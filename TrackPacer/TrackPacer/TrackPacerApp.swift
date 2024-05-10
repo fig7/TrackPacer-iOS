@@ -7,11 +7,17 @@
 
 import SwiftUI
 
-@main
-struct TrackPacerApp: App {
+@main struct TrackPacerApp: App {
+  @State private var tpDataModel: TPDataModel
+
+  init() {
+    let distanceSelection = DistanceSelection()
+    tpDataModel           = TPDataModel(distanceSelection: distanceSelection)
+  }
+
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      ContentView(model: tpDataModel)
     }
   }
 }

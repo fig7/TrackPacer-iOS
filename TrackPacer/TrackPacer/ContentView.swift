@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+  let model: TPDataModel
+
   var body: some View {
     TabView {
-      RunView().tabItem {
+      RunView(distanceSelection: model.distanceSelection).tabItem {
         Label("Run", image: "baseline_run_24")
       }
 

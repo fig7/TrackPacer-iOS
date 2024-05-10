@@ -7,9 +7,10 @@
 
 import SwiftUI
 
+// TODO: Add app icon
 // TODO: Extract sub-views
 struct RunView: View {
-  @State var distanceSelection = DistanceSelection()
+  @ObservedObject var distanceSelection: DistanceSelection
 
   @State var laneStr = "1"
   var laneList = ["1", "2", "3"]
