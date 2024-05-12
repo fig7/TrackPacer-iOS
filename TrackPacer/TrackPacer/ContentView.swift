@@ -8,24 +8,36 @@
 import SwiftUI
 
 struct ContentView: View {
-  let model: TPDataModel
+  let viewModel: MainViewModel
+  
+  init(viewModel: MainViewModel) {
+    self.viewModel = viewModel
+  }
 
   var body: some View {
-    TabView {
-      RunView(distanceSelection: model.distanceSelection).tabItem {
-        Label("Run", image: "baseline_run_24")
-      }
+    NavigationStack {
+      TabView {
+        RunView(viewModel: viewModel.runViewModel).tabItem {
+          Label("Run", image: "baseline_run_24")
+        }
 
-      HistoryView().tabItem {
-        Label("History", image: "baseline_history_24")
-      }
+        HistoryView().tabItem {
+          Label("History", image: "baseline_history_24")
+        }
 
-      AudioView().tabItem {
-        Label("Audio", image: "baseline_audio_24")
-      }
+        AudioView().tabItem {
+          Label("Audio", image: "baseline_audio_24")
+        }
 
-      SettingsView().tabItem {
-        Label("Settings", image: "baseline_settings_24")
+        SettingsView().tabItem {
+          Label("Settings", image: "baseline_settings_24")
+        }
+      }.navigationDestination(for: Int.self) { selection in
+        PaceView(viewModel: viewModel.paceViewModel)
+      }.toolbar() {
+        ToolbarItem(placement: .navigationBarTrailing) {
+          StatusView()
+        }
       }
     }
   }

@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-// TODO: Add app icon
-// TODO: Extract sub-views
 struct RunView: View {
+  let viewModel: RunViewModel
+
   @ObservedObject var distanceSelection: DistanceSelection
 
   @State var laneStr = "1"
@@ -21,14 +21,18 @@ struct RunView: View {
   @State var profileStr = "Fixed pace"
   var profileList = ["Fixed pace"]
 
+  init(viewModel: RunViewModel) {
+    self.viewModel = viewModel
+    
+    self.distanceSelection = viewModel.distanceSelection
+  }
+
   var body: some View {
     VStack(spacing: 5) {
-      StatusView().frame(maxWidth: .infinity, alignment: .trailing)
-
       HStack {
-        Text("Distance:")
+        Text("Distance:").frame(width: 180, alignment: .leading)
 
-        Spacer()
+        Spacer().frame(width: 15)
 
         Text("Lane:")
 
@@ -36,19 +40,10 @@ struct RunView: View {
       }.padding(.horizontal, 20)
 
       HStack {
-        Picker("Choose a distance", selection: $distanceSelection.selected) {
-          ForEach(distanceSelection.list, id: \.self) {
-            Text($0)
-          }
-        }.frame(width: 150, alignment: .center)
+        TPPicker(selected: $distanceSelection.selected, list: distanceSelection.list).frame(width: 180, height: 42, alignment: .center)
+        Spacer().frame(width: 15)
 
-        Spacer()
-
-        Picker("Choose a lane", selection: $laneStr) {
-          ForEach(laneList, id: \.self) {
-            Text($0)
-          }
-        }.frame(width: 80, alignment: .center)
+        TPPicker(selected: $laneStr, list: laneList).frame(width: 80, height: 42, alignment: .center)
 
         Spacer()
       }.padding(.horizontal, 20)
@@ -62,16 +57,10 @@ struct RunView: View {
       }.padding(.horizontal, 20)
 
       HStack {
-        Picker("Choose a time", selection: $timeStr) {
-          ForEach(timeList, id: \.self) {
-            Text($0)
-          }
-        }.frame(width: 150, alignment: .center)
+        TPPicker(selected: $timeStr, list: timeList).frame(width: 200, height: 42, alignment: .center)
+        Spacer().frame(width: 15)
 
-        Spacer()
-
-        Button("Edit") {
-        }.frame(width: 80, alignment: .center)
+        TPButton(iconName: "baseline_edit_42").frame(width: 60, height: 42, alignment: .center)
 
         Spacer()
       }.padding(.horizontal, 20)
@@ -85,16 +74,10 @@ struct RunView: View {
       }.padding(.horizontal, 20)
 
       HStack {
-        Picker("Choose a profile", selection: $profileStr) {
-          ForEach(profileList, id: \.self) {
-            Text($0)
-          }
-        }.frame(width: 150, alignment: .center)
+        TPPicker(selected: $profileStr, list: profileList).frame(width: 200, height: 42, alignment: .center)
+        Spacer().frame(width: 15)
 
-        Spacer()
-
-        Button("?") {
-        }.frame(width: 80, alignment: .center)
+        TPButton(iconName: "baseline_help_outline_42").frame(width: 60, height: 42, alignment: .center)
 
         Spacer()
       }.padding(.horizontal, 20)
@@ -123,10 +106,7 @@ struct RunView: View {
 
       Spacer()
 
-      Button("ON YOUR MARKS") { }
-
-      Spacer().frame(height: 20)
-
+      NavigationLink(" ON  YOUR  MARKS ", value: 1).buttonStyle(ActionButtonStyle())
     }
   }
 }

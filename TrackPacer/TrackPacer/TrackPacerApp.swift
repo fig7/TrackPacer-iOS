@@ -8,16 +8,15 @@
 import SwiftUI
 
 @main struct TrackPacerApp: App {
-  @State private var tpDataModel: TPDataModel
+  @State private var mainViewModel: MainViewModel
 
   init() {
-    let distanceSelection = DistanceSelection()
-    tpDataModel           = TPDataModel(distanceSelection: distanceSelection)
+    mainViewModel = MainViewModel()
   }
 
   var body: some Scene {
     WindowGroup {
-      ContentView(model: tpDataModel)
+      ContentView(viewModel: mainViewModel)
     }
   }
 }

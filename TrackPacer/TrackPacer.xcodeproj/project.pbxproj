@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		124645E52BF1661000CB6EAC /* RunViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645E42BF1661000CB6EAC /* RunViewModel.swift */; };
+		124645E82BF169DF00CB6EAC /* TPPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645E72BF169DF00CB6EAC /* TPPicker.swift */; };
+		124645EA2BF16A2400CB6EAC /* TPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645E92BF16A2400CB6EAC /* TPButton.swift */; };
+		124645ED2BF16A6C00CB6EAC /* ActionButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645EC2BF16A6C00CB6EAC /* ActionButtonStyle.swift */; };
+		124645F02BF16B5600CB6EAC /* PacingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645EF2BF16B5600CB6EAC /* PacingStatus.swift */; };
+		124645F22BF16E5900CB6EAC /* PaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645F12BF16E5900CB6EAC /* PaceView.swift */; };
+		124645F42BF1731900CB6EAC /* PaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645F32BF1731900CB6EAC /* PaceViewModel.swift */; };
 		1271228E2BEE41A000106069 /* TrackPacerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1271228D2BEE41A000106069 /* TrackPacerApp.swift */; };
 		127122902BEE41A000106069 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1271228F2BEE41A000106069 /* ContentView.swift */; };
 		127122922BEE41A200106069 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 127122912BEE41A200106069 /* Assets.xcassets */; };
@@ -17,10 +24,17 @@
 		127122A32BEE5DCC00106069 /* AudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122A22BEE5DCC00106069 /* AudioView.swift */; };
 		127122A52BEE68D100106069 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122A42BEE68D100106069 /* SettingsView.swift */; };
 		127122A82BEE7F1F00106069 /* DistanceSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122A72BEE7F1F00106069 /* DistanceSelection.swift */; };
-		127122AB2BEEDE5400106069 /* TPDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122AA2BEEDE5400106069 /* TPDataModel.swift */; };
+		127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122AA2BEEDE5400106069 /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		124645E42BF1661000CB6EAC /* RunViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewModel.swift; sourceTree = "<group>"; };
+		124645E72BF169DF00CB6EAC /* TPPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPPicker.swift; sourceTree = "<group>"; };
+		124645E92BF16A2400CB6EAC /* TPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPButton.swift; sourceTree = "<group>"; };
+		124645EC2BF16A6C00CB6EAC /* ActionButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonStyle.swift; sourceTree = "<group>"; };
+		124645EF2BF16B5600CB6EAC /* PacingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingStatus.swift; sourceTree = "<group>"; };
+		124645F12BF16E5900CB6EAC /* PaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaceView.swift; sourceTree = "<group>"; };
+		124645F32BF1731900CB6EAC /* PaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaceViewModel.swift; sourceTree = "<group>"; };
 		1271228A2BEE41A000106069 /* TrackPacer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackPacer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1271228D2BEE41A000106069 /* TrackPacerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPacerApp.swift; sourceTree = "<group>"; };
 		1271228F2BEE41A000106069 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -32,7 +46,7 @@
 		127122A22BEE5DCC00106069 /* AudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioView.swift; sourceTree = "<group>"; };
 		127122A42BEE68D100106069 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		127122A72BEE7F1F00106069 /* DistanceSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelection.swift; sourceTree = "<group>"; };
-		127122AA2BEEDE5400106069 /* TPDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPDataModel.swift; sourceTree = "<group>"; };
+		127122AA2BEEDE5400106069 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +60,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		124645E62BF169A100CB6EAC /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				1271229C2BEE565200106069 /* StatusView.swift */,
+				124645E72BF169DF00CB6EAC /* TPPicker.swift */,
+				124645E92BF16A2400CB6EAC /* TPButton.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		124645EB2BF16A4D00CB6EAC /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				124645EC2BF16A6C00CB6EAC /* ActionButtonStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		124645EE2BF16A8800CB6EAC /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				127122A92BEEDE3F00106069 /* Models */,
+				127122A62BEE7ED300106069 /* Observables */,
+				124645EB2BF16A4D00CB6EAC /* Styles */,
+				1271229B2BEE561A00106069 /* Views */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		127122812BEE41A000106069 = {
 			isa = PBXGroup;
 			children = (
@@ -65,9 +108,7 @@
 		1271228C2BEE41A000106069 /* TrackPacer */ = {
 			isa = PBXGroup;
 			children = (
-				127122A92BEEDE3F00106069 /* Models */,
-				127122A62BEE7ED300106069 /* Observables */,
-				1271229B2BEE561A00106069 /* Views */,
+				124645EE2BF16A8800CB6EAC /* UI */,
 				1271228D2BEE41A000106069 /* TrackPacerApp.swift */,
 				1271228F2BEE41A000106069 /* ContentView.swift */,
 				127122912BEE41A200106069 /* Assets.xcassets */,
@@ -87,11 +128,12 @@
 		1271229B2BEE561A00106069 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1271229C2BEE565200106069 /* StatusView.swift */,
+				124645E62BF169A100CB6EAC /* SubViews */,
 				1271229E2BEE5AC600106069 /* RunView.swift */,
 				127122A02BEE5B6100106069 /* HistoryView.swift */,
 				127122A22BEE5DCC00106069 /* AudioView.swift */,
 				127122A42BEE68D100106069 /* SettingsView.swift */,
+				124645F12BF16E5900CB6EAC /* PaceView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -100,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				127122A72BEE7F1F00106069 /* DistanceSelection.swift */,
+				124645EF2BF16B5600CB6EAC /* PacingStatus.swift */,
 			);
 			path = Observables;
 			sourceTree = "<group>";
@@ -107,7 +150,9 @@
 		127122A92BEEDE3F00106069 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				127122AA2BEEDE5400106069 /* TPDataModel.swift */,
+				127122AA2BEEDE5400106069 /* MainViewModel.swift */,
+				124645E42BF1661000CB6EAC /* RunViewModel.swift */,
+				124645F32BF1731900CB6EAC /* PaceViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -186,9 +231,16 @@
 				1271229F2BEE5AC600106069 /* RunView.swift in Sources */,
 				127122A32BEE5DCC00106069 /* AudioView.swift in Sources */,
 				127122902BEE41A000106069 /* ContentView.swift in Sources */,
-				127122AB2BEEDE5400106069 /* TPDataModel.swift in Sources */,
+				124645EA2BF16A2400CB6EAC /* TPButton.swift in Sources */,
+				127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */,
+				124645ED2BF16A6C00CB6EAC /* ActionButtonStyle.swift in Sources */,
 				127122A82BEE7F1F00106069 /* DistanceSelection.swift in Sources */,
 				127122A12BEE5B6100106069 /* HistoryView.swift in Sources */,
+				124645E82BF169DF00CB6EAC /* TPPicker.swift in Sources */,
+				124645F02BF16B5600CB6EAC /* PacingStatus.swift in Sources */,
+				124645F42BF1731900CB6EAC /* PaceViewModel.swift in Sources */,
+				124645E52BF1661000CB6EAC /* RunViewModel.swift in Sources */,
+				124645F22BF16E5900CB6EAC /* PaceView.swift in Sources */,
 				1271228E2BEE41A000106069 /* TrackPacerApp.swift in Sources */,
 				1271229D2BEE565200106069 /* StatusView.swift in Sources */,
 			);
