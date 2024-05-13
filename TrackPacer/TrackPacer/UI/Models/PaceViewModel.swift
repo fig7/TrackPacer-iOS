@@ -10,10 +10,14 @@ import Foundation
 @MainActor class PaceViewModel {
   var mainViewModel: MainViewModel!
   var pacingStatus: PacingStatus
+  var pacingOptions: PacingOptions
+  var pacingProgress: PacingProgress
 
   init() {
     mainViewModel = nil
-    pacingStatus = PacingStatus()
+    pacingStatus   = PacingStatus()
+    pacingOptions  = PacingOptions()
+    pacingProgress = PacingProgress()
   }
 
   func setMain(mainViewModel: MainViewModel) {
