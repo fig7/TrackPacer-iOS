@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
   let viewModel: MainViewModel
-  
+
   init(viewModel: MainViewModel) {
     self.viewModel = viewModel
   }

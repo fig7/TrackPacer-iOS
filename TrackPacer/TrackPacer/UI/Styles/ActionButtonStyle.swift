@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct ActionButtonStyle : ButtonStyle {
-  let disabled: Bool
+  let disabledCol: Bool
   let foregroundCol: Color
   let backgroundCol: Color
 
   init() {
-    self.init(disabled: false)
+    self.init(disabledCol: false)
   }
 
-  init(disabled: Bool) {
-    self.disabled = disabled
-    foregroundCol = disabled ? .gray : .white
-    backgroundCol = disabled ? Color(red: 0.839, green: 0.843, blue: 0.843) : Color(red: 0.427, green: 0.0, blue: 0.965)
+  init(disabledCol: Bool) {
+    self.disabledCol = disabledCol
+    foregroundCol = disabledCol ? .gray : .white
+    backgroundCol = disabledCol ? Color(red: 0.839, green: 0.843, blue: 0.843) : Color(red: 0.427, green: 0.0, blue: 0.965)
   }
 
   func makeBody(configuration: Self.Configuration) -> some View {
@@ -31,14 +31,18 @@ struct ActionButtonStyle : ButtonStyle {
 }
 
 struct ActionButtonStyleMax : ButtonStyle {
-  let disabled: Bool
+  let disabledCol: Bool
   let foregroundCol: Color
   let backgroundCol: Color
 
-  init(disabled: Bool) {
-    self.disabled = disabled
-    foregroundCol = disabled ? .gray : .white
-    backgroundCol = disabled ? Color(red: 0.839, green: 0.843, blue: 0.843) : Color(red: 0.427, green: 0.0, blue: 0.965)
+  init() {
+    self.init(disabledCol: false)
+  }
+  
+  init(disabledCol: Bool) {
+    self.disabledCol = disabledCol
+    foregroundCol = disabledCol ? .gray : .white
+    backgroundCol = disabledCol ? Color(red: 0.839, green: 0.843, blue: 0.843) : Color(red: 0.427, green: 0.0, blue: 0.965)
   }
 
   func makeBody(configuration: Self.Configuration) -> some View {

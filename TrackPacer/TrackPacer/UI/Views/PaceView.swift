@@ -18,13 +18,17 @@ struct PaceView: View {
   }
 
   var body: some View {
+    let isPacing = pacingStatus.isPacing
+
     VStack(spacing: 5) {
       Spacer()
 
       HStack {
-        let stopDisabled = !pacingStatus.isPacing
-        Button(" STOP ") { viewModel.setPacingStatus(pacingStatus: .NotPacing) }.buttonStyle(ActionButtonStyleMax(disabled: stopDisabled)).disabled(stopDisabled)
-        Button(" SET ")  { viewModel.setPacingStatus(pacingStatus: .Pacing) }.buttonStyle(ActionButtonStyleMax(disabled: !stopDisabled))
+        Button(action: { viewModel.setPacingStatus(pacingStatus: .NotPacing) }) { Text(" STOP ").opacity(0.0).overlay { Image(isPacing ? "stop" : "stop2") } }
+          .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(!isPacing)
+
+        Button(action: { viewModel.setPacingStatus(pacingStatus: .Pacing) })    { Text(" SET ") }
+          .buttonStyle(ActionButtonStyleMax(disabledCol: isPacing)).disabled( isPacing)
       }.padding(.horizontal, 20).padding(.bottom, 5)
     }.toolbar() {
       ToolbarItem(placement: .navigationBarTrailing) {
