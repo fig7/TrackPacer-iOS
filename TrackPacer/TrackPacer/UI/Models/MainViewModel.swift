@@ -8,8 +8,6 @@
 import Foundation
 
 @MainActor class MainViewModel {
-  var pacingStatus: PacingStatus = PacingStatus()
-
   var runViewModel: RunViewModel
   var paceViewModel: PaceViewModel
 

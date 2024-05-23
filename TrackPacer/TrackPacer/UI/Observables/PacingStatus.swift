@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum PacingStatusVal { case NotPacing, Pacing }
+enum PacingStatusVal { case NotPacing, PacingStart, Pacing, PacingPause, PacingPaused, PacingResume, PacingComplete, PacingCancel }
 
 @MainActor class PacingStatus : ObservableObject {
   @Published var status: PacingStatusVal = .NotPacing {
     didSet {
-      isPacing = (status == .Pacing)
+      isPacing = (status == .PacingStart) || (status == .Pacing)
     }
   }
   

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1215D4072BFEC38C00DB07C3 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1215D4062BFEC38C00DB07C3 /* Int.swift */; };
 		124645E52BF1661000CB6EAC /* RunViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645E42BF1661000CB6EAC /* RunViewModel.swift */; };
 		124645E82BF169DF00CB6EAC /* TPPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645E72BF169DF00CB6EAC /* TPPicker.swift */; };
 		124645EA2BF16A2400CB6EAC /* TPButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124645E92BF16A2400CB6EAC /* TPButton.swift */; };
@@ -25,13 +26,61 @@
 		127122A52BEE68D100106069 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122A42BEE68D100106069 /* SettingsView.swift */; };
 		127122A82BEE7F1F00106069 /* DistanceSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122A72BEE7F1F00106069 /* DistanceSelection.swift */; };
 		127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122AA2BEEDE5400106069 /* MainViewModel.swift */; };
+		1293591E2BFE0BAD0042F99E /* WaypointCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293591D2BFE0BAD0042F99E /* WaypointCalculator.swift */; };
+		129359212BFE1BA20042F99E /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359202BFE1BA20042F99E /* Array.swift */; };
+		129359252BFE20290042F99E /* WaypointService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359242BFE20290042F99E /* WaypointService.swift */; };
+		1293594C2BFE4D8D0042F99E /* onehundred.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359262BFE4D8C0042F99E /* onehundred.m4a */; };
+		1293594D2BFE4D8D0042F99E /* lap7.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359272BFE4D8C0042F99E /* lap7.m4a */; };
+		1293594E2BFE4D8D0042F99E /* finish.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359282BFE4D8C0042F99E /* finish.m4a */; };
+		1293594F2BFE4D8D0042F99E /* lap4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359292BFE4D8C0042F99E /* lap4.m4a */; };
+		129359502BFE4D8D0042F99E /* paused.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293592A2BFE4D8C0042F99E /* paused.m4a */; };
+		129359512BFE4D8D0042F99E /* lap9.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293592B2BFE4D8C0042F99E /* lap9.m4a */; };
+		129359522BFE4D8D0042F99E /* threehundredandfifty.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293592C2BFE4D8C0042F99E /* threehundredandfifty.m4a */; };
+		129359532BFE4D8D0042F99E /* lap15.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293592D2BFE4D8C0042F99E /* lap15.m4a */; };
+		129359542BFE4D8D0042F99E /* threehundred.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293592E2BFE4D8C0042F99E /* threehundred.m4a */; };
+		129359552BFE4D8D0042F99E /* lap13.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293592F2BFE4D8C0042F99E /* lap13.m4a */; };
+		129359562BFE4D8D0042F99E /* lap8.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359302BFE4D8C0042F99E /* lap8.m4a */; };
+		129359572BFE4D8D0042F99E /* lap22.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359312BFE4D8C0042F99E /* lap22.m4a */; };
+		129359582BFE4D8D0042F99E /* lap24.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359322BFE4D8C0042F99E /* lap24.m4a */; };
+		129359592BFE4D8D0042F99E /* lap5.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359332BFE4D8C0042F99E /* lap5.m4a */; };
+		1293595A2BFE4D8D0042F99E /* lap18.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359342BFE4D8C0042F99E /* lap18.m4a */; };
+		1293595B2BFE4D8D0042F99E /* go.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359352BFE4D8C0042F99E /* go.m4a */; };
+		1293595C2BFE4D8D0042F99E /* complete.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359362BFE4D8C0042F99E /* complete.m4a */; };
+		1293595D2BFE4D8D0042F99E /* lap17.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359372BFE4D8C0042F99E /* lap17.m4a */; };
+		1293595E2BFE4D8D0042F99E /* lap20.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359382BFE4D8C0042F99E /* lap20.m4a */; };
+		1293595F2BFE4D8D0042F99E /* cancelled.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359392BFE4D8C0042F99E /* cancelled.m4a */; };
+		129359602BFE4D8D0042F99E /* lap6.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293593A2BFE4D8C0042F99E /* lap6.m4a */; };
+		129359612BFE4D8D0042F99E /* lap10.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293593B2BFE4D8C0042F99E /* lap10.m4a */; };
+		129359622BFE4D8D0042F99E /* onehundredandfifty.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293593C2BFE4D8C0042F99E /* onehundredandfifty.m4a */; };
+		129359632BFE4D8D0042F99E /* lap14.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293593D2BFE4D8D0042F99E /* lap14.m4a */; };
+		129359642BFE4D8D0042F99E /* twohundredandfifty.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293593E2BFE4D8D0042F99E /* twohundredandfifty.m4a */; };
+		129359652BFE4D8D0042F99E /* lap16.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293593F2BFE4D8D0042F99E /* lap16.m4a */; };
+		129359662BFE4D8D0042F99E /* lap3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359402BFE4D8D0042F99E /* lap3.m4a */; };
+		129359672BFE4D8D0042F99E /* lap11.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359412BFE4D8D0042F99E /* lap11.m4a */; };
+		129359682BFE4D8D0042F99E /* fourhundred.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359422BFE4D8D0042F99E /* fourhundred.m4a */; };
+		129359692BFE4D8D0042F99E /* resumed.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359432BFE4D8D0042F99E /* resumed.m4a */; };
+		1293596A2BFE4D8D0042F99E /* lap25.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359442BFE4D8D0042F99E /* lap25.m4a */; };
+		1293596B2BFE4D8D0042F99E /* twohundred.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359452BFE4D8D0042F99E /* twohundred.m4a */; };
+		1293596C2BFE4D8D0042F99E /* fifty.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359462BFE4D8D0042F99E /* fifty.m4a */; };
+		1293596D2BFE4D8D0042F99E /* lap2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359472BFE4D8D0042F99E /* lap2.m4a */; };
+		1293596E2BFE4D8D0042F99E /* lap12.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359482BFE4D8D0042F99E /* lap12.m4a */; };
+		1293596F2BFE4D8D0042F99E /* lap19.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 129359492BFE4D8D0042F99E /* lap19.m4a */; };
+		129359702BFE4D8D0042F99E /* lap21.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293594A2BFE4D8D0042F99E /* lap21.m4a */; };
+		129359712BFE4D8D0042F99E /* lap23.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1293594B2BFE4D8D0042F99E /* lap23.m4a */; };
+		129359732BFE66F30042F99E /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359722BFE66F30042F99E /* Handler.swift */; };
+		129359752BFE683F0042F99E /* Runnable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359742BFE683F0042F99E /* Runnable.swift */; };
+		129359792BFEAC180042F99E /* Int64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359782BFEAC180042F99E /* Int64.swift */; };
+		1293597B2BFEAD1D0042F99E /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597A2BFEAD1D0042F99E /* Double.swift */; };
+		1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597C2BFEADF50042F99E /* ContinousClock.swift */; };
 		12B144AF2BF2854A00FCD2A7 /* PacingProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144AE2BF2854A00FCD2A7 /* PacingProgress.swift */; };
 		12B144B22BF2889600FCD2A7 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B12BF2889600FCD2A7 /* TimeUtil.swift */; };
 		12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */; };
 		12B144B62BF2D13700FCD2A7 /* PacingProgressStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B52BF2D13700FCD2A7 /* PacingProgressStyle.swift */; };
+		12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1215D4062BFEC38C00DB07C3 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		124645E42BF1661000CB6EAC /* RunViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewModel.swift; sourceTree = "<group>"; };
 		124645E72BF169DF00CB6EAC /* TPPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPPicker.swift; sourceTree = "<group>"; };
 		124645E92BF16A2400CB6EAC /* TPButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPButton.swift; sourceTree = "<group>"; };
@@ -51,10 +100,58 @@
 		127122A42BEE68D100106069 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		127122A72BEE7F1F00106069 /* DistanceSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelection.swift; sourceTree = "<group>"; };
 		127122AA2BEEDE5400106069 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		1293591D2BFE0BAD0042F99E /* WaypointCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Waypoint\U0010Calculator.swift"; sourceTree = "<group>"; };
+		129359202BFE1BA20042F99E /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		129359242BFE20290042F99E /* WaypointService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointService.swift; sourceTree = "<group>"; };
+		129359262BFE4D8C0042F99E /* onehundred.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = onehundred.m4a; sourceTree = "<group>"; };
+		129359272BFE4D8C0042F99E /* lap7.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap7.m4a; sourceTree = "<group>"; };
+		129359282BFE4D8C0042F99E /* finish.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = finish.m4a; sourceTree = "<group>"; };
+		129359292BFE4D8C0042F99E /* lap4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap4.m4a; sourceTree = "<group>"; };
+		1293592A2BFE4D8C0042F99E /* paused.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = paused.m4a; sourceTree = "<group>"; };
+		1293592B2BFE4D8C0042F99E /* lap9.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap9.m4a; sourceTree = "<group>"; };
+		1293592C2BFE4D8C0042F99E /* threehundredandfifty.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = threehundredandfifty.m4a; sourceTree = "<group>"; };
+		1293592D2BFE4D8C0042F99E /* lap15.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap15.m4a; sourceTree = "<group>"; };
+		1293592E2BFE4D8C0042F99E /* threehundred.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = threehundred.m4a; sourceTree = "<group>"; };
+		1293592F2BFE4D8C0042F99E /* lap13.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap13.m4a; sourceTree = "<group>"; };
+		129359302BFE4D8C0042F99E /* lap8.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap8.m4a; sourceTree = "<group>"; };
+		129359312BFE4D8C0042F99E /* lap22.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap22.m4a; sourceTree = "<group>"; };
+		129359322BFE4D8C0042F99E /* lap24.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap24.m4a; sourceTree = "<group>"; };
+		129359332BFE4D8C0042F99E /* lap5.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap5.m4a; sourceTree = "<group>"; };
+		129359342BFE4D8C0042F99E /* lap18.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap18.m4a; sourceTree = "<group>"; };
+		129359352BFE4D8C0042F99E /* go.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = go.m4a; sourceTree = "<group>"; };
+		129359362BFE4D8C0042F99E /* complete.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = complete.m4a; sourceTree = "<group>"; };
+		129359372BFE4D8C0042F99E /* lap17.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap17.m4a; sourceTree = "<group>"; };
+		129359382BFE4D8C0042F99E /* lap20.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap20.m4a; sourceTree = "<group>"; };
+		129359392BFE4D8C0042F99E /* cancelled.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = cancelled.m4a; sourceTree = "<group>"; };
+		1293593A2BFE4D8C0042F99E /* lap6.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap6.m4a; sourceTree = "<group>"; };
+		1293593B2BFE4D8C0042F99E /* lap10.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap10.m4a; sourceTree = "<group>"; };
+		1293593C2BFE4D8C0042F99E /* onehundredandfifty.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = onehundredandfifty.m4a; sourceTree = "<group>"; };
+		1293593D2BFE4D8D0042F99E /* lap14.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap14.m4a; sourceTree = "<group>"; };
+		1293593E2BFE4D8D0042F99E /* twohundredandfifty.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = twohundredandfifty.m4a; sourceTree = "<group>"; };
+		1293593F2BFE4D8D0042F99E /* lap16.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap16.m4a; sourceTree = "<group>"; };
+		129359402BFE4D8D0042F99E /* lap3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap3.m4a; sourceTree = "<group>"; };
+		129359412BFE4D8D0042F99E /* lap11.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap11.m4a; sourceTree = "<group>"; };
+		129359422BFE4D8D0042F99E /* fourhundred.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = fourhundred.m4a; sourceTree = "<group>"; };
+		129359432BFE4D8D0042F99E /* resumed.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = resumed.m4a; sourceTree = "<group>"; };
+		129359442BFE4D8D0042F99E /* lap25.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap25.m4a; sourceTree = "<group>"; };
+		129359452BFE4D8D0042F99E /* twohundred.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = twohundred.m4a; sourceTree = "<group>"; };
+		129359462BFE4D8D0042F99E /* fifty.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = fifty.m4a; sourceTree = "<group>"; };
+		129359472BFE4D8D0042F99E /* lap2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap2.m4a; sourceTree = "<group>"; };
+		129359482BFE4D8D0042F99E /* lap12.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap12.m4a; sourceTree = "<group>"; };
+		129359492BFE4D8D0042F99E /* lap19.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap19.m4a; sourceTree = "<group>"; };
+		1293594A2BFE4D8D0042F99E /* lap21.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap21.m4a; sourceTree = "<group>"; };
+		1293594B2BFE4D8D0042F99E /* lap23.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = lap23.m4a; sourceTree = "<group>"; };
+		129359722BFE66F30042F99E /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
+		129359742BFE683F0042F99E /* Runnable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runnable.swift; sourceTree = "<group>"; };
+		129359782BFEAC180042F99E /* Int64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int64.swift; sourceTree = "<group>"; };
+		1293597A2BFEAD1D0042F99E /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
+		1293597C2BFEADF50042F99E /* ContinousClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinousClock.swift; sourceTree = "<group>"; };
 		12B144AE2BF2854A00FCD2A7 /* PacingProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingProgress.swift; sourceTree = "<group>"; };
 		12B144B12BF2889600FCD2A7 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
 		12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingOptions.swift; sourceTree = "<group>"; };
 		12B144B52BF2D13700FCD2A7 /* PacingProgressStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingProgressStyle.swift; sourceTree = "<group>"; };
+		12B144B72BF3BDAA00FCD2A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = threetwoone.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,11 +214,15 @@
 		1271228C2BEE41A000106069 /* TrackPacer */ = {
 			isa = PBXGroup;
 			children = (
+				1293591F2BFE1B910042F99E /* Ext */,
+				1293591C2BFE0B790042F99E /* Waypoint */,
+				12B144B72BF3BDAA00FCD2A7 /* Info.plist */,
 				12B144B02BF2887600FCD2A7 /* Util */,
 				124645EE2BF16A8800CB6EAC /* UI */,
 				1271228D2BEE41A000106069 /* TrackPacerApp.swift */,
 				1271228F2BEE41A000106069 /* ContentView.swift */,
 				127122912BEE41A200106069 /* Assets.xcassets */,
+				12B144B82BF3CCFC00FCD2A7 /* Audio */,
 				127122932BEE41A200106069 /* Preview Content */,
 			);
 			path = TrackPacer;
@@ -169,12 +270,81 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		1293591C2BFE0B790042F99E /* Waypoint */ = {
+			isa = PBXGroup;
+			children = (
+				1293591D2BFE0BAD0042F99E /* WaypointCalculator.swift */,
+				129359242BFE20290042F99E /* WaypointService.swift */,
+			);
+			path = Waypoint;
+			sourceTree = "<group>";
+		};
+		1293591F2BFE1B910042F99E /* Ext */ = {
+			isa = PBXGroup;
+			children = (
+				129359202BFE1BA20042F99E /* Array.swift */,
+				1293597C2BFEADF50042F99E /* ContinousClock.swift */,
+				1293597A2BFEAD1D0042F99E /* Double.swift */,
+				129359722BFE66F30042F99E /* Handler.swift */,
+				1215D4062BFEC38C00DB07C3 /* Int.swift */,
+				129359782BFEAC180042F99E /* Int64.swift */,
+				129359742BFE683F0042F99E /* Runnable.swift */,
+			);
+			path = Ext;
+			sourceTree = "<group>";
+		};
 		12B144B02BF2887600FCD2A7 /* Util */ = {
 			isa = PBXGroup;
 			children = (
 				12B144B12BF2889600FCD2A7 /* TimeUtil.swift */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		12B144B82BF3CCFC00FCD2A7 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				129359392BFE4D8C0042F99E /* cancelled.m4a */,
+				129359362BFE4D8C0042F99E /* complete.m4a */,
+				129359462BFE4D8D0042F99E /* fifty.m4a */,
+				129359282BFE4D8C0042F99E /* finish.m4a */,
+				129359422BFE4D8D0042F99E /* fourhundred.m4a */,
+				129359352BFE4D8C0042F99E /* go.m4a */,
+				129359472BFE4D8D0042F99E /* lap2.m4a */,
+				129359402BFE4D8D0042F99E /* lap3.m4a */,
+				129359292BFE4D8C0042F99E /* lap4.m4a */,
+				129359332BFE4D8C0042F99E /* lap5.m4a */,
+				1293593A2BFE4D8C0042F99E /* lap6.m4a */,
+				129359272BFE4D8C0042F99E /* lap7.m4a */,
+				129359302BFE4D8C0042F99E /* lap8.m4a */,
+				1293592B2BFE4D8C0042F99E /* lap9.m4a */,
+				1293593B2BFE4D8C0042F99E /* lap10.m4a */,
+				129359412BFE4D8D0042F99E /* lap11.m4a */,
+				129359482BFE4D8D0042F99E /* lap12.m4a */,
+				1293592F2BFE4D8C0042F99E /* lap13.m4a */,
+				1293593D2BFE4D8D0042F99E /* lap14.m4a */,
+				1293592D2BFE4D8C0042F99E /* lap15.m4a */,
+				1293593F2BFE4D8D0042F99E /* lap16.m4a */,
+				129359372BFE4D8C0042F99E /* lap17.m4a */,
+				129359342BFE4D8C0042F99E /* lap18.m4a */,
+				129359492BFE4D8D0042F99E /* lap19.m4a */,
+				129359382BFE4D8C0042F99E /* lap20.m4a */,
+				1293594A2BFE4D8D0042F99E /* lap21.m4a */,
+				129359312BFE4D8C0042F99E /* lap22.m4a */,
+				1293594B2BFE4D8D0042F99E /* lap23.m4a */,
+				129359322BFE4D8C0042F99E /* lap24.m4a */,
+				129359442BFE4D8D0042F99E /* lap25.m4a */,
+				129359262BFE4D8C0042F99E /* onehundred.m4a */,
+				1293593C2BFE4D8C0042F99E /* onehundredandfifty.m4a */,
+				1293592A2BFE4D8C0042F99E /* paused.m4a */,
+				129359432BFE4D8D0042F99E /* resumed.m4a */,
+				1293592E2BFE4D8C0042F99E /* threehundred.m4a */,
+				1293592C2BFE4D8C0042F99E /* threehundredandfifty.m4a */,
+				129359452BFE4D8D0042F99E /* twohundred.m4a */,
+				1293593E2BFE4D8D0042F99E /* twohundredandfifty.m4a */,
+				12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,8 +405,47 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */,
+				129359552BFE4D8D0042F99E /* lap13.m4a in Resources */,
+				1293595E2BFE4D8D0042F99E /* lap20.m4a in Resources */,
+				1293596C2BFE4D8D0042F99E /* fifty.m4a in Resources */,
+				129359592BFE4D8D0042F99E /* lap5.m4a in Resources */,
+				1293596F2BFE4D8D0042F99E /* lap19.m4a in Resources */,
+				129359512BFE4D8D0042F99E /* lap9.m4a in Resources */,
+				129359682BFE4D8D0042F99E /* fourhundred.m4a in Resources */,
+				1293595B2BFE4D8D0042F99E /* go.m4a in Resources */,
+				129359542BFE4D8D0042F99E /* threehundred.m4a in Resources */,
+				1293596D2BFE4D8D0042F99E /* lap2.m4a in Resources */,
+				1293595F2BFE4D8D0042F99E /* cancelled.m4a in Resources */,
 				127122952BEE41A200106069 /* Preview Assets.xcassets in Resources */,
+				129359652BFE4D8D0042F99E /* lap16.m4a in Resources */,
+				129359612BFE4D8D0042F99E /* lap10.m4a in Resources */,
+				129359572BFE4D8D0042F99E /* lap22.m4a in Resources */,
+				129359632BFE4D8D0042F99E /* lap14.m4a in Resources */,
+				129359702BFE4D8D0042F99E /* lap21.m4a in Resources */,
+				1293595D2BFE4D8D0042F99E /* lap17.m4a in Resources */,
+				129359532BFE4D8D0042F99E /* lap15.m4a in Resources */,
+				1293594C2BFE4D8D0042F99E /* onehundred.m4a in Resources */,
+				1293594E2BFE4D8D0042F99E /* finish.m4a in Resources */,
+				129359502BFE4D8D0042F99E /* paused.m4a in Resources */,
+				1293596A2BFE4D8D0042F99E /* lap25.m4a in Resources */,
+				1293595A2BFE4D8D0042F99E /* lap18.m4a in Resources */,
+				1293596E2BFE4D8D0042F99E /* lap12.m4a in Resources */,
+				129359672BFE4D8D0042F99E /* lap11.m4a in Resources */,
+				129359622BFE4D8D0042F99E /* onehundredandfifty.m4a in Resources */,
+				129359712BFE4D8D0042F99E /* lap23.m4a in Resources */,
+				129359692BFE4D8D0042F99E /* resumed.m4a in Resources */,
+				129359642BFE4D8D0042F99E /* twohundredandfifty.m4a in Resources */,
+				1293596B2BFE4D8D0042F99E /* twohundred.m4a in Resources */,
+				1293595C2BFE4D8D0042F99E /* complete.m4a in Resources */,
+				1293594F2BFE4D8D0042F99E /* lap4.m4a in Resources */,
+				129359522BFE4D8D0042F99E /* threehundredandfifty.m4a in Resources */,
+				129359602BFE4D8D0042F99E /* lap6.m4a in Resources */,
+				129359582BFE4D8D0042F99E /* lap24.m4a in Resources */,
+				1293594D2BFE4D8D0042F99E /* lap7.m4a in Resources */,
 				127122922BEE41A200106069 /* Assets.xcassets in Resources */,
+				129359662BFE4D8D0042F99E /* lap3.m4a in Resources */,
+				129359562BFE4D8D0042F99E /* lap8.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,11 +456,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				129359752BFE683F0042F99E /* Runnable.swift in Sources */,
 				127122A52BEE68D100106069 /* SettingsView.swift in Sources */,
 				1271229F2BEE5AC600106069 /* RunView.swift in Sources */,
+				1215D4072BFEC38C00DB07C3 /* Int.swift in Sources */,
 				127122A32BEE5DCC00106069 /* AudioView.swift in Sources */,
+				129359252BFE20290042F99E /* WaypointService.swift in Sources */,
 				127122902BEE41A000106069 /* ContentView.swift in Sources */,
 				124645EA2BF16A2400CB6EAC /* TPButton.swift in Sources */,
+				1293597B2BFEAD1D0042F99E /* Double.swift in Sources */,
+				129359732BFE66F30042F99E /* Handler.swift in Sources */,
+				1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */,
 				12B144AF2BF2854A00FCD2A7 /* PacingProgress.swift in Sources */,
 				127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */,
 				124645ED2BF16A6C00CB6EAC /* ActionButtonStyle.swift in Sources */,
@@ -264,9 +479,12 @@
 				124645F42BF1731900CB6EAC /* PaceViewModel.swift in Sources */,
 				124645E52BF1661000CB6EAC /* RunViewModel.swift in Sources */,
 				12B144B22BF2889600FCD2A7 /* TimeUtil.swift in Sources */,
+				129359212BFE1BA20042F99E /* Array.swift in Sources */,
+				129359792BFEAC180042F99E /* Int64.swift in Sources */,
 				124645F22BF16E5900CB6EAC /* PaceView.swift in Sources */,
 				1271228E2BEE41A000106069 /* TrackPacerApp.swift in Sources */,
 				1271229D2BEE565200106069 /* StatusView.swift in Sources */,
+				1293591E2BFE0BAD0042F99E /* WaypointCalculator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,11 +621,15 @@
 				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrackPacer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TrackPacer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -432,11 +654,15 @@
 				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrackPacer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TrackPacer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

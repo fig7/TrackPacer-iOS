@@ -22,8 +22,6 @@ struct PaceView: View {
   }
 
   var body: some View {
-    let isPacing = pacingStatus.isPacing
-
     VStack(alignment: .leading, spacing: 4) {
       HStack {
         Spacer()
@@ -52,7 +50,7 @@ struct PaceView: View {
         let showPacing = (pacingProgress.distRun >= 0)
 
         Text("Distance run (on pace):")
-        Text(showPacing ? String(format: "%.2fm", pacingProgress.distRun) : " ").font(.system(size: 30, weight: .regular, design: .default))
+        Text(showPacing ? String(format: "%.2fm", pacingProgress.distRun) : " ").font(.system(size: 30, weight: .regular, design: .default)).monospacedDigit()
 
         Spacer().frame(height: 10)
 
@@ -68,16 +66,61 @@ struct PaceView: View {
       Spacer()
 
       HStack {
-        Button(action: { viewModel.setPacingStatus(pacingStatus: .NotPacing) }) { Text(" ").overlay { Image(isPacing ? "stop" : "stop2") } }
-          .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(!isPacing)
+        let pacingStatus = pacingStatus.status
+        switch(pacingStatus) {
+        case .NotPacing:
+          Button(action: { }) { Text(" ").overlay { Image("stop2") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+          Button(action: { viewModel.setPacingStatus(pacingStatus: .PacingStart) }) { Text(" SET ") }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: false)).disabled(false)
 
-        Button(action: { viewModel.setPacingStatus(pacingStatus: .Pacing) })    { Text(" SET ") }
-          .buttonStyle(ActionButtonStyleMax(disabledCol: isPacing)).disabled( isPacing)
+        case .PacingStart:
+          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { }) { Text(" SET ") }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+
+        case .Pacing:
+          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { viewModel.pausePacing() }) { Text(" ").overlay { Image("pause") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+
+        case .PacingPause:
+          Button(action: { }) { Text(" ").overlay { Image("stop2") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+          Button(action: { }) { Text(" ").overlay { Image("pause2") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+
+        case .PacingPaused:
+          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { viewModel.resumePacing() }) { Text(" ").overlay { Image("resume") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+
+        case .PacingResume:
+          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { }) { Text(" ").overlay { Image("resume2") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+
+        case .PacingComplete:
+          Button(action: { }) { Text(" ").overlay { Image("stop2") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+          Button(action: { }) { Text(" SET ") }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+
+        case .PacingCancel:
+          Button(action: { }) { Text(" ").overlay { Image("stop2") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+          Button(action: { }) { Text(" SET ") }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+        }
       }.padding(.bottom, 5)
     }.toolbar() {
       ToolbarItem(placement: .navigationBarTrailing) {
         StatusView()
       }
-    }.navigationBarBackButtonHidden(pacingStatus.isPacing).padding(.horizontal, 20)
+    }.navigationBarBackButtonHidden(pacingStatus.status != .NotPacing).padding(.horizontal, 20)
   }
 }
