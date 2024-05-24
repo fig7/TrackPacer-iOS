@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RunView: View {
   let viewModel: RunViewModel
-
   @ObservedObject var distanceSelection: DistanceSelection
 
   @State var laneStr = "1"
@@ -23,7 +22,6 @@ struct RunView: View {
 
   init(viewModel: RunViewModel) {
     self.viewModel = viewModel
-    
     self.distanceSelection = viewModel.distanceSelection
   }
 

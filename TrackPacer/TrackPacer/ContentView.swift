@@ -36,7 +36,7 @@ struct ContentView: View {
         PaceView(viewModel: viewModel.paceViewModel)
       }.toolbar() {
         ToolbarItem(placement: .navigationBarTrailing) {
-          StatusView()
+          StatusView(viewModel: viewModel.statusViewModel)
         }
       }
     }

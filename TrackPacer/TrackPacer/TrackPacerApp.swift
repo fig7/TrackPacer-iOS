@@ -10,25 +10,19 @@ import SwiftUI
 import AVKit
 import BackgroundTasks
 
-var mainViewModel: MainViewModel?
+var mainViewModel: MainViewModel!
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-  @objc func onAppDidBecomeActive(notification: NSNotification) {
-    print("Become active:")
-  }
-
   @objc func onAppWillResignActive(notification: NSNotification) {
-    print("Resign active:")
-
-    let pacingStatus = mainViewModel!.paceViewModel.pacingStatus.status
-    if(pacingStatus != .Pacing) {
-      mainViewModel!.paceViewModel.powerStart()
+    // Have a bool enabled or something in the statusViewModel (so, the code basically matches Android)
+    let statusViewModel = mainViewModel.statusViewModel
+    if(statusViewModel.screenReceiverActive) {
+      mainViewModel.handleIncomingIntent(begin: true, silent: false)
     }
   }
 
   func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     NotificationCenter.default.addObserver(self, selector: #selector(onAppWillResignActive),   name: UIApplication.willResignActiveNotification, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(onAppDidBecomeActive),   name: UIApplication.didBecomeActiveNotification, object: nil)
 
     do {
       let audioSession = AVAudioSession.sharedInstance();
@@ -42,17 +36,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   }
 
   override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-    print("Observing: \(String(describing: keyPath))")
-
     let application = UIApplication.shared
     if(application.applicationState != .active) {
-      // TODO: Implement with Android's handleIncomingIntent
-      let pacingStatus = mainViewModel!.paceViewModel.pacingStatus.status
-      if((pacingStatus == .NotPacing) || (pacingStatus == .PacingPaused)) { return }
-      if(pacingStatus == .Pacing) {
-        mainViewModel!.paceViewModel.pausePacing()
-      } else {
-        mainViewModel!.paceViewModel.stopPacing()
+      let statusViewModel = mainViewModel.statusViewModel
+      if(statusViewModel.screenReceiverActive) {
+        mainViewModel.handleIncomingIntent(begin: false, silent: false)
       }
     }
   }

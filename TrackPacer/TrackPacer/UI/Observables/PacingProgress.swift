@@ -14,9 +14,9 @@ import SwiftUI
   @Published var waypointName: String
   @Published var waypointProgress: Double
 
-  @Published var timeRemaining: Int64 {
+  @Published var timeRemaining: Int64? {
     didSet {
-      timeToProgress = min(1.0, (1.0 - (Double(timeRemaining) / Double(timeRemaining + elapsedTime))))
+      timeToProgress = (timeRemaining == nil) ? 0.0 : min(1.0, (1.0 - (Double(timeRemaining!) / Double(timeRemaining! + elapsedTime))))
     }
   }
   @Published var timeToProgress: Double
@@ -24,11 +24,11 @@ import SwiftUI
   init() {
     elapsedTime = 0
 
-    distRun = -1.0
+    distRun = 0.0
     waypointName = ""
     waypointProgress = 0.0
 
-    timeRemaining  = 0
+    timeRemaining  = nil
     timeToProgress = 0.0
   }
 
@@ -44,5 +44,11 @@ import SwiftUI
     self.waypointName     = waypointName
     self.waypointProgress = waypointProgress
     self.timeRemaining    = timeRemaining
+  }
+
+  func resetWaypointProgress() {
+    self.waypointName     = ""
+    self.waypointProgress = 0.0
+    self.timeRemaining    = nil
   }
 }

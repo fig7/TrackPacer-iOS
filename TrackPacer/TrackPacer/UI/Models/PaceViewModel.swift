@@ -29,21 +29,17 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
 
   @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
     viewModel.setPacingStatus(pacingStatus: .NotPacing)
-
-    /* do {
-      let audioSession = AVAudioSession.sharedInstance()
-      try audioSession.setActive(false)
-    } catch { } */
   }
 }
 
-@MainActor class PaceViewModel {
+@MainActor class PaceViewModel : ServiceConnection {
   var mainViewModel: MainViewModel!
-  var pacingStatus: PacingStatus
+  var statusViewModel: StatusViewModel!
+
   var pacingOptions: PacingOptions
   var pacingProgress: PacingProgress
 
-  private var waypointService: WaypointService?
+  private var waypointService: WaypointService!
   private var timer: Timer?
 
   private var mpPacingPaused: AVAudioPlayer!
@@ -66,7 +62,6 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
 
   init() {
     mainViewModel = nil
-    pacingStatus   = PacingStatus()
     pacingOptions  = PacingOptions()
     pacingProgress = PacingProgress()
 
@@ -90,49 +85,71 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func setMain(mainViewModel: MainViewModel) {
-    self.mainViewModel = mainViewModel
+    self.mainViewModel   = mainViewModel
+    self.statusViewModel = mainViewModel.statusViewModel
+  }
+
+  func startScreenReceiver() {
+    statusViewModel.screenReceiverActive = true
   }
 
   func onServiceConnected() {
-    if(pacingStatus.status == .PacingStart) {
-      waypointService!.beginPacing(runDist: "400m", runLane: 1, runTime: 80000, alternateStart: false)
+    let pacingStatus   = statusViewModel.pacingStatus.status
+    let pacingSettings = statusViewModel.pacingSettings
+    if(pacingStatus == .ServiceStart) {
+      waypointService.beginPacing(runDist: "400m", runLane: 1, runTime: 80000, alternateStart: false)
 
-      // If delay start (otherwise, power start) TODO: Add waypoint service callback, like Android
-      if(waypointService!.delayStart(startDelay: 5000, quickStart: false)) {
+      if(pacingSettings.powerStart) {
+        // Power start
+        setPacingStatus(pacingStatus: .PacingWait)
+
+        // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        startScreenReceiver()
+      } else {
+        // Delay start
+        setPacingStatus(pacingStatus: .PacingStart)
+
+        if(waypointService.delayStart(startDelay: 5000, quickStart: pacingSettings.quickStart)) {
+          handler.postDelayed(pacingRunnable, delayMS: 113)
+        }  else {
+          stopPacing(silent: true)
+        }
+      }
+    } else if(pacingStatus == .ServiceResume) {
+      setPacingStatus(pacingStatus: .PacingResume)
+
+      if(pacingSettings.powerStart) {
+        startScreenReceiver()
+      }
+
+      if(waypointService.resumePacing(runDist: "400m", runLane: 1, runTime: 80000, alternateStart: false, resumeTime: pacingProgress.elapsedTime)) {
         handler.postDelayed(pacingRunnable, delayMS: 113)
-       }
-    }
-    else if(pacingStatus.status == .PacingResume) {
-      if(waypointService!.resumePacing(runDist: "400m", runLane: 1, runTime: 80000, alternateStart: false, resumeTime: pacingProgress.elapsedTime)) {
-        handler.postDelayed(pacingRunnable, delayMS: 113)
+      } else {
+        stopPacing(silent: true)
       }
     }
   }
 
+  func onServiceDisconnected() {
+    stopPacing(silent: true)
+  }
+
   func setPacingStatus(pacingStatus: PacingStatusVal) {
-    self.pacingStatus.status = pacingStatus
-
-    // TODO: Move this out, and move pacing status into StatusModel
-    // TODO: Move functions into PacingModel (aka Android PacingActivity)
-    if(pacingStatus == .PacingStart) {
-      pacingProgress.setDistRun(-1.0)
-      pacingProgress.setElapsedTime(0)
-
-      waypointService = WaypointService(serviceConnectedCallback: onServiceConnected)
-    } else if(pacingStatus == .NotPacing) {
-      stopService()
-    }
+    statusViewModel.setPacingStatus(pacingStatus: pacingStatus)
   }
 
   func powerStart() {
     guard let waypointService else { return }
 
-    if(waypointService.powerStart(quickStart: false)) {
+    setPacingStatus(pacingStatus: .PacingStart)
+    if(waypointService.powerStart(quickStart: statusViewModel.pacingSettings.quickStart)) {
       timer = Timer.scheduledTimer(withTimeInterval: 0.113, repeats: true) { _ in
         Task { @MainActor in
           self.handleTimeUpdate()
         }
       }
+    } else {
+      stopPacing(silent: true)
     }
   }
 
@@ -140,7 +157,7 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
     guard let waypointService else { return }
     let elapsedTime = waypointService.elapsedTime()
     if(elapsedTime >= 0) {
-      let pacingStatus = pacingStatus.status
+      let pacingStatus = statusViewModel.pacingStatus.status
       if((pacingStatus == .PacingStart) || (pacingStatus == .PacingResume)) {
         setPacingStatus(pacingStatus: .Pacing)
       } else {
@@ -158,15 +175,30 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func stopService() {
+    let pacingSettings = statusViewModel.pacingSettings
+    if(pacingSettings.powerStart) {
+      // window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+      statusViewModel.screenReceiverActive = false
+    }
+
     timer?.invalidate()
     timer = nil
 
     waypointService = nil
   }
 
-  func pausePacing() {
+  func beginPacing() {
+    pacingProgress.setElapsedTime(0)
+    pacingProgress.resetWaypointProgress()
+
+    setPacingStatus(pacingStatus: .ServiceStart)
+    waypointService = WaypointService(serviceConnection: self)
+  }
+
+  func pausePacing(silent: Bool) {
     guard let waypointService else { return }
 
+    // Record the pacing progress
     let elapsedTime = waypointService.elapsedTime()
     pacingProgress.setElapsedTime(elapsedTime)
 
@@ -178,30 +210,26 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
     let remainingTime = waypointService.timeRemaining(elapsedTime)
     pacingProgress.setWaypointProgress(name, progress, remainingTime)
 
+    // Stop the service
     stopService()
 
-    // if(silent) {
-    //     statusModel.setPacingStatus(PacingStatus.PacingPaused)
-    // } else {
-        // statusModel.setPacingStatus(PacingStatus.PacingPause)
-        setPacingStatus(pacingStatus: .PacingPause)
-        mpPacingPaused.play()
-    // }
+    // Update the status
+    if(silent) {
+      setPacingStatus(pacingStatus: .PacingPaused)
+    } else {
+      setPacingStatus(pacingStatus: .PacingPause)
+      mpPacingPaused.play()
+    }
   }
 
-  func stopPacing() {
-    // TODO: Add status model
-    // TODO: And result model
-
-    let silent = false
-    let isPacing = pacingStatus.isPacing
-    let pacingStatus = pacingStatus.status
-    if(isPacing) {
+  func stopPacing(silent: Bool) {
+    let pacingStatus = statusViewModel.pacingStatus
+    if(pacingStatus.isPacing) {
       stopService()
 
       if(silent) {
         setPacingStatus(pacingStatus: .NotPacing)
-      } else if ((pacingStatus == .Pacing) && (pacingProgress.elapsedTime >= 40000)) {
+      } else if ((pacingStatus.status == .Pacing) && (pacingProgress.elapsedTime >= 40000)) {
         // resultModel.setPacingResult(resources, pacingModel)
         // statusModel.setPacingStatus(pacingStatus: .PacingComplete)
         setPacingStatus(pacingStatus: .PacingComplete)
@@ -210,7 +238,7 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
         setPacingStatus(pacingStatus: .PacingCancel)
         mpPacingCancelled.play()
       }
-    } else if((pacingStatus == .PacingPaused) && !silent) {
+    } else if((pacingStatus.status == .PacingPaused) && !silent) {
       if(pacingProgress.elapsedTime >= 40000) {
         // resultModel.setPacingResult(resources, pacingModel)
         setPacingStatus(pacingStatus: .PacingComplete)
@@ -225,10 +253,7 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func resumePacing() {
-    setPacingStatus(pacingStatus: .PacingResume)
-
-    // TODO: Make this like Android, have a callback for when the waypointService is up
-    // TODO: Just setup the right states here
-    waypointService = WaypointService(serviceConnectedCallback: onServiceConnected)
+    setPacingStatus(pacingStatus: .ServiceResume)
+    waypointService = WaypointService(serviceConnection: self)
   }
 }

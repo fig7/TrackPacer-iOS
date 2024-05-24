@@ -109,6 +109,30 @@ private class MPWaypointDelegate : NSObject, AVAudioPlayerDelegate {
   }
 }
 
+private class MPFinishDelegate : NSObject, AVAudioPlayerDelegate {
+  weak var service: WaypointService?
+
+  init(service: WaypointService) {
+    self.service = service
+  }
+
+  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    service?.playFinalClip()
+  }
+}
+
+private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
+  weak var service: WaypointService?
+
+  init(service: WaypointService) {
+    self.service = service
+  }
+
+  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    service?.terminate()
+  }
+}
+
 @MainActor class WaypointService /* : OnAudioFocusChangeListener */ {
   private var startRealtime: ContinuousClock.Instant!
   private var prevTime = -1.0
@@ -135,20 +159,26 @@ private class MPWaypointDelegate : NSObject, AVAudioPlayerDelegate {
   private var mpStart1: AVAudioPlayer!
   private var mpStart2: AVAudioPlayer!
   private var mpResume: AVAudioPlayer!
+  private var mpFinal: AVAudioPlayer!
   private var mpWaypoint: [AVAudioPlayer]!
 
   private var startDelegate: AVAudioPlayerDelegate!
-  private var finishDelegate: AVAudioPlayerDelegate!
   private var waypointDelegate: AVAudioPlayerDelegate!
+
+  private var finishDelegate: AVAudioPlayerDelegate!
+  private var finalDelegate: AVAudioPlayerDelegate!
 
   private let waypointCalculator = WaypointCalculator()
   private var clipIndexList: [Int]!
 
-  init(serviceConnectedCallback: @escaping () -> Void) {
+  private weak var serviceConnection: ServiceConnection?
+
+  init(serviceConnection: ServiceConnection?) {
+    self.serviceConnection = serviceConnection
     onCreate()
 
     Task { @MainActor in
-      serviceConnectedCallback()
+      serviceConnection?.onServiceConnected()
     }
   }
 
@@ -271,6 +301,9 @@ private class MPWaypointDelegate : NSObject, AVAudioPlayerDelegate {
         return try AVAudioPlayer(contentsOf: url)
       }
 
+      let urlComplete = Bundle.main.url(forResource: "complete", withExtension: ".m4a")!
+      mpFinal = try AVAudioPlayer(contentsOf: urlComplete)
+
       /* audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
        focusRequest = AudioFocusRequest.Builder(AUDIOFOCUS_GAIN).run {
        setAudioAttributes(AudioAttributes.Builder().run {
@@ -290,7 +323,12 @@ private class MPWaypointDelegate : NSObject, AVAudioPlayerDelegate {
 
       waypointDelegate = MPWaypointDelegate(service: self)
       for i in 0..<fL { mpWaypoint[i].delegate = waypointDelegate }
-      mpWaypoint[fL].delegate = nil
+
+      finishDelegate = MPFinishDelegate(service: self)
+      mpWaypoint[fL].delegate = finishDelegate
+
+      finalDelegate = MPFinalDelegate(service: self)
+      mpFinal.delegate = finalDelegate
     } catch { }
   }
 
@@ -341,5 +379,14 @@ private class MPWaypointDelegate : NSObject, AVAudioPlayerDelegate {
      let waypointTime = waypointCalculator.nextWaypoint()
      handler.postDelayed(waypointRunnable, delayMS: waypointTime.toLong()-elapsedTime())
     }
+  }
+
+  fileprivate func playFinalClip() {
+    // Complete pacing if the user doesn't stop the pacing after another 6 minutes
+    mpFinal.play(atTime: mpFinal.deviceCurrentTime + 360.0)
+  }
+
+  fileprivate func terminate() {
+    serviceConnection?.onServiceDisconnected()
   }
 }

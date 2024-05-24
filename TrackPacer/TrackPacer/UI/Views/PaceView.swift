@@ -15,10 +15,9 @@ struct PaceView: View {
 
   init(viewModel: PaceViewModel) {
     self.viewModel = viewModel
-
-    pacingStatus   = viewModel.pacingStatus
     pacingOptions  = viewModel.pacingOptions
     pacingProgress = viewModel.pacingProgress
+    pacingStatus   = viewModel.statusViewModel.pacingStatus
   }
 
   var body: some View {
@@ -47,19 +46,19 @@ struct PaceView: View {
       Spacer()
 
       VStack(alignment: .leading, spacing: 2) {
-        let showPacing = (pacingProgress.distRun >= 0)
+        let hidePacing = (pacingProgress.timeRemaining == nil)
 
         Text("Distance run (on pace):")
-        Text(showPacing ? String(format: "%.2fm", pacingProgress.distRun) : " ").font(.system(size: 30, weight: .regular, design: .default)).monospacedDigit()
+        Text(hidePacing ? " " : String(format: "%.2fm", pacingProgress.distRun)).font(.system(size: 30, weight: .regular, design: .default)).monospacedDigit()
 
         Spacer().frame(height: 10)
 
-        Text("Next up: \(showPacing ? pacingProgress.waypointName : "")")
+        Text("Next up: \(pacingProgress.waypointName)")
         ProgressView(value: pacingProgress.waypointProgress).progressViewStyle(PacingProgressStyle())
 
         Spacer().frame(height: 10)
 
-        Text("Time to target: \(showPacing ? timeToString(timeInMS: pacingProgress.timeRemaining) : "")")
+        Text("Time to target: \(hidePacing ? "" : timeToString(timeInMS: pacingProgress.timeRemaining!))")
         ProgressView(value: pacingProgress.timeToProgress).progressViewStyle(PacingProgressStyle())
       }
 
@@ -71,19 +70,31 @@ struct PaceView: View {
         case .NotPacing:
           Button(action: { }) { Text(" ").overlay { Image("stop2") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
-          Button(action: { viewModel.setPacingStatus(pacingStatus: .PacingStart) }) { Text(" SET ") }
+          Button(action: { viewModel.beginPacing() }) { Text(" SET ") }
             .buttonStyle(ActionButtonStyleMax(disabledCol: false)).disabled(false)
 
+        case .ServiceStart:
+          Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { }) { Text(" SET ") }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+
+        case .PacingWait:
+          Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { }) { Text(" SET ") }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+
         case .PacingStart:
-          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+          Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
           Button(action: { }) { Text(" SET ") }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
 
         case .Pacing:
-          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+          Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
-          Button(action: { viewModel.pausePacing() }) { Text(" ").overlay { Image("pause") } }
+          Button(action: { viewModel.pausePacing(silent: false) }) { Text(" ").overlay { Image("pause") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
 
         case .PacingPause:
@@ -93,13 +104,19 @@ struct PaceView: View {
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
 
         case .PacingPaused:
-          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+          Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
           Button(action: { viewModel.resumePacing() }) { Text(" ").overlay { Image("resume") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
 
+        case .ServiceResume:
+          Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { }) { Text(" ").overlay { Image("resume2") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
+
         case .PacingResume:
-          Button(action: { viewModel.stopPacing() }) { Text(" ").overlay { Image("stop") } }
+          Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
           Button(action: { }) { Text(" ").overlay { Image("resume2") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
@@ -119,7 +136,7 @@ struct PaceView: View {
       }.padding(.bottom, 5)
     }.toolbar() {
       ToolbarItem(placement: .navigationBarTrailing) {
-        StatusView()
+        StatusView(viewModel: viewModel.statusViewModel)
       }
     }.navigationBarBackButtonHidden(pacingStatus.status != .NotPacing).padding(.horizontal, 20)
   }
