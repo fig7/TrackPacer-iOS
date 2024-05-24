@@ -8,6 +8,6 @@
 import Foundation
 
 @MainActor class DistanceSelection: ObservableObject {
-  @Published var selected = "400m"
-  @Published var list = ["400m", "800m", "1000m"]
+  @Published var selected = ""
+  @Published var list: [String] = []
 }

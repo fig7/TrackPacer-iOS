@@ -80,6 +80,11 @@
 		12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */; };
 		12B144B62BF2D13700FCD2A7 /* PacingProgressStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B52BF2D13700FCD2A7 /* PacingProgressStyle.swift */; };
 		12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */; };
+		12E5204D2C00E98A002F54AE /* LaneSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E5204C2C00E98A002F54AE /* LaneSelection.swift */; };
+		12E520522C014046002F54AE /* DistanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520512C014046002F54AE /* DistanceModel.swift */; };
+		12E520542C014345002F54AE /* DistanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520532C014345002F54AE /* DistanceManager.swift */; };
+		12E5205A2C015114002F54AE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520592C015114002F54AE /* File.swift */; };
+		12E5205C2C015AD5002F54AE /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E5205B2C015AD5002F54AE /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -158,6 +163,11 @@
 		12B144B52BF2D13700FCD2A7 /* PacingProgressStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingProgressStyle.swift; sourceTree = "<group>"; };
 		12B144B72BF3BDAA00FCD2A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = threetwoone.m4a; sourceTree = "<group>"; };
+		12E5204C2C00E98A002F54AE /* LaneSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaneSelection.swift; sourceTree = "<group>"; };
+		12E520512C014046002F54AE /* DistanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceModel.swift; sourceTree = "<group>"; };
+		12E520532C014345002F54AE /* DistanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceManager.swift; sourceTree = "<group>"; };
+		12E520592C015114002F54AE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		12E5205B2C015AD5002F54AE /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,8 +203,7 @@
 		124645EE2BF16A8800CB6EAC /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				127122A92BEEDE3F00106069 /* Models */,
-				127122A62BEE7ED300106069 /* Observables */,
+				127122A92BEEDE3F00106069 /* ViewModels */,
 				124645EB2BF16A4D00CB6EAC /* Styles */,
 				1271229B2BEE561A00106069 /* Views */,
 			);
@@ -221,12 +230,14 @@
 			isa = PBXGroup;
 			children = (
 				1293591F2BFE1B910042F99E /* Ext */,
-				1293591C2BFE0B790042F99E /* Waypoint */,
-				12B144B72BF3BDAA00FCD2A7 /* Info.plist */,
+				12E5204F2C0134C1002F54AE /* AppModels */,
+				12E5204E2C013487002F54AE /* StorageModels */,
 				12B144B02BF2887600FCD2A7 /* Util */,
 				124645EE2BF16A8800CB6EAC /* UI */,
+				1293591C2BFE0B790042F99E /* Waypoint */,
 				1271228D2BEE41A000106069 /* TrackPacerApp.swift */,
 				1271228F2BEE41A000106069 /* ContentView.swift */,
+				12B144B72BF3BDAA00FCD2A7 /* Info.plist */,
 				127122912BEE41A200106069 /* Assets.xcassets */,
 				12B144B82BF3CCFC00FCD2A7 /* Audio */,
 				127122932BEE41A200106069 /* Preview Content */,
@@ -247,10 +258,10 @@
 			children = (
 				124645E62BF169A100CB6EAC /* SubViews */,
 				1271229E2BEE5AC600106069 /* RunView.swift */,
+				124645F12BF16E5900CB6EAC /* PaceView.swift */,
 				127122A02BEE5B6100106069 /* HistoryView.swift */,
 				127122A22BEE5DCC00106069 /* AudioView.swift */,
 				127122A42BEE68D100106069 /* SettingsView.swift */,
-				124645F12BF16E5900CB6EAC /* PaceView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -258,24 +269,22 @@
 		127122A62BEE7ED300106069 /* Observables */ = {
 			isa = PBXGroup;
 			children = (
-				127122A72BEE7F1F00106069 /* DistanceSelection.swift */,
-				12B144AE2BF2854A00FCD2A7 /* PacingProgress.swift */,
-				12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */,
-				124645EF2BF16B5600CB6EAC /* PacingStatus.swift */,
-				123F12642C00AE3100F5E6E6 /* PacingSettings.swift */,
+				12E5204B2C00E968002F54AE /* Pace */,
+				12E5204A2C00E961002F54AE /* Run */,
 			);
 			path = Observables;
 			sourceTree = "<group>";
 		};
-		127122A92BEEDE3F00106069 /* Models */ = {
+		127122A92BEEDE3F00106069 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				127122A62BEE7ED300106069 /* Observables */,
 				127122AA2BEEDE5400106069 /* MainViewModel.swift */,
 				124645E42BF1661000CB6EAC /* RunViewModel.swift */,
 				124645F32BF1731900CB6EAC /* PaceViewModel.swift */,
 				123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */,
 			);
-			path = Models;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		1293591C2BFE0B790042F99E /* Waypoint */ = {
@@ -294,10 +303,12 @@
 				129359202BFE1BA20042F99E /* Array.swift */,
 				1293597C2BFEADF50042F99E /* ContinousClock.swift */,
 				1293597A2BFEAD1D0042F99E /* Double.swift */,
+				12E520592C015114002F54AE /* File.swift */,
 				129359722BFE66F30042F99E /* Handler.swift */,
 				1215D4062BFEC38C00DB07C3 /* Int.swift */,
 				129359782BFEAC180042F99E /* Int64.swift */,
 				129359742BFE683F0042F99E /* Runnable.swift */,
+				12E5205B2C015AD5002F54AE /* String.swift */,
 			);
 			path = Ext;
 			sourceTree = "<group>";
@@ -354,6 +365,50 @@
 				12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		12E5204A2C00E961002F54AE /* Run */ = {
+			isa = PBXGroup;
+			children = (
+				127122A72BEE7F1F00106069 /* DistanceSelection.swift */,
+				12E5204C2C00E98A002F54AE /* LaneSelection.swift */,
+			);
+			path = Run;
+			sourceTree = "<group>";
+		};
+		12E5204B2C00E968002F54AE /* Pace */ = {
+			isa = PBXGroup;
+			children = (
+				12B144AE2BF2854A00FCD2A7 /* PacingProgress.swift */,
+				12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */,
+				124645EF2BF16B5600CB6EAC /* PacingStatus.swift */,
+				123F12642C00AE3100F5E6E6 /* PacingSettings.swift */,
+			);
+			path = Pace;
+			sourceTree = "<group>";
+		};
+		12E5204E2C013487002F54AE /* StorageModels */ = {
+			isa = PBXGroup;
+			children = (
+				12E520512C014046002F54AE /* DistanceModel.swift */,
+				12E520502C014019002F54AE /* Manager */,
+			);
+			path = StorageModels;
+			sourceTree = "<group>";
+		};
+		12E5204F2C0134C1002F54AE /* AppModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AppModels;
+			sourceTree = "<group>";
+		};
+		12E520502C014019002F54AE /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				12E520532C014345002F54AE /* DistanceManager.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -485,13 +540,18 @@
 				127122A12BEE5B6100106069 /* HistoryView.swift in Sources */,
 				123F12652C00AE3100F5E6E6 /* PacingSettings.swift in Sources */,
 				124645E82BF169DF00CB6EAC /* TPPicker.swift in Sources */,
+				12E520522C014046002F54AE /* DistanceModel.swift in Sources */,
 				124645F02BF16B5600CB6EAC /* PacingStatus.swift in Sources */,
 				12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */,
 				124645F42BF1731900CB6EAC /* PaceViewModel.swift in Sources */,
+				12E520542C014345002F54AE /* DistanceManager.swift in Sources */,
+				12E5205A2C015114002F54AE /* File.swift in Sources */,
 				123F12612BFFE39600F5E6E6 /* ServiceConnection.swift in Sources */,
+				12E5205C2C015AD5002F54AE /* String.swift in Sources */,
 				124645E52BF1661000CB6EAC /* RunViewModel.swift in Sources */,
 				12B144B22BF2889600FCD2A7 /* TimeUtil.swift in Sources */,
 				129359212BFE1BA20042F99E /* Array.swift in Sources */,
+				12E5204D2C00E98A002F54AE /* LaneSelection.swift in Sources */,
 				129359792BFEAC180042F99E /* Int64.swift in Sources */,
 				124645F22BF16E5900CB6EAC /* PaceView.swift in Sources */,
 				1271228E2BEE41A000106069 /* TrackPacerApp.swift in Sources */,

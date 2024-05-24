@@ -10,9 +10,7 @@ import SwiftUI
 struct RunView: View {
   let viewModel: RunViewModel
   @ObservedObject var distanceSelection: DistanceSelection
-
-  @State var laneStr = "1"
-  var laneList = ["1", "2", "3"]
+  @ObservedObject var laneSelection: LaneSelection
 
   @State var timeStr = "1:30.00"
   var timeList = ["1:30.00", "1:45.00", "2:00.00"]
@@ -23,6 +21,7 @@ struct RunView: View {
   init(viewModel: RunViewModel) {
     self.viewModel = viewModel
     self.distanceSelection = viewModel.distanceSelection
+    self.laneSelection     = viewModel.laneSelection
   }
 
   var body: some View {
@@ -41,7 +40,7 @@ struct RunView: View {
         TPPicker(selected: $distanceSelection.selected, list: distanceSelection.list).frame(width: 180, height: 42, alignment: .center)
         Spacer().frame(width: 15)
 
-        TPPicker(selected: $laneStr, list: laneList).frame(width: 80, height: 42, alignment: .center)
+        TPPicker(selected: $laneSelection.selected, list: laneSelection.list).frame(width: 80, height: 42, alignment: .center)
 
         Spacer()
       }.padding(.horizontal, 20)

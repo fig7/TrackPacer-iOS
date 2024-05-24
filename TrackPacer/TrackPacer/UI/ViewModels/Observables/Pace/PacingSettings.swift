@@ -5,7 +5,7 @@
 //  Created by Stuart Fisher on 24/05/2024.
 //
 
-import SwiftUI
+import Foundation
 
 @MainActor class PacingSettings : ObservableObject {
   @Published var powerStart = true

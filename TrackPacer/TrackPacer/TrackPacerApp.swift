@@ -8,7 +8,6 @@
 import SwiftUI
 
 import AVKit
-import BackgroundTasks
 
 var mainViewModel: MainViewModel!
 
@@ -49,7 +48,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main struct TrackPacerApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+  private let distanceModel: DistanceModel
+
   init() {
+    distanceModel = DistanceModel()
+    if(!distanceModel.distanceDataOK) {
+        // val dialog = DistanceErrorDialog.newDialog("initializing", true)
+        // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
+    }
+
     mainViewModel = MainViewModel()
   }
 

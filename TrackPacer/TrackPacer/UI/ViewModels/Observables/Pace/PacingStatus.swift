@@ -5,7 +5,7 @@
 //  Created by Stuart Fisher on 12/05/2024.
 //
 
-import SwiftUI
+import Foundation
 
 enum PacingStatusVal { case NotPacing, ServiceStart, PacingWait, PacingStart, Pacing, PacingPause, PacingPaused, ServiceResume, PacingResume, PacingComplete, PacingCancel }
 

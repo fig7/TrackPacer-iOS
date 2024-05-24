@@ -1,11 +1,11 @@
 //
-//  PacingTimes.swift
+//  PacingProgress.swift
 //  TrackPacer
 //
 //  Created by Stuart Fisher on 13/05/2024.
 //
 
-import SwiftUI
+import Foundation
 
 @MainActor class PacingProgress : ObservableObject {
   @Published var elapsedTime: Int64

@@ -10,10 +10,12 @@ import Foundation
 @MainActor class RunViewModel {
   var mainViewModel: MainViewModel!
   var distanceSelection: DistanceSelection
+  var laneSelection: LaneSelection
 
   init() {
     mainViewModel = nil
     distanceSelection = DistanceSelection()
+    laneSelection     = LaneSelection()
   }
 
   func setMain(mainViewModel: MainViewModel) {
