@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FileError : Error { case FileCreationError, FileReadError, FileDataError }
+enum FileError : Error { case FileCreationError, FileReadError, FileDataError, FolderCreationError }
 
 struct File {
   let url: URL
@@ -28,6 +28,10 @@ struct File {
   func exists() -> Bool { return fm.fileExists(atPath: url.path(percentEncoded: false)) }
   func mkdir() throws -> Bool { try fm.createDirectory(at: url, withIntermediateDirectories: false); return true }
 
+  func list() throws -> [String] {
+    return try fm.contentsOfDirectory(atPath: url.path(percentEncoded: false))
+  }
+
   func readText() throws -> String {
     let data = NSData(contentsOf: url) as Data?
     guard let data else { throw FileError.FileReadError }
@@ -38,7 +42,7 @@ struct File {
     return text
   }
 
-  func writeText(text: String) throws {
-    
+  func writeText(_ text: String) throws {
+    try text.write(to: url, atomically: true, encoding: .utf8)
   }
 }

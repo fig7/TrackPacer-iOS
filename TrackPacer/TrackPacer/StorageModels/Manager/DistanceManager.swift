@@ -8,6 +8,9 @@
 import Foundation
 
 private let distanceVersion = "1.3"
+
+enum DistanceError : Error { case VersionError }
+
 class DistanceManager {
   private let filesDir: File
   private let distanceDir: File
@@ -24,11 +27,11 @@ class DistanceManager {
 
   func initDistances(defaultDistances: [String]) throws {
     if(distanceDir.exists()) {
-      // readVersion()
-      // readData()
+      try readVersion()
+      try readData()
 
       if(currentVersion != distanceVersion) {
-        // updateData(defaultDistances)
+        try updateData(defaultDistances: defaultDistances)
       }
     } else {
       try initData(defaultDistances)
@@ -37,22 +40,19 @@ class DistanceManager {
 
   private func readVersion() throws {
     let versionFile = File(file: distanceDir, child: "version.dat", directoryHint: .notDirectory)
-    if(!versionFile.exists()) {
-      // Version before version file existed
-      currentVersion = "1.2"
-      return
-    }
+    if(!versionFile.exists()) { throw FileError.FileReadError }
 
     currentVersion = try versionFile.readText()
   }
 
   private func writeVersion() throws {
     let versionFile = File(file: distanceDir, child: "version.dat", directoryHint: .notDirectory)
-    try versionFile.writeText(text: distanceVersion)
+    try versionFile.writeText(distanceVersion)
   }
 
   private func initData(_ defaultDistances: [String]) throws {
-    if(!(try distanceDir.mkdir())) { throw FileError.FileCreationError }
+    let success = try distanceDir.mkdir()
+    if(!success) { throw FileError.FolderCreationError }
 
     distanceArray = (0 ..< defaultDistances.size).map { (i: Int) in String(defaultDistances[i].split(separator: "+")[0]) }
     for (i, runDistance) in distanceArray.enumerated() {
@@ -63,213 +63,173 @@ class DistanceManager {
     try writeVersion()
   }
 
-  /*
-    private fun readData() {
-        val folderList = distanceDir.list() ?: throw IOException()
-        val distanceFilter = { distance: String -> distance.startsWith("Distance") }
+  private func readData() throws {
+    let folderList = try distanceDir.list()
+    let distanceFilter = { (distance: String) in distance.starts(with: "Distance") }
 
-        val folderArray = folderList.filter(distanceFilter).toTypedArray()
-        folderArray.sort()
-        distanceArray = Array(folderArray.size) { "" }
+    var folderArray = folderList.filter(distanceFilter)
+    folderArray.sort()
+    distanceArray = [String](repeating: "", count: folderArray.size)
 
-        for ((i, distance) in folderArray.withIndex()) {
-            val runDistance  = distance.substring(13)
-            distanceArray[i] = runDistance
+    for (i, distance) in folderArray.enumerated() {
+      let runDistance  = distance.substring(13)
+      distanceArray[i] = runDistance
 
-            val distanceDir = File(distanceDir, distance)
-            val timesFile = File(distanceDir, "times.dat")
-            val timesStr  = timesFile.readText()
-            timeMap[runDistance] = timesStr.split(",").toTypedArray()
-        }
+      let distanceDir = File(file: distanceDir, child: distance, directoryHint: .isDirectory)
+      let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
+      let timesStr  = try timesFile.readText()
+      timeMap[runDistance] = timesStr.split(separator: ",").map(String.init)
+    }
+  }
+
+  private func writeData(_ distance: String) throws {
+    let i = distanceArray.firstIndex(of: distance)
+    guard let i else { throw Exception.IllegalArgumentException }
+
+    let prefix = String(format: "Distance_%03d_", i)
+    let distanceDir = File(file: distanceDir, child: prefix + distance, directoryHint: .isDirectory)
+    if(!distanceDir.exists()) {
+      let success = try distanceDir.mkdir()
+      if(!success) { throw Exception.IOException }
     }
 
-    private fun writeData(distance: String) {
-        val i = distanceArray.indexOf(distance)
-        if (i == -1) { throw IllegalArgumentException() }
+    let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
+    let timeStr = timeMap[distance]!.joined(separator: ",")
+    try timesFile.writeText(timeStr)
+  }
 
-        val prefix = String.format("Distance_%03d_", i)
-        val distanceDir = File(distanceDir, prefix + distance)
-        if (!distanceDir.exists() && !distanceDir.mkdir()) throw IOException()
+  private func writeData() throws {
+    for (i, distance) in distanceArray.enumerated() {
+      let prefix = String(format: "Distance_%03d_", i)
+      let distanceDir = File(file: distanceDir, child: prefix + distance, directoryHint: .isDirectory)
+      if(!distanceDir.exists()) {
+        let success = try distanceDir.mkdir()
+        if(!success) { throw FileError.FolderCreationError }
+      }
 
-        val timesFile = File(distanceDir, "times.dat")
-        val timeStr = timeMap[distance]!!.joinToString(separator = ",")
-        timesFile.writeText(timeStr)
+      let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
+      let timeStr = timeMap[distance]!.joined(separator: ",")
+      try timesFile.writeText(timeStr)
+    }
+  }
+
+  private func updateData(defaultDistances: [String]) throws {
+    throw DistanceError.VersionError
+  }
+
+  private func timeGreaterThan(time1: String, time2: String) throws -> Bool {
+    let time1Split = time1.split(separator: ":")
+    let time1Split0 = try String(time1Split[0]).trim().toLong()
+    let time1Split1 = try String(time1Split[1]).toDouble()
+    let time1Dbl = 1000.0*(time1Split0.toDouble()*60.0 + time1Split1)
+
+    let time2Split = time2.split(separator: ":")
+    let time2Split0 = try String(time2Split[0]).trim().toLong()
+    let time2Split1 = try String(time2Split[1]).toDouble()
+    let time2Dbl = 1000.0*(time2Split0.toDouble()*60.0 + time2Split1)
+    return (time1Dbl > time2Dbl)
+  }
+
+
+  func deleteTime(runDistance: String, runTime: String?) throws -> Int {
+    guard let runTime else { throw Exception.IllegalArgumentException }
+
+    let timeArray = timeMap[runDistance]
+    guard let timeArray else { throw Exception.IllegalArgumentException }
+    if(!timeArray.contains(runTime)) { throw Exception.IllegalArgumentException }
+
+    var i = 0
+    var newIndex = -1
+    var newTimeArray = [String](repeating: "", count: timeArray.size-1)
+    for time in timeArray {
+      if(time == runTime) {
+        newIndex = i-1
+        if(newIndex < 0) { newIndex = 0 }
+
+        continue
+      }
+
+      newTimeArray[i] = time
+      i += 1
     }
 
-    private fun writeData() {
-        for ((i, distance) in distanceArray.withIndex()) {
-            val prefix = String.format("Distance_%03d_", i)
-            val distanceDir = File(distanceDir, prefix + distance)
-            if (!distanceDir.exists() && !distanceDir.mkdir()) throw IOException()
+    timeMap[runDistance] = newTimeArray
+    try writeData(runDistance)
 
-            val timesFile = File(distanceDir, "times.dat")
-            val timeStr = timeMap[distance]!!.joinToString(separator = ",")
-            timesFile.writeText(timeStr)
-        }
+    return newIndex
+  }
+
+  func addTime(runDistance: String, runTime: String?) throws -> Int {
+    guard let runTime else { throw Exception.IllegalArgumentException }
+
+    let timeArray = timeMap[runDistance]
+    guard let timeArray else { throw Exception.IllegalArgumentException }
+    if(timeArray.contains(runTime)) { throw Exception.IllegalArgumentException }
+
+    var i = 0
+    var j = 0
+    var newTimeArray = [String](repeating: "", count: timeArray.size+1)
+    while(i < timeArray.size) {
+      let time = timeArray[i]
+      if(try timeGreaterThan(time1: time, time2: runTime)) { break }
+
+      newTimeArray[j] = time
+      i += 1; j += 1
     }
 
-    private fun updateData(defaultDistances: Array<String>) {
-        when(currentVersion) {
-            "1.2" -> {
-                // 1.2 -> 1.3
-                // Rename Distance_002_1200m ....
-                var oldDistanceDir = File(distanceDir, "Distance_002_1200m")
-                var newDistanceDir = File(distanceDir, "Distance_003_1200m")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
+    let newIndex = j
+    newTimeArray[j] = runTime
+    j += 1
 
-                oldDistanceDir = File(distanceDir, "Distance_003_1500m")
-                newDistanceDir = File(distanceDir, "Distance_004_1500m")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
-
-                oldDistanceDir = File(distanceDir, "Distance_004_2000m")
-                newDistanceDir = File(distanceDir, "Distance_005_2000m")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
-
-                oldDistanceDir = File(distanceDir, "Distance_005_3000m")
-                newDistanceDir = File(distanceDir, "Distance_006_3000m")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
-
-                oldDistanceDir = File(distanceDir, "Distance_006_4000m")
-                newDistanceDir = File(distanceDir, "Distance_007_4000m")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
-
-                oldDistanceDir = File(distanceDir, "Distance_007_5000m")
-                newDistanceDir = File(distanceDir, "Distance_008_5000m")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
-
-                oldDistanceDir = File(distanceDir, "Distance_008_10000m")
-                newDistanceDir = File(distanceDir, "Distance_009_10000m")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
-
-                oldDistanceDir = File(distanceDir, "Distance_009_1 mile")
-                newDistanceDir = File(distanceDir, "Distance_010_1 mile")
-                if(!oldDistanceDir.renameTo(newDistanceDir)) throw IOException()
-
-                // Update distance array
-                distanceArray = Array(defaultDistances.size) { defaultDistances[it].split("+")[0] }
-                timeMap["1000m"] = defaultDistances[2].split("+")[1].trim().split(",").toTypedArray()
-
-                // Write out Distance_002_1000m
-                val distanceDir = File(distanceDir, "Distance_002_1000m")
-                if (!distanceDir.exists() && !distanceDir.mkdir()) throw IOException()
-
-                val timesFile = File(distanceDir, "times.dat")
-                val timeStr = timeMap["1000m"]!!.joinToString(separator = ",")
-                timesFile.writeText(timeStr)
-            }
-
-            else -> throw IllegalArgumentException()
-        }
-
-        writeVersion()
+    while(i < timeArray.size) {
+      newTimeArray[j] = timeArray[i]
+      i += 1; j += 1
     }
 
-    private fun timeGreaterThan(time1: String, time2: String): Bool {
-        val time1Split = time1.split(":")
-        val time1Dbl = 1000.0*(time1Split[0].trim().toLong()*60.0 + time1Split[1].toDouble())
+    timeMap[runDistance] = newTimeArray
+    try writeData(runDistance)
 
-        val time2Split = time2.split(":")
-        val time2Dbl = 1000.0*(time2Split[0].trim().toLong()*60.0 + time2Split[1].toDouble())
-        return time1Dbl > time2Dbl
+    return newIndex
+  }
+
+  func replaceTime(runDistance: String, origTime: String?, newTime: String?) throws -> Int {
+    guard let origTime, let newTime else { throw Exception.IllegalArgumentException }
+
+    let timeArray = timeMap[runDistance]
+    guard let timeArray else { throw Exception.IllegalArgumentException }
+    if(!timeArray.contains(origTime)) { throw Exception.IllegalArgumentException }
+
+    var i = 0
+    var j = 0
+    var newTimeArray = [String](repeating: "", count: timeArray.size)
+    while(i < timeArray.size) {
+      let time = timeArray[i]
+      if(try timeGreaterThan(time1: time, time2: newTime)) { break }
+
+      i += 1
+      if(time == origTime) { continue }
+
+      newTimeArray[j] = time
+      j += 1
     }
 
-    fun deleteTime(runDistance: String, runTime: String?): Int {
-        if (runTime == null) { throw IllegalArgumentException() }
-        if (!timeMap.containsKey(runDistance)) { throw IllegalArgumentException() }
+    let newIndex = j
+    newTimeArray[j] = newTime
+    j += 1
 
-        val timeArray = timeMap[runDistance]!!
-        if (!timeArray.contains(runTime)) { throw IllegalArgumentException() }
+    while(i < timeArray.size) {
+      let time = timeArray[i]
 
-        var i = 0
-        var newIndex = -1
-        val newTimeArray = Array(timeArray.size-1) { "" }
-        for (time in timeArray) {
-            if (time == runTime) {
-                newIndex = i-1
-                if (newIndex < 0) newIndex = 0
-                continue
-            }
+      i += 1
+      if(time == origTime) { continue }
 
-            newTimeArray[i++] = time
-        }
-
-        timeMap[runDistance] = newTimeArray
-        writeData(runDistance)
-
-        return newIndex
+      newTimeArray[j] = time
+      j += 1
     }
 
-    fun addTime(runDistance: String, runTime: String?): Int {
-        if (runTime == null) { throw IllegalArgumentException() }
-        if (!timeMap.containsKey(runDistance)) { throw IllegalArgumentException() }
+    timeMap[runDistance] = newTimeArray
+    try writeData(runDistance)
 
-        var i = 0
-        var j = 0
-        val timeArray = timeMap[runDistance]!!
-        val newTimeArray = Array(timeArray.size+1) { "" }
-        while (i < timeArray.size) {
-            val time = timeArray[i]
-            if (timeGreaterThan(time, runTime)) {
-                break
-            }
-
-            i++
-            newTimeArray[j++] = time
-        }
-
-        val newIndex = j
-        newTimeArray[j++] = runTime
-
-        while (i < timeArray.size) {
-            val time = timeArray[i++]
-            newTimeArray[j++] = time
-        }
-
-        timeMap[runDistance] = newTimeArray
-        writeData(runDistance)
-
-        return newIndex
-    }
-
-    fun replaceTime(runDistance: String, origTime: String?, newTime: String?): Int {
-        if ((origTime == null) || (newTime == null)) { throw IllegalArgumentException() }
-        if (!timeMap.containsKey(runDistance)) { throw IllegalArgumentException() }
-
-        var i = 0
-        var j = 0
-        val timeArray = timeMap[runDistance]!!
-        val newTimeArray = Array(timeArray.size) { "" }
-        while (i < timeArray.size) {
-            val time = timeArray[i]
-            if (timeGreaterThan(time, newTime)) {
-                break
-            }
-
-            i++
-            if (time == origTime) {
-                continue
-            }
-
-            newTimeArray[j++] = time
-        }
-
-        val newIndex = j
-        newTimeArray[j++] = newTime
-
-        while (i < timeArray.size) {
-            val time = timeArray[i]
-
-            ++i
-            if (time == origTime) {
-                continue
-            }
-
-            newTimeArray[j++] = time
-        }
-
-        timeMap[runDistance] = newTimeArray
-        writeData(runDistance)
-
-        return newIndex
-    } */
+    return newIndex
+  }
 }

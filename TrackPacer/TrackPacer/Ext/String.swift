@@ -9,4 +9,23 @@ import Foundation
 
 extension String {
   func trim() -> String { return self.trimmingCharacters(in: .whitespaces) }
+
+  func substring(_ from: Int) -> String {
+    let startIndex = self.index(self.startIndex, offsetBy: from)
+    return String(self[startIndex...])
+  }
+
+  func toLong() throws -> Int64 {
+    let result = Int64(self)
+    guard let result else { throw Exception.NumberFormatException }
+
+    return result
+  }
+
+  func toDouble() throws -> Double {
+    let result = Double(self)
+    guard let result else { throw Exception.NumberFormatException }
+
+    return result
+  }
 }

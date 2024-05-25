@@ -9,19 +9,20 @@ import SwiftUI
 
 struct RunView: View {
   let viewModel: RunViewModel
+
   @ObservedObject var distanceSelection: DistanceSelection
   @ObservedObject var laneSelection: LaneSelection
-
-  @State var timeStr = "1:30.00"
-  var timeList = ["1:30.00", "1:45.00", "2:00.00"]
+  @ObservedObject var timeSelection: TimeSelection
 
   @State var profileStr = "Fixed pace"
   var profileList = ["Fixed pace"]
 
   init(viewModel: RunViewModel) {
     self.viewModel = viewModel
+
     self.distanceSelection = viewModel.distanceSelection
     self.laneSelection     = viewModel.laneSelection
+    self.timeSelection     = viewModel.timeSelection
   }
 
   var body: some View {
@@ -54,7 +55,7 @@ struct RunView: View {
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $timeStr, list: timeList).frame(width: 200, height: 42, alignment: .center)
+        TPPicker(selected: $timeSelection.selected, list: timeSelection.list).frame(width: 200, height: 42, alignment: .center)
         Spacer().frame(width: 15)
 
         TPButton(iconName: "baseline_edit_42").frame(width: 60, height: 42, alignment: .center)

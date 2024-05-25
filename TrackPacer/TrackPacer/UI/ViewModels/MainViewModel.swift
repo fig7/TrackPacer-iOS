@@ -8,12 +8,16 @@
 import Foundation
 
 @MainActor class MainViewModel {
+  weak var runModel: RunModel?
+
   var runViewModel: RunViewModel
   var paceViewModel: PaceViewModel
   var statusViewModel: StatusViewModel
 
-  init() {
-    runViewModel    = RunViewModel()
+  init(runModel: RunModel) {
+    self.runModel = runModel
+
+    runViewModel    = RunViewModel(runModel)
     paceViewModel   = PaceViewModel()
     statusViewModel = StatusViewModel()
 

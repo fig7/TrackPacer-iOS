@@ -48,16 +48,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main struct TrackPacerApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-  private let distanceModel: DistanceModel
+  private let runModel: RunModel
 
   init() {
-    distanceModel = DistanceModel()
-    if(!distanceModel.distanceDataOK) {
-        // val dialog = DistanceErrorDialog.newDialog("initializing", true)
-        // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
+    runModel = RunModel()
+    if(!runModel.runModelOK) {
+      // val dialog = DistanceErrorDialog.newDialog("initializing", true)
+      // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
     }
 
-    mainViewModel = MainViewModel()
+    mainViewModel = MainViewModel(runModel: runModel)
+    initialiseRunView()
+  }
+
+  private func initialiseRunView() {
+    let distanceArray = runModel.distanceArray()
+    let timeArray     = runModel.timesFor(distanceArray[0])
+
+    let runViewModel = mainViewModel.runViewModel
+    runViewModel.setDistances(distanceArray)
+    runViewModel.updateTimes(timeArray, selected: 0)
   }
 
   var body: some Scene {

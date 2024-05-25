@@ -17,11 +17,12 @@ struct TPPicker : View {
   var body: some View {
     HStack {
       Spacer().frame(width: 10)
-      RoundedRectangle(cornerRadius: 8).fill(LinearGradient(colors:[gray1, gray2], startPoint: .top, endPoint: .bottom)).strokeBorder(.black, lineWidth: 1).overlay(        Picker("", selection: selected) {
-        ForEach(list, id: \.self) {
-          Text($0)
-        }
-      }.tint(.black))
+      RoundedRectangle(cornerRadius: 8).fill(LinearGradient(colors:[gray1, gray2], startPoint: .top, endPoint: .bottom)).strokeBorder(.black, lineWidth: 1).overlay(
+        Picker("", selection: selected) {
+          ForEach(list, id: \.self) {
+            Text($0)
+          }
+        }.tint(.black))
     }
   }
 }
