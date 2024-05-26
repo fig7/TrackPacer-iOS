@@ -11,9 +11,8 @@ import Foundation
   var delegate: SelectedChangedDelegate?
 
   @Published var selected = "" {
-    didSet {
-      delegate?.selectedChanged(selected)
-    }
+    didSet { delegate?.selectedChanged(self, selected) }
   }
+
   @Published var list: [String] = [""]
 }

@@ -17,12 +17,16 @@ struct RunView: View {
   @State var profileStr = "Fixed pace"
   var profileList = ["Fixed pace"]
 
+  @ObservedObject var trackSelection: TrackSelection
+
   init(viewModel: RunViewModel) {
     self.viewModel = viewModel
 
     self.distanceSelection = viewModel.distanceSelection
     self.laneSelection     = viewModel.laneSelection
     self.timeSelection     = viewModel.timeSelection
+
+    self.trackSelection    = viewModel.trackSelection
   }
 
   var body: some View {
@@ -84,7 +88,7 @@ struct RunView: View {
 
       VStack {
         HStack {
-          Text("Start to Finish (400m):")
+          Text("Start to Finish (\(trackSelection.totalDist)):")
 
           Spacer()
         }.padding(.horizontal, 20)
@@ -93,11 +97,11 @@ struct RunView: View {
 
         ZStack {
           Image("running_track")
-          Image("rt_400_l1")
+          Image(trackSelection.trackOverlay)
           VStack {
-            Text("1 lap")
-            Text("")
-            Text("")
+            Text(trackSelection.lapCounter)
+            Text(trackSelection.lapDesc1)
+            Text(trackSelection.lapDesc2)
           }
         }
       }

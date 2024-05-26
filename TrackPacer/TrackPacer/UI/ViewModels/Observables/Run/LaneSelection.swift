@@ -8,7 +8,11 @@
 import Foundation
 
 @MainActor class LaneSelection: ObservableObject {
-  @Published var selected = "1"
-  @Published var list     = ["1", "2", "3", "4", "5", "6", "7", "8"]
-}
+  var delegate: SelectedChangedDelegate?
 
+  @Published var selected = "1" {
+    didSet { delegate?.selectedChanged(self, selected) }
+  }
+
+  @Published var list = ["1", "2", "3", "4", "5", "6", "7", "8"]
+}

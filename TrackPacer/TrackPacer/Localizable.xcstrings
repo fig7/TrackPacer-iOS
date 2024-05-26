@@ -1,0 +1,348 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    " " : {
+
+    },
+    " ON  YOUR  MARKS " : {
+
+    },
+    " SET " : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "%@ (%@/km)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@/km)"
+          }
+        }
+      }
+    },
+    "Audio" : {
+
+    },
+    "Distance in lane %lld" : {
+
+    },
+    "Distance run (on pace):" : {
+
+    },
+    "Distance:" : {
+
+    },
+    "fl_200m" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First lap is a ½ lap"
+          }
+        }
+      }
+    },
+    "fl_300m" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First lap is a ¾ lap"
+          }
+        }
+      }
+    },
+    "fl_mile" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First lap is 9.34m extra"
+          }
+        }
+      }
+    },
+    "Hello, 2" : {
+
+    },
+    "Hello, 3" : {
+
+    },
+    "Hello, 4" : {
+
+    },
+    "History" : {
+
+    },
+    "Lane:" : {
+
+    },
+    "laps_400" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 lap"
+          }
+        }
+      }
+    },
+    "laps_800" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 laps"
+          }
+        }
+      }
+    },
+    "laps_1000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 and a ½ laps"
+          }
+        }
+      }
+    },
+    "laps_1200" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 laps"
+          }
+        }
+      }
+    },
+    "laps_1500" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 and ¾ laps"
+          }
+        }
+      }
+    },
+    "laps_2000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 laps"
+          }
+        }
+      }
+    },
+    "laps_3000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 and a ½ laps"
+          }
+        }
+      }
+    },
+    "laps_4000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 laps"
+          }
+        }
+      }
+    },
+    "laps_5000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "12 and a ½ laps"
+          }
+        }
+      }
+    },
+    "laps_10000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "25 laps"
+          }
+        }
+      }
+    },
+    "laps_mile" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4 and a bit laps"
+          }
+        }
+      }
+    },
+    "ll_2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 2"
+          }
+        }
+      }
+    },
+    "ll_3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 3"
+          }
+        }
+      }
+    },
+    "ll_4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 4"
+          }
+        }
+      }
+    },
+    "ll_5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 5"
+          }
+        }
+      }
+    },
+    "ll_8" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 8"
+          }
+        }
+      }
+    },
+    "ll_10" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 10"
+          }
+        }
+      }
+    },
+    "ll_13" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 13"
+          }
+        }
+      }
+    },
+    "ll_25" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last lap is lap 25"
+          }
+        }
+      }
+    },
+    "ll_200m" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lap lap is a ½ lap"
+          }
+        }
+      }
+    },
+    "Next up: %@" : {
+
+    },
+    "Profile" : {
+
+    },
+    "Profile:" : {
+
+    },
+    "Run" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Start to Finish (%@):" : {
+
+    },
+    "Target time" : {
+
+    },
+    "Time to target: %@" : {
+
+    },
+    "Time:" : {
+
+    }
+  },
+  "version" : "1.0"
+}

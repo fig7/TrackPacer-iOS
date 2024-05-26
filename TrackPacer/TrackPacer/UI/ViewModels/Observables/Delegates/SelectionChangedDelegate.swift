@@ -8,5 +8,5 @@
 import Foundation
 
 @MainActor protocol SelectedChangedDelegate : AnyObject {
-  func selectedChanged(_ newSelected: String)
+  func selectedChanged(_ observable: any ObservableObject, _ newSelected: String)
 }

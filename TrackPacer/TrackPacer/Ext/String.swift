@@ -15,6 +15,13 @@ extension String {
     return String(self[startIndex...])
   }
 
+  func toInt() throws -> Int {
+    let result = Int(self)
+    guard let result else { throw Exception.NumberFormatException }
+
+    return result
+  }
+
   func toLong() throws -> Int64 {
     let result = Int64(self)
     guard let result else { throw Exception.NumberFormatException }

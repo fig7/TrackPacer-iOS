@@ -84,6 +84,9 @@
 		12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */; };
 		12B144B62BF2D13700FCD2A7 /* PacingProgressStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B52BF2D13700FCD2A7 /* PacingProgressStyle.swift */; };
 		12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */; };
+		12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C8734F2C036B4100FA5C5E /* TrackSelection.swift */; };
+		12C873532C03740500FA5C5E /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C873522C03740500FA5C5E /* R.swift */; };
+		12C873552C0376F100FA5C5E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 12C873542C0376F100FA5C5E /* Localizable.xcstrings */; };
 		12E5204D2C00E98A002F54AE /* LaneSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E5204C2C00E98A002F54AE /* LaneSelection.swift */; };
 		12E520522C014046002F54AE /* DistanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520512C014046002F54AE /* DistanceModel.swift */; };
 		12E520542C014345002F54AE /* DistanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520532C014345002F54AE /* DistanceManager.swift */; };
@@ -171,6 +174,9 @@
 		12B144B52BF2D13700FCD2A7 /* PacingProgressStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingProgressStyle.swift; sourceTree = "<group>"; };
 		12B144B72BF3BDAA00FCD2A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		12B144B92BF3CD6100FCD2A7 /* threetwoone.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = threetwoone.m4a; sourceTree = "<group>"; };
+		12C8734F2C036B4100FA5C5E /* TrackSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSelection.swift; sourceTree = "<group>"; };
+		12C873522C03740500FA5C5E /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = R.swift; sourceTree = "<group>"; };
+		12C873542C0376F100FA5C5E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		12E5204C2C00E98A002F54AE /* LaneSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaneSelection.swift; sourceTree = "<group>"; };
 		12E520512C014046002F54AE /* DistanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceModel.swift; sourceTree = "<group>"; };
 		12E520532C014345002F54AE /* DistanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceManager.swift; sourceTree = "<group>"; };
@@ -237,19 +243,17 @@
 		1271228C2BEE41A000106069 /* TrackPacer */ = {
 			isa = PBXGroup;
 			children = (
-				12E5204F2C0134C1002F54AE /* AppModels */,
+				12C873562C03785800FA5C5E /* App */,
+				12B144B82BF3CCFC00FCD2A7 /* Audio */,
 				12AE78F62C0275F40057764D /* Errors */,
 				1293591F2BFE1B910042F99E /* Ext */,
 				12AE78F52C0268F80057764D /* Kotlin */,
-				12E5204E2C013487002F54AE /* StorageModels */,
 				12B144B02BF2887600FCD2A7 /* Util */,
 				124645EE2BF16A8800CB6EAC /* UI */,
 				1293591C2BFE0B790042F99E /* Waypoint */,
-				1271228D2BEE41A000106069 /* TrackPacerApp.swift */,
-				1271228F2BEE41A000106069 /* ContentView.swift */,
 				12B144B72BF3BDAA00FCD2A7 /* Info.plist */,
 				127122912BEE41A200106069 /* Assets.xcassets */,
-				12B144B82BF3CCFC00FCD2A7 /* Audio */,
+				12C873542C0376F100FA5C5E /* Localizable.xcstrings */,
 				127122932BEE41A200106069 /* Preview Content */,
 			);
 			path = TrackPacer;
@@ -324,6 +328,7 @@
 		12AE78F52C0268F80057764D /* Kotlin */ = {
 			isa = PBXGroup;
 			children = (
+				12C873522C03740500FA5C5E /* R.swift */,
 				12E520592C015114002F54AE /* File.swift */,
 				129359722BFE66F30042F99E /* Handler.swift */,
 				129359742BFE683F0042F99E /* Runnable.swift */,
@@ -401,12 +406,24 @@
 			path = Audio;
 			sourceTree = "<group>";
 		};
+		12C873562C03785800FA5C5E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				12E5204F2C0134C1002F54AE /* Models */,
+				12E5204E2C013487002F54AE /* StorageModels */,
+				1271228F2BEE41A000106069 /* ContentView.swift */,
+				1271228D2BEE41A000106069 /* TrackPacerApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		12E5204A2C00E961002F54AE /* Run */ = {
 			isa = PBXGroup;
 			children = (
 				127122A72BEE7F1F00106069 /* DistanceSelection.swift */,
 				12E5204C2C00E98A002F54AE /* LaneSelection.swift */,
 				12AE78F92C0294A70057764D /* TimeSelection.swift */,
+				12C8734F2C036B4100FA5C5E /* TrackSelection.swift */,
 			);
 			path = Run;
 			sourceTree = "<group>";
@@ -431,12 +448,12 @@
 			path = StorageModels;
 			sourceTree = "<group>";
 		};
-		12E5204F2C0134C1002F54AE /* AppModels */ = {
+		12E5204F2C0134C1002F54AE /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				12AE78FB2C0297B10057764D /* RunModel.swift */,
 			);
-			path = AppModels;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		12E520502C014019002F54AE /* Manager */ = {
@@ -531,6 +548,7 @@
 				1293596A2BFE4D8D0042F99E /* lap25.m4a in Resources */,
 				1293595A2BFE4D8D0042F99E /* lap18.m4a in Resources */,
 				1293596E2BFE4D8D0042F99E /* lap12.m4a in Resources */,
+				12C873552C0376F100FA5C5E /* Localizable.xcstrings in Resources */,
 				129359672BFE4D8D0042F99E /* lap11.m4a in Resources */,
 				129359622BFE4D8D0042F99E /* onehundredandfifty.m4a in Resources */,
 				129359712BFE4D8D0042F99E /* lap23.m4a in Resources */,
@@ -556,6 +574,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12C873532C03740500FA5C5E /* R.swift in Sources */,
 				129359752BFE683F0042F99E /* Runnable.swift in Sources */,
 				127122A52BEE68D100106069 /* SettingsView.swift in Sources */,
 				1271229F2BEE5AC600106069 /* RunView.swift in Sources */,
@@ -568,6 +587,7 @@
 				1293597B2BFEAD1D0042F99E /* Double.swift in Sources */,
 				129359732BFE66F30042F99E /* Handler.swift in Sources */,
 				1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */,
+				12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */,
 				12B144AF2BF2854A00FCD2A7 /* PacingProgress.swift in Sources */,
 				127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */,
 				12AE78FE2C029E260057764D /* SelectionChangedDelegate.swift in Sources */,

@@ -8,6 +8,6 @@
 import Foundation
 
 @MainActor class TimeSelection: ObservableObject {
-  @Published var selected       = ""
-  @Published var list: [String] = [""]
+  @Published var selected = ""
+  @Published var list     = [""]
 }

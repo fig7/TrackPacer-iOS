@@ -8,6 +8,10 @@
 import Foundation
 
 extension Double {
+  func toInt() -> Int {
+    return Int(self)
+  }
+
   func toLong() -> Int64 {
     return Int64(self)
   }

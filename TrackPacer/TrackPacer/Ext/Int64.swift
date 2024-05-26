@@ -11,4 +11,8 @@ extension Int64 {
   func toDouble() -> Double {
     return Double(self)
   }
+
+  func toString() -> String {
+    return "\(self)"
+  }
 }

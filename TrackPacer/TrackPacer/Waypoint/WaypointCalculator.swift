@@ -52,7 +52,7 @@ let runMultiplierMile = (0 ..< 8).map { (i: Int) in
   return (8.0*Double.pi*r + 675.12 + 9.34)/1609.34
 }
 
-func distanceFor(runDist: String, runLane: Int) -> Double {
+func distanceFor(_ runDist: String, _ runLane: Int) -> Double {
   let runLaneIndex = runLane - 1
   switch(runDist) {
   case "1500m":
