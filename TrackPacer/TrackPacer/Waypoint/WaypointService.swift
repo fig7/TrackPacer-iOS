@@ -171,14 +171,14 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   private let waypointCalculator = WaypointCalculator()
   private var clipIndexList: [Int]!
 
-  private weak var serviceConnection: ServiceConnection?
+  private unowned let serviceConnection: ServiceConnection
 
-  init(serviceConnection: ServiceConnection?) {
+  init(serviceConnection: ServiceConnection) {
     self.serviceConnection = serviceConnection
     onCreate()
 
-    Task { @MainActor in
-      serviceConnection?.onServiceConnected()
+    Task { @MainActor [weak self] in
+      self?.serviceConnection.onServiceConnected()
     }
   }
 
@@ -191,12 +191,12 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return clipKey
   }
 
-  func beginPacing(runDist: String, runLane: Int, runTime: Double, alternateStart: Bool) {
+  func beginPacing(_ runDist: String, _ runLane: Int, _ runTime: Double, _ alternateStart: Bool) {
     let clipKey   = clipKeyFromArgs(runDist, alternateStart)
     clipIndexList = clipMap[clipKey]!
     prevTime      = 0.0
 
-    waypointCalculator.initRun(runDist, runTime, runLane)
+    waypointCalculator.initRun(runDist, runLane, runTime)
   }
 
   func delayStart(startDelay: Int64, quickStart: Bool) -> Bool {
@@ -227,10 +227,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return true
   }
 
-  func resumePacing(runDist: String, runLane: Int, runTime: Double, alternateStart: Bool, resumeTime: Int64) -> Bool {
+  func resumePacing(_ runDist: String, _ runLane: Int, _ runTime: Double, _ alternateStart: Bool, _ resumeTime: Int64) -> Bool {
     let clipKey   = clipKeyFromArgs(runDist, alternateStart)
     clipIndexList = clipMap[clipKey]!
-    prevTime      = waypointCalculator.initResume(runDist, runTime, runLane, resumeTime.toDouble())
+    prevTime      = waypointCalculator.initResume(runDist, runLane, runTime, resumeTime.toDouble())
 
     startRealtime = SystemClock.elapsedRealtime() - .milliseconds(resumeTime)
     handler.post(resumeRunnable)
@@ -387,6 +387,6 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   fileprivate func terminate() {
-    serviceConnection?.onServiceDisconnected()
+    serviceConnection.onServiceDisconnected()
   }
 }

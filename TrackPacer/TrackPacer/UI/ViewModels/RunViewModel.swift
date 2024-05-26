@@ -134,39 +134,81 @@ let rtMap = [
   "rt_1 mile_l7" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l7],
   "rt_1 mile_l8" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l8]]
 
-@MainActor class RunViewModel : SelectedChangedDelegate {
-  weak var runModel: RunModel!
-  weak var mainViewModel: MainViewModel!
+func rtKeyFromArgs(_ runDist: String, _ runLane: Int, _ alternateStart: Bool = false) -> String {
+  var rtKey = "rt_" + runDist + "_l" + runLane.toString()
+  if(alternateStart && (["1000m", "3000m", "5000m"].contains(runDist))) { rtKey += "_a" }
 
-  var distanceSelection: DistanceSelection
-  var laneSelection: LaneSelection
-  var timeSelection: TimeSelection
+  return rtKey
+}
 
-  var trackSelection: TrackSelection
+func rtLaps(_ runDist: String, _ runLane: Int) -> String {
+  let rtKey   = rtKeyFromArgs(runDist, runLane)
+  let rtArray = rtMap[rtKey]!
+  return rtArray[0]
+}
+
+func runTimeFor(selectedTime: String) throws -> Double {
+  let runTimeSplit = selectedTime.split(separator: ":")
+  let runTime0 = try String(runTimeSplit[0]).trim().toLong()
+  let runTime1 = try String(runTimeSplit[1]).toDouble()
+  return 1000.0*(runTime0.toDouble()*60.0 + runTime1)
+}
+
+@MainActor class RunViewModel {
+  unowned let runModel: RunModel
+  unowned var mainViewModel: MainViewModel!
+
+  var distanceSelection: DistanceSelection = DistanceSelection()
+  var laneSelection: LaneSelection = LaneSelection()
+  var timeSelection: TimeSelection = TimeSelection()
+
+  var trackSelection: TrackSelection = TrackSelection()
 
   init(_ runModel: RunModel) {
-    self.runModel = runModel
-
-    distanceSelection = DistanceSelection()
-    laneSelection     = LaneSelection()
-    timeSelection     = TimeSelection()
-    trackSelection    = TrackSelection()
-
-    distanceSelection.delegate = self
-    laneSelection.delegate     = self
+    self.runModel  = runModel
   }
 
   func setMain(mainViewModel: MainViewModel) {
     self.mainViewModel = mainViewModel
   }
 
-  func setDistances(_ distanceArray: [String]) {
-    distanceSelection.list     = distanceArray.map { (pickerBugWorkaround: String) in " " + pickerBugWorkaround + " "}
-    distanceSelection.selected = distanceSelection.list[0]
+  func initTimes() throws {
+    let selectedDistance = distanceSelection.selected.trim()
+    try initTimes(selectedDistance)
   }
 
-  func setNewTimes(_ selectedDistance: String) {
-    let timeArray = runModel.timesFor(selectedDistance.trim())
+  func initCallbacks() {
+    distanceSelection.selectedCallback = { [weak self] newSelected in
+      guard let self else { return }
+
+      do {
+        let newSelected = newSelected.trim()
+        try initTimes(newSelected)
+      } catch { }
+
+      updateTrackOverlay()
+    }
+
+    laneSelection.selectedCallback = { [weak self] newSelected in
+      guard let self else { return }
+      updateTrackOverlay()
+    }
+  }
+
+  func initDistances(_ distanceArray: [String]) throws {
+    distanceSelection.list     = distanceArray.map { (pickerBugWorkaround: String) in " " + pickerBugWorkaround + " "}
+    distanceSelection.selected = distanceSelection.list[0]
+
+    laneSelection.list         = ["1", "2", "3", "4", "5", "6", "7", "8"]
+    laneSelection.selected     = laneSelection.list[0]
+
+    try initTimes()
+    initCallbacks()
+    updateTrackOverlay()
+  }
+
+  func initTimes(_ selectedDistance: String) throws {
+    let timeArray = try runModel.timesFor(selectedDistance)
     updateTimes(timeArray, selected: 0)
   }
 
@@ -175,31 +217,12 @@ let rtMap = [
     timeSelection.selected = timeSelection.list[selected]
   }
 
-  func selectedChanged(_ observable: any ObservableObject, _ newSelected: String) {
-    if(observable === distanceSelection) { setNewTimes(newSelected) }
-
-    updateTrackOverlay()
-  }
-
-  private func rtKeyFromArgs(_ runDist: String, _ runLane: Int, _ alternateStart: Bool = false) -> String {
-    var rtKey = "rt_" + runDist + "_l" + runLane.toString()
-    if(alternateStart && (["1000m", "3000m", "5000m"].contains(runDist))) { rtKey += "_a" }
-
-    return rtKey
-  }
-
   private func formatDist(_ runDist: String, _ runLane: Int, _ totalDist: Double) -> String {
     if(runDist == "1 mile") {
       if(runLane == 1) { return runDist } else { return String(format: "%.2f miles", totalDist/1609.34) }
     } else {
       if(runLane == 1) { return String(format: "%dm", totalDist.toInt()) } else { return String(format: "%.2fm", totalDist) }
     }
-  }
-
-  private func rtLaps(_ runDist: String, _ runLane: Int) -> String {
-    let rtKey   = rtKeyFromArgs(runDist, runLane)
-    let rtArray = rtMap[rtKey]!
-    return rtArray[0]
   }
 
   private func rtDesc1(_ runDist: String, _ runLane: Int, _ alternateStart: Bool) -> String {
@@ -235,5 +258,22 @@ let rtMap = [
 
       trackSelection.trackOverlay = rtOverlay(runDist, runLane, alternateStart)
     } catch { }
+  }
+
+  func fetchPacingOptions() -> (String, Int, Double) {
+    do {
+      let distanceSelected = distanceSelection.selected
+      let runDist = distanceSelected.trim()
+
+      let laneSelected = laneSelection.selected
+      let runLane = try laneSelected.toInt()
+
+      let timeSelected = timeSelection.selected
+      let runTime = try runTimeFor(selectedTime: timeSelected)
+
+      return (runDist, runLane, runTime)
+    } catch { }
+
+    return ("", 0, 0.0)
   }
 }

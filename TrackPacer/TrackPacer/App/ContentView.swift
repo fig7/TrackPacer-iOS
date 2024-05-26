@@ -33,7 +33,7 @@ struct ContentView: View {
           Label("Settings", image: "baseline_settings_24")
         }
       }.navigationDestination(for: Int.self) { selection in
-        PaceView(viewModel: viewModel.paceViewModel)
+        PaceView(viewModel: viewModel.paceViewModel, runViewModel: viewModel.runViewModel)
       }.toolbar() {
         ToolbarItem(placement: .navigationBarTrailing) {
           StatusView(viewModel: viewModel.statusViewModel)

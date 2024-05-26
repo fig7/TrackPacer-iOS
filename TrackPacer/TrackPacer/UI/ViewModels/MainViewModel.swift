@@ -8,14 +8,16 @@
 import Foundation
 
 @MainActor class MainViewModel {
-  weak var runModel: RunModel?
+  unowned let runModel: RunModel
+  unowned let paceModel: PaceModel
 
   var runViewModel: RunViewModel
   var paceViewModel: PaceViewModel
   var statusViewModel: StatusViewModel
 
-  init(runModel: RunModel) {
-    self.runModel = runModel
+  init(_ runModel: RunModel, _ paceModel: PaceModel) {
+    self.runModel  = runModel
+    self.paceModel = paceModel
 
     runViewModel    = RunViewModel(runModel)
     paceViewModel   = PaceViewModel()

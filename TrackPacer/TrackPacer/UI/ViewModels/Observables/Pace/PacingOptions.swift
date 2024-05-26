@@ -8,31 +8,58 @@
 import Foundation
 
 @MainActor class PacingOptions : ObservableObject {
-  @Published var runLane: Int
+  var runDist = "" {
+    didSet {
+      let totalDist = distanceFor(runDist, runLane)
+      totalDistStr  = formatDistance(totalDist)
+      runLaps       = rtLaps(runDist, runLane)
 
-  @Published var runLaps: String
-  @Published var totalDistStr: String
+      let totalTime = timeFor(runDist, runLane, runTime)
+      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
 
-  @Published var runTime: Double
-  @Published var totalTimeStr: String
-  @Published var totalPaceStr: String
-
-  @Published var runProf: String
-
-  init() {
-    runLane = 1
-
-    runLaps = "25 laps"
-    totalDistStr = "10000m"
-
-    runTime = 2200.0
-    totalTimeStr = "37:30.00"
-    totalPaceStr = "3:45"
-
-    runProf = "Fixed pace"
+      let totalPace = (1000.0 * totalTime) / totalDist
+      totalPaceStr = timeToString(timeInMS: totalPace.toLong())
+    }
   }
 
-  func setRunLane(runLane: Int) {
-    self.runLane = runLane
+  var runLane = 1 {
+    didSet {
+      let totalDist = distanceFor(runDist, runLane)
+      totalDistStr  = formatDistance(totalDist)
+      runLaps       = rtLaps(runDist, runLane)
+
+      let totalTime = timeFor(runDist, runLane, runTime)
+      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
+
+      let totalPace = (1000.0 * totalTime) / totalDist
+      totalPaceStr = timeToString(timeInMS: totalPace.toLong())
+    }
+  }
+
+  var runTime = 0.0 {
+    didSet {
+      let totalDist = distanceFor(runDist, runLane)
+      let totalTime = timeFor(runDist, runLane, runTime)
+      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
+
+      let totalPace = (1000.0 * totalTime) / totalDist
+      totalPaceStr = timeToString(timeInMS: totalPace.toLong())
+    }
+  }
+
+  @Published var runLaps = ""
+  @Published var totalDistStr = ""
+
+  @Published var totalTimeStr = ""
+  @Published var totalPaceStr = ""
+
+  @Published var runProf = "Fixed pace"
+
+  private func formatDistance(_ totalDist: Double) -> String {
+    if(runDist == "1 mile") {
+      if(runLane == 1) { return runDist } else { return String(format: "%.2f miles", totalDist/1609.34) }
+    } else {
+      if(runLane == 1) { return String(format: "%dm", totalDist.toInt()) } else { return String(format: "%.2fm", totalDist) }
+    }
   }
 }

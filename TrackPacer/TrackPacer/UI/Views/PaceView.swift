@@ -13,11 +13,14 @@ struct PaceView: View {
   @ObservedObject var pacingOptions: PacingOptions
   @ObservedObject var pacingProgress: PacingProgress
 
-  init(viewModel: PaceViewModel) {
+  init(viewModel: PaceViewModel, runViewModel: RunViewModel) {
     self.viewModel = viewModel
     pacingOptions  = viewModel.pacingOptions
     pacingProgress = viewModel.pacingProgress
     pacingStatus   = viewModel.statusViewModel.pacingStatus
+
+    (pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime) = runViewModel.fetchPacingOptions()
+    pacingProgress.resetProgress()
   }
 
   var body: some View {
@@ -31,7 +34,7 @@ struct PaceView: View {
       Spacer().frame(height: 10)
 
       Text("Distance in lane \(pacingOptions.runLane)")
-      Text("\(pacingOptions.totalDistStr) (\(pacingOptions.runLaps))").font(.system(size: 30, weight: .regular, design: .default))
+      Text("\(pacingOptions.totalDistStr) (\(pacingOptions.runLaps))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
 
       Spacer().frame(height: 10)
 

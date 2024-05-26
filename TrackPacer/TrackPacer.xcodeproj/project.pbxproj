@@ -78,7 +78,6 @@
 		12AE78F82C0276440057764D /* Exception.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AE78F72C0276440057764D /* Exception.swift */; };
 		12AE78FA2C0294A70057764D /* TimeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AE78F92C0294A70057764D /* TimeSelection.swift */; };
 		12AE78FC2C0297B10057764D /* RunModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AE78FB2C0297B10057764D /* RunModel.swift */; };
-		12AE78FE2C029E260057764D /* SelectionChangedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AE78FD2C029E260057764D /* SelectionChangedDelegate.swift */; };
 		12B144AF2BF2854A00FCD2A7 /* PacingProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144AE2BF2854A00FCD2A7 /* PacingProgress.swift */; };
 		12B144B22BF2889600FCD2A7 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B12BF2889600FCD2A7 /* TimeUtil.swift */; };
 		12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */; };
@@ -92,6 +91,7 @@
 		12E520542C014345002F54AE /* DistanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520532C014345002F54AE /* DistanceManager.swift */; };
 		12E5205A2C015114002F54AE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520592C015114002F54AE /* File.swift */; };
 		12E5205C2C015AD5002F54AE /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E5205B2C015AD5002F54AE /* String.swift */; };
+		12F0E37B2C03A27700ECE1E0 /* PaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0E37A2C03A27700ECE1E0 /* PaceModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -167,7 +167,6 @@
 		12AE78F72C0276440057764D /* Exception.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exception.swift; sourceTree = "<group>"; };
 		12AE78F92C0294A70057764D /* TimeSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSelection.swift; sourceTree = "<group>"; };
 		12AE78FB2C0297B10057764D /* RunModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunModel.swift; sourceTree = "<group>"; };
-		12AE78FD2C029E260057764D /* SelectionChangedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionChangedDelegate.swift; sourceTree = "<group>"; };
 		12B144AE2BF2854A00FCD2A7 /* PacingProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingProgress.swift; sourceTree = "<group>"; };
 		12B144B12BF2889600FCD2A7 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
 		12B144B32BF28F6E00FCD2A7 /* PacingOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingOptions.swift; sourceTree = "<group>"; };
@@ -182,6 +181,7 @@
 		12E520532C014345002F54AE /* DistanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceManager.swift; sourceTree = "<group>"; };
 		12E520592C015114002F54AE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		12E5205B2C015AD5002F54AE /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		12F0E37A2C03A27700ECE1E0 /* PaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaceModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,7 +218,6 @@
 			isa = PBXGroup;
 			children = (
 				127122A92BEEDE3F00106069 /* ViewModels */,
-				124645EB2BF16A4D00CB6EAC /* Styles */,
 				1271229B2BEE561A00106069 /* Views */,
 			);
 			path = UI;
@@ -270,6 +269,7 @@
 		1271229B2BEE561A00106069 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				124645EB2BF16A4D00CB6EAC /* Styles */,
 				124645E62BF169A100CB6EAC /* SubViews */,
 				1271229E2BEE5AC600106069 /* RunView.swift */,
 				124645F12BF16E5900CB6EAC /* PaceView.swift */,
@@ -283,7 +283,6 @@
 		127122A62BEE7ED300106069 /* Observables */ = {
 			isa = PBXGroup;
 			children = (
-				12AE78FF2C029E680057764D /* Delegates */,
 				12E5204B2C00E968002F54AE /* Pace */,
 				12E5204A2C00E961002F54AE /* Run */,
 			);
@@ -342,14 +341,6 @@
 				12AE78F72C0276440057764D /* Exception.swift */,
 			);
 			path = Errors;
-			sourceTree = "<group>";
-		};
-		12AE78FF2C029E680057764D /* Delegates */ = {
-			isa = PBXGroup;
-			children = (
-				12AE78FD2C029E260057764D /* SelectionChangedDelegate.swift */,
-			);
-			path = Delegates;
 			sourceTree = "<group>";
 		};
 		12B144B02BF2887600FCD2A7 /* Util */ = {
@@ -452,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				12AE78FB2C0297B10057764D /* RunModel.swift */,
+				12F0E37A2C03A27700ECE1E0 /* PaceModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -578,6 +570,7 @@
 				129359752BFE683F0042F99E /* Runnable.swift in Sources */,
 				127122A52BEE68D100106069 /* SettingsView.swift in Sources */,
 				1271229F2BEE5AC600106069 /* RunView.swift in Sources */,
+				12F0E37B2C03A27700ECE1E0 /* PaceModel.swift in Sources */,
 				1215D4072BFEC38C00DB07C3 /* Int.swift in Sources */,
 				123F12632C00AAB500F5E6E6 /* StatusViewModel.swift in Sources */,
 				127122A32BEE5DCC00106069 /* AudioView.swift in Sources */,
@@ -590,7 +583,6 @@
 				12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */,
 				12B144AF2BF2854A00FCD2A7 /* PacingProgress.swift in Sources */,
 				127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */,
-				12AE78FE2C029E260057764D /* SelectionChangedDelegate.swift in Sources */,
 				124645ED2BF16A6C00CB6EAC /* ActionButtonStyle.swift in Sources */,
 				12AE78FA2C0294A70057764D /* TimeSelection.swift in Sources */,
 				12B144B62BF2D13700FCD2A7 /* PacingProgressStyle.swift in Sources */,

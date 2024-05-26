@@ -8,11 +8,10 @@
 import Foundation
 
 @MainActor class DistanceSelection: ObservableObject {
-  var delegate: SelectedChangedDelegate?
+  var selectedCallback: (_ newSelected: String) -> Void = { _ in }
 
-  @Published var selected = "" {
-    didSet { delegate?.selectedChanged(self, selected) }
-  }
+  @Published var selected = ""
+  { didSet { selectedCallback(selected) } }
 
   @Published var list: [String] = [""]
 }

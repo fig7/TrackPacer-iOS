@@ -8,6 +8,10 @@
 import Foundation
 
 @MainActor class TimeSelection: ObservableObject {
+  var selectedCallback: (_ newSelected: String) -> Void = { _ in }
+
   @Published var selected = ""
-  @Published var list     = [""]
+  { didSet { selectedCallback(selected) } }
+
+  @Published var list: [String] = [""]
 }

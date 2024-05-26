@@ -98,7 +98,7 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
     let pacingStatus   = statusViewModel.pacingStatus.status
     let pacingSettings = statusViewModel.pacingSettings
     if(pacingStatus == .ServiceStart) {
-      waypointService.beginPacing(runDist: "400m", runLane: 1, runTime: 80000, alternateStart: false)
+      waypointService.beginPacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, false)
 
       if(pacingSettings.powerStart) {
         // Power start
@@ -123,7 +123,7 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
         startScreenReceiver()
       }
 
-      if(waypointService.resumePacing(runDist: "400m", runLane: 1, runTime: 80000, alternateStart: false, resumeTime: pacingProgress.elapsedTime)) {
+      if(waypointService.resumePacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, false, pacingProgress.elapsedTime)) {
         handler.postDelayed(pacingRunnable, delayMS: 113)
       } else {
         stopPacing(silent: true)

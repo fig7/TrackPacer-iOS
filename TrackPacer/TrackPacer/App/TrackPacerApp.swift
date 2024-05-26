@@ -49,6 +49,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
   private let runModel: RunModel
+  private let paceModel: PaceModel
 
   init() {
     runModel = RunModel()
@@ -57,17 +58,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
     }
 
-    mainViewModel = MainViewModel(runModel: runModel)
-    initialiseRunView()
+    paceModel = PaceModel()
+    mainViewModel = MainViewModel(runModel, paceModel)
+
+    do {
+      try initialiseApp()
+    } catch {
+      // TODO: Show dlg
+    }
   }
 
-  private func initialiseRunView() {
-    let distanceArray = runModel.distanceArray()
-    let timeArray     = runModel.timesFor(distanceArray[0])
-
+  private func initialiseApp() throws {
     let runViewModel = mainViewModel.runViewModel
-    runViewModel.setDistances(distanceArray)
-    runViewModel.updateTimes(timeArray, selected: 0)
+    try runViewModel.initDistances(runModel.distanceArray())
   }
 
   var body: some Scene {

@@ -23,13 +23,20 @@ import Foundation
 
   init() {
     elapsedTime = 0
+    distRun     = 0.0
 
-    distRun = 0.0
-    waypointName = ""
+    waypointName     = ""
     waypointProgress = 0.0
+    timeRemaining    = nil
 
-    timeRemaining  = nil
     timeToProgress = 0.0
+  }
+
+  func resetProgress() {
+    elapsedTime = 0
+    distRun     = 0.0
+
+    resetWaypointProgress()
   }
 
   func setElapsedTime(_ elapsedTime: Int64) {

@@ -37,7 +37,7 @@ let rDiff        = (0 ..<   8).map { (i: Int) in 1.22*i.toDouble() }
 let arcAngle     = [1.358696, 1.358696, 0.424201, 0.0, 1.358696, 1.358696, 0.424201, 0.0]
 let arcAngle1500 = [0.424201, 0.0, 1.358696, 1.358696, 0.424201, 0.0, 1.358696, 1.358696]
 
-let runMultiplier     = (0 ..< 8).map { (i: Int) in
+let runMultiplier = (0 ..< 8).map { (i: Int) in
   let r = 36.8 + rDiff[i]
   return (2.0*Double.pi*r + 168.78)/400.0
 }
@@ -68,7 +68,7 @@ func distanceFor(_ runDist: String, _ runLane: Int) -> Double {
   }
 }
 
-func timeFor(runDist: String, runLane: Int, runTime:Double) -> Double {
+func timeFor(_ runDist: String, _ runLane: Int, _ runTime:Double) -> Double {
   let runLaneIndex = runLane - 1
   switch(runDist) {
   case"1500m":
@@ -108,7 +108,7 @@ class WaypointCalculator {
     return (waypointDistance() * totalTime) / totalDist
   }
 
-  private func initRunParams(_ runDist: String, _ runTime: Double, _ runLane: Int) {
+  private func initRunParams(_ runDist: String, _ runLane: Int, _ runTime: Double) {
     runLaneIndex = runLane - 1
     waypointList = waypointMap[runDist]!
 
@@ -132,8 +132,8 @@ class WaypointCalculator {
     }
   }
 
-  func initRun(_ runDist: String, _ runTime: Double, _ runLane: Int) {
-    initRunParams(runDist, runTime, runLane)
+  func initRun(_ runDist: String, _ runLane: Int, _ runTime: Double) {
+    initRunParams(runDist, runLane, runTime)
 
     currentWaypoint = 0
     currentExtra    = arcExtra()
@@ -143,8 +143,8 @@ class WaypointCalculator {
     // Log.d("TP", waypointTime().toString())
   }
 
-  func initResume(_ runDist: String, _ runTime: Double, _ runLane: Int, _ resumeTime: Double) -> Double {
-    initRunParams(runDist, runTime, runLane)
+  func initResume(_ runDist: String, _ runLane: Int, _ runTime: Double, _ resumeTime: Double) -> Double {
+    initRunParams(runDist, runLane, runTime)
 
     var prevTime = 0.0
     for i in waypointList.indices {

@@ -22,8 +22,11 @@ class RunModel {
     return distanceManager.distanceArray
   }
 
-  func timesFor(_ distance: String) -> [String] {
+  func timesFor(_ distance: String) throws -> [String] {
     let distanceManager = distanceModel.distanceManager
-    return distanceManager.timeMap[distance]!
+    let timeArray = distanceManager.timeMap[distance]
+    
+    guard let timeArray else { throw Exception.IllegalArgumentException }
+    return timeArray
   }
 }
