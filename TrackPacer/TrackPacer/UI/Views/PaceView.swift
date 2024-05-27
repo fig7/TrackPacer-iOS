@@ -15,6 +15,7 @@ struct PaceView: View {
 
   init(viewModel: PaceViewModel, runViewModel: RunViewModel) {
     self.viewModel = viewModel
+
     pacingOptions  = viewModel.pacingOptions
     pacingProgress = viewModel.pacingProgress
     pacingStatus   = viewModel.statusViewModel.pacingStatus

@@ -33,8 +33,9 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
 }
 
 @MainActor class PaceViewModel : ServiceConnection {
-  weak var mainViewModel: MainViewModel!
-  weak var statusViewModel: StatusViewModel!
+  unowned let paceModel: PaceModel
+  unowned var mainViewModel: MainViewModel!
+  unowned var statusViewModel: StatusViewModel!
 
   var pacingOptions: PacingOptions
   var pacingProgress: PacingProgress
@@ -60,9 +61,9 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
     }
   }
 
-  init() {
-    mainViewModel = nil
-    
+  init(_ paceModel: PaceModel) {
+    self.paceModel = paceModel
+
     pacingOptions  = PacingOptions()
     pacingProgress = PacingProgress()
 

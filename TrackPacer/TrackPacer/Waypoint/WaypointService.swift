@@ -8,83 +8,6 @@
 import Foundation
 import AVKit
 
-private let clipList = [
-  "fifty",
-  "onehundred",
-  "onehundredandfifty",
-  "twohundred",
-  "twohundredandfifty",
-  "threehundred",
-  "threehundredandfifty",
-  "lap2",
-  "lap3",
-  "lap4",
-  "lap5",
-  "lap6",
-  "lap7",
-  "lap8",
-  "lap9",
-  "lap10",
-  "lap11",
-  "lap12",
-  "lap13",
-  "lap14",
-  "lap15",
-  "lap16",
-  "lap17",
-  "lap18",
-  "lap19",
-  "lap20",
-  "lap21",
-  "lap22",
-  "lap23",
-  "lap24",
-  "lap25",
-  "finish"]
-
-private let clipNames = [
-  "50m",    "100m",   "150m",   "200m",   "250m",   "300m",   "350m",
-  "Lap 2",  "Lap 3",  "Lap 4",  "Lap 5",  "Lap 6",  "Lap 7",  "Lap 8",  "Lap 9",
-  "Lap 10", "Lap 11", "Lap 12", "Lap 13", "Lap 14", "Lap 15", "Lap 16", "Lap 17",
-  "Lap 18", "Lap 19", "Lap 20", "Lap 21", "Lap 22", "Lap 23", "Lap 24", "Lap 25", "Finish line"]
-
-private let fL = clipList.size - 1
-private let clipMap = [
-  "400m"    : [0, 1, 2, 3, 4, 5 ,6, fL],
-  "800m"    : [0, 1, 2, 3, 4, 5 ,6,  7, 0, 1, 2, 3, 4, 5, 6, fL],
-  "1000m"   : [            0, 1, 2,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6, fL],
-  "1000m_a" : [0, 1, 2, 3, 4, 5, 6,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, fL],
-  "1200m"   : [0, 1, 2, 3, 4, 5 ,6,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6, fL],
-  "1500m"   : [      0, 1, 2, 3 ,4,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, fL],
-  "2000m"   : [0, 1, 2, 3, 4, 5 ,6,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, 10, 0, 1, 2, 3, 4, 5, 6, fL],
-  "3000m"   : [            0, 1, 2,  7, 0, 1 ,2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, 10,
-               0, 1 ,2, 3, 4, 5, 6, 11, 0, 1, 2, 3, 4, 5, 6, 12, 0, 1, 2, 3, 4, 5, 6, 13, 0, 1, 2, 3, 4, 5, 6, fL],
-  "3000m_a" : [0, 1, 2, 3, 4, 5, 6,  7, 0, 1 ,2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, 10,
-               0, 1 ,2, 3, 4, 5, 6, 11, 0, 1, 2, 3, 4, 5, 6, 12, 0, 1, 2, 3, 4, 5, 6, 13, 0, 1, 2, fL],
-  "4000m"   : [0, 1, 2, 3, 4, 5 ,6,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, 10,
-               0, 1, 2, 3, 4, 5, 6, 11, 0, 1, 2, 3, 4, 5 ,6, 12, 0, 1, 2, 3, 4, 5, 6, 13, 0, 1, 2, 3, 4, 5, 6, 14,
-               0, 1, 2, 3, 4, 5, 6, 15, 0, 1, 2, 3, 4, 5, 6, fL],
-  "5000m"   : [            0, 1, 2,  7, 0, 1 ,2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, 10,
-               0, 1, 2, 3, 4, 5, 6, 11, 0, 1, 2, 3, 4, 5, 6, 12, 0, 1, 2, 3, 4, 5, 6, 13, 0, 1, 2, 3, 4, 5, 6, 14,
-               0, 1, 2, 3, 4, 5, 6, 15, 0, 1, 2, 3, 4, 5, 6, 16, 0, 1, 2, 3, 4, 5, 6, 17, 0, 1, 2, 3, 4, 5, 6, 18, 0, 1, 2, 3, 4, 5, 6, fL],
-  "5000m_a" : [0, 1, 2, 3, 4, 5, 6,  7, 0, 1 ,2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, 10,
-               0, 1, 2, 3, 4, 5, 6, 11, 0, 1, 2, 3, 4, 5, 6, 12, 0, 1, 2, 3, 4, 5, 6, 13, 0, 1, 2, 3, 4, 5, 6, 14,
-               0, 1, 2, 3, 4, 5, 6, 15, 0, 1, 2, 3, 4, 5, 6, 16, 0, 1, 2, 3, 4, 5, 6, 17, 0, 1, 2, 3, 4, 5, 6, 18, 0, 1, 2, fL],
-  "10000m"  : [0, 1, 2, 3, 4, 5 ,6,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, 10,
-               0, 1, 2, 3, 4, 5, 6, 11, 0, 1, 2, 3, 4, 5, 6, 12, 0, 1, 2, 3, 4, 5, 6, 13, 0, 1, 2, 3, 4, 5, 6, 14,
-               0, 1, 2, 3, 4, 5, 6, 15, 0, 1, 2, 3, 4, 5, 6, 16, 0, 1, 2, 3, 4, 5, 6, 17, 0, 1, 2, 3, 4, 5, 6, 18,
-               0, 1, 2, 3, 4, 5, 6, 19, 0, 1, 2, 3, 4, 5, 6, 20, 0, 1, 2, 3, 4, 5, 6, 21, 0, 1, 2, 3, 4, 5, 6, 22,
-               0, 1, 2, 3, 4, 5, 6, 23, 0, 1, 2, 3, 4, 5, 6, 24, 0, 1, 2, 3, 4, 5, 6, 25, 0, 1, 2, 3, 4, 5, 6, 26,
-               0, 1, 2, 3, 4, 5, 6, 27, 0, 1, 2, 3, 4, 5, 6, 28, 0, 1, 2, 3, 4, 5, 6, 29, 0, 1, 2, 3, 4, 5, 6, 30, 0, 1, 2, 3, 4, 5, 6, fL],
-  "1 mile"  : [0, 1, 2, 3, 4, 5 ,6,  7, 0, 1, 2, 3, 4, 5, 6,  8, 0, 1, 2, 3, 4, 5, 6,  9, 0, 1, 2, 3, 4, 5, 6, fL]]
-
-private let Go1ClipDuration: Int64  = 400
-private let Go4ClipDuration: Int64  = 3000
-private let PowerStartOffset: Int64 = 4000
-private let PowerClipOffset: Int64  = 1000
-
-private let SystemClock = ContinuousClock()
-
 private class MPStartDelegate : NSObject, AVAudioPlayerDelegate {
   weak var service: WaypointService?
 
@@ -137,6 +60,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   private var startRealtime: ContinuousClock.Instant!
   private var prevTime = -1.0
 
+  // TODO: Add notifications and handle interruptions
   // private lateinit var mNM: NotificationManager
   // private lateinit var audioManager: AudioManager
   // private lateinit var focusRequest: AudioFocusRequest
@@ -363,13 +287,6 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
       mpResume.stop()
       mpWaypoint[i].play(atTime: mpWaypoint[i].deviceCurrentTime + delayMS.toDouble()/1000.0)
     // }
-
-    /* if(waypointCalculator.waypointsRemaining()) {
-     prevTime = waypointCalculator.waypointTime()
-     
-     let waypointTime = waypointCalculator.nextWaypoint()
-     handler.postDelayed(waypointRunnable, delayMS: waypointTime.toLong()-elapsedTime())
-    } */
   }
 
   fileprivate func nextWaypoint() {

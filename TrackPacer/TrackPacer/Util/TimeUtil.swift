@@ -99,3 +99,10 @@ func timeToFullString(timeInMS: Int64) -> String {
   let msStr = String(format: "%03d", timeLeft)
   return String(format: baseTimeAll, sgnStr, hrsStr, minsStr, secsStr, msStr)
 }
+
+func runTimeFor(selectedTime: String) throws -> Double {
+  let runTimeSplit = selectedTime.split(separator: ":")
+  let runTime0 = try String(runTimeSplit[0]).trim().toLong()
+  let runTime1 = try String(runTimeSplit[1]).toDouble()
+  return 1000.0*(runTime0.toDouble()*60.0 + runTime1)
+}
