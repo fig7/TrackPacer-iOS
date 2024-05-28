@@ -131,7 +131,7 @@ class DistanceManager {
   }
 
 
-  func deleteTime(runDistance: String, runTime: String?) throws -> Int {
+  func deleteTime(_ runDistance: String, _ runTime: String?) throws -> Int {
     guard let runTime else { throw Exception.IllegalArgumentException }
 
     let timeArray = timeMap[runDistance]
@@ -159,7 +159,7 @@ class DistanceManager {
     return newIndex
   }
 
-  func addTime(runDistance: String, runTime: String?) throws -> Int {
+  func addTime(_ runDistance: String, _ runTime: String?) throws -> Int {
     guard let runTime else { throw Exception.IllegalArgumentException }
 
     let timeArray = timeMap[runDistance]
@@ -192,12 +192,13 @@ class DistanceManager {
     return newIndex
   }
 
-  func replaceTime(runDistance: String, origTime: String?, newTime: String?) throws -> Int {
+  func replaceTime(_ runDistance: String, _ origTime: String?, _ newTime: String?) throws -> Int {
     guard let origTime, let newTime else { throw Exception.IllegalArgumentException }
 
     let timeArray = timeMap[runDistance]
     guard let timeArray else { throw Exception.IllegalArgumentException }
     if(!timeArray.contains(origTime)) { throw Exception.IllegalArgumentException }
+    if(timeArray.contains(newTime))   { throw Exception.IllegalArgumentException }
 
     var i = 0
     var j = 0

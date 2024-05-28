@@ -14,4 +14,7 @@ import Foundation
   { didSet { selectedCallback(selected) } }
 
   @Published var list: [String] = [""]
+
+  func contains(_ timeStr: String) -> Bool
+  { return list.contains(timeStr) }
 }

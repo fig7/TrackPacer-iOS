@@ -7,14 +7,15 @@
 
 import Foundation
 
-enum DialogType { case Info }
+enum DialogType { case None, Info, Edit }
 
 @MainActor class DialogContent : ObservableObject {
-  @Published var dialogType: DialogType = .Info
+  @Published var dialogType: DialogType = .None
 
   @Published var dialogTitle: String = ""
   @Published var dialogText: String  = ""
 
-  @Published var dialogWidth: CGFloat  = 0.0
-  @Published var dialogHeight: CGFloat = 0.0
+  @Published var dialogWidth: CGFloat   = 0.0
+  @Published var dialogHeight: CGFloat  = 0.0
+  @Published var dialogPadding: CGFloat = 0.0
 }

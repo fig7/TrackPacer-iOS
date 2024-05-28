@@ -42,7 +42,7 @@ struct RunView: View {
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $distanceSelection.selected, list: distanceSelection.list).frame(width: 180, height: 42, alignment: .center)
+        TPPicker(selected: $distanceSelection.selectedPadded, list: distanceSelection.list).frame(width: 180, height: 42, alignment: .center)
         Spacer().frame(width: 15)
 
         TPPicker(selected: $laneSelection.selected, list: laneSelection.list).frame(width: 80, height: 42, alignment: .center)
@@ -62,7 +62,9 @@ struct RunView: View {
         TPPicker(selected: $timeSelection.selected, list: timeSelection.list).frame(width: 200, height: 42, alignment: .center)
         Spacer().frame(width: 15)
 
-        TPButton(iconName: "baseline_edit_42") { }.frame(width: 60, height: 42, alignment: .center)
+        TPButton(iconName: "baseline_edit_42") {
+          viewModel.editTime()
+        }.frame(width: 60, height: 42, alignment: .center)
 
         Spacer()
       }.padding(.horizontal, 20)
@@ -79,7 +81,9 @@ struct RunView: View {
         TPPicker(selected: $profileStr, list: profileList).frame(width: 200, height: 42, alignment: .center)
         Spacer().frame(width: 15)
 
-        TPButton(iconName: "baseline_help_outline_42") { viewModel.showProfileHelp() } .frame(width: 60, height: 42, alignment: .center)
+        TPButton(iconName: "baseline_help_outline_42") {
+          viewModel.showProfileHelp()
+        }.frame(width: 60, height: 42, alignment: .center)
 
         Spacer()
       }.padding(.horizontal, 20)

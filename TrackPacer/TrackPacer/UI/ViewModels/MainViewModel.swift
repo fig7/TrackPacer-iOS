@@ -39,13 +39,25 @@ import Foundation
     dialogContent.dialogTitle = title
     dialogContent.dialogText  = message
 
-    dialogContent.dialogWidth  = CGFloat(width)
-    dialogContent.dialogHeight = CGFloat(height)
+    dialogContent.dialogWidth   = CGFloat(width)
+    dialogContent.dialogHeight  = CGFloat(height)
+    dialogContent.dialogPadding = CGFloat(20)
+
+    dialogVisibility.visible = true
+  }
+
+  func showEditTimeDialog(width: Int, height: Int) {
+    dialogContent.dialogType = .Edit
+
+    dialogContent.dialogWidth   = CGFloat(width)
+    dialogContent.dialogHeight  = CGFloat(height)
+    dialogContent.dialogPadding = CGFloat(8)
 
     dialogVisibility.visible = true
   }
 
   func dismissDialog() {
+    dialogContent.dialogType = .None
     dialogVisibility.visible = false
   }
 

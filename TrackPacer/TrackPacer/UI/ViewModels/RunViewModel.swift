@@ -13,12 +13,16 @@ import Foundation
 
   var distanceSelection: DistanceSelection = DistanceSelection()
   var laneSelection: LaneSelection = LaneSelection()
+
   var timeSelection: TimeSelection = TimeSelection()
+  let timeEdit: TimeEdit
 
   var trackSelection: TrackSelection = TrackSelection()
 
   init(_ runModel: RunModel) {
     self.runModel  = runModel
+
+    timeEdit = TimeEdit(timeSelection)
   }
 
   func setMain(mainViewModel: MainViewModel) {
@@ -26,7 +30,7 @@ import Foundation
   }
 
   func initTimes() throws {
-    let selectedDistance = distanceSelection.selected.trim()
+    let selectedDistance = distanceSelection.selected
     try initTimes(selectedDistance)
   }
 
@@ -35,7 +39,6 @@ import Foundation
       guard let self else { return }
 
       do {
-        let newSelected = newSelected.trim()
         try initTimes(newSelected)
       } catch { }
 
@@ -49,8 +52,9 @@ import Foundation
   }
 
   func initDistances(_ distanceArray: [String]) throws {
-    distanceSelection.list     = distanceArray.map { (pickerBugWorkaround: String) in " " + pickerBugWorkaround + " "}
-    distanceSelection.selected = distanceSelection.list[0]
+    // To workaround a picker bug, the picker selection is padded with spaces
+    distanceSelection.list           = distanceArray.map { (pickerBugWorkaround: String) in " " + pickerBugWorkaround + " "}
+    distanceSelection.selectedPadded = distanceSelection.list[0]
 
     laneSelection.list         = ["1", "2", "3", "4", "5", "6", "7", "8"]
     laneSelection.selected     = laneSelection.list[0]
@@ -72,7 +76,7 @@ import Foundation
 
   func updateTrackOverlay() {
     do {
-      let runDist        = distanceSelection.selected.trim()
+      let runDist        = distanceSelection.selected
       let runLane        = try laneSelection.selected.toInt()
       let alternateStart = false // TODO: settingsModel.settingsManager.alternateStart
 
@@ -92,19 +96,52 @@ import Foundation
       "Profiles are a feature that allow you to incorporate changes to your pace.\n\n" +
       "Perhaps you want to run at a slower pace, or stop to recover, between fast intervals. Speed up and slow down, you decide when!\n\n" +
       "Profiles will only be available in the pro version of TrackPacer, which is coming soon...",
-      width: 342, height: 342)
+      width: 342, height: 356)
+  }
+
+  func editTime() {
+    do {
+      let runTime = try runTimeFor(timeSelection.selected)
+      (timeEdit.mins, timeEdit.secs, timeEdit.hths) = mshFromRunTime(runTime)
+    } catch { }
+
+    mainViewModel.showEditTimeDialog(width: 300, height: 382)
+  }
+
+  func deleteTime() {
+    do {
+      (timeSelection.list, timeSelection.selected) = try runModel.deleteTime(timeSelection.selected, distanceSelection.selected)
+    } catch {
+      // TODO: mainViewModel.handleUpdatingDistanceError()
+    }
+  }
+
+  func addTime() {
+    do {
+      (timeSelection.list, timeSelection.selected) = try runModel.addTime(timeEdit.timeStr, distanceSelection.selected)
+    } catch {
+      // TODO: mainViewModel.handleUpdatingDistanceError()
+    }
+  }
+
+  func setTime() {
+    do {
+      (timeSelection.list, timeSelection.selected) = try runModel.setTime(timeSelection.selected, timeEdit.timeStr, distanceSelection.selected)
+    } catch {
+      // TODO: mainViewModel.handleUpdatingDistanceError()
+    }
   }
 
   func fetchPacingOptions() -> (String, Int, Double) {
     do {
       let distanceSelected = distanceSelection.selected
-      let runDist = distanceSelected.trim()
+      let runDist = distanceSelected
 
       let laneSelected = laneSelection.selected
       let runLane = try laneSelected.toInt()
 
       let timeSelected = timeSelection.selected
-      let runTime = try runTimeFor(selectedTime: timeSelected)
+      let runTime = try runTimeFor(timeSelected)
 
       return (runDist, runLane, runTime)
     } catch { }

@@ -12,6 +12,7 @@ let baseTimeMS  = "%@%@:%@"
 let baseTimeHMS = "%@%@:%@:%@"
 let baseTimeMSS = "%@%@:%@.%@"
 let baseTimeAll = "%@%@:%@:%@.%@"
+let editTimeAll = "%@:%@.%@"
 
 func timeToString(timeInMS: Int64) -> String {
   var timeLeft = abs(timeInMS)
@@ -100,9 +101,20 @@ func timeToFullString(timeInMS: Int64) -> String {
   return String(format: baseTimeAll, sgnStr, hrsStr, minsStr, secsStr, msStr)
 }
 
-func runTimeFor(selectedTime: String) throws -> Double {
+func runTimeFor(_ selectedTime: String) throws -> Double {
   let runTimeSplit = selectedTime.split(separator: ":")
   let runTime0 = try String(runTimeSplit[0]).trim().toLong()
   let runTime1 = try String(runTimeSplit[1]).toDouble()
   return 1000.0*(runTime0.toDouble()*60.0 + runTime1)
+}
+
+func mshFromRunTime(_ runTime: Double) -> (mins: Int, secs: Int, hths: Int) {
+  let mins = (runTime / 60000.0).toInt()
+  let secs = ((runTime - mins.toDouble()*60000.0) / 1000.0).toInt()
+  let hths = ((runTime - mins.toDouble()*60000.0 - secs.toDouble()*1000.0)/10.0).toInt()
+  return (mins, secs, hths)
+}
+
+func strFromMSH(_ mins: Int, _ secs: Int, _ hths: Int) -> String {
+  return String(format: editTimeAll, mins.toString(), String(format:"%02d", secs), String(format: "%02d", hths))
 }

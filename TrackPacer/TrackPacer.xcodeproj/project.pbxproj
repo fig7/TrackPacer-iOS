@@ -29,6 +29,7 @@
 		127122A52BEE68D100106069 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122A42BEE68D100106069 /* SettingsView.swift */; };
 		127122A82BEE7F1F00106069 /* DistanceSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122A72BEE7F1F00106069 /* DistanceSelection.swift */; };
 		127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127122AA2BEEDE5400106069 /* MainViewModel.swift */; };
+		1287C29A2C06026C008BDD46 /* TimeEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1287C2992C06026C008BDD46 /* TimeEdit.swift */; };
 		1293591E2BFE0BAD0042F99E /* WaypointCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293591D2BFE0BAD0042F99E /* WaypointCalculator.swift */; };
 		129359212BFE1BA20042F99E /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359202BFE1BA20042F99E /* Array.swift */; };
 		129359252BFE20290042F99E /* WaypointService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359242BFE20290042F99E /* WaypointService.swift */; };
@@ -128,6 +129,7 @@
 		127122A42BEE68D100106069 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		127122A72BEE7F1F00106069 /* DistanceSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelection.swift; sourceTree = "<group>"; };
 		127122AA2BEEDE5400106069 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		1287C2992C06026C008BDD46 /* TimeEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeEdit.swift; sourceTree = "<group>"; };
 		1293591D2BFE0BAD0042F99E /* WaypointCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Waypoint\U0010Calculator.swift"; sourceTree = "<group>"; };
 		129359202BFE1BA20042F99E /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		129359242BFE20290042F99E /* WaypointService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointService.swift; sourceTree = "<group>"; };
@@ -221,7 +223,6 @@
 				1271229C2BEE565200106069 /* StatusView.swift */,
 				124645E72BF169DF00CB6EAC /* TPPicker.swift */,
 				124645E92BF16A2400CB6EAC /* TPButton.swift */,
-				12B5A4002C04A71000455303 /* Dialog.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -298,6 +299,7 @@
 				127122A02BEE5B6100106069 /* HistoryView.swift */,
 				127122A22BEE5DCC00106069 /* AudioView.swift */,
 				127122A42BEE68D100106069 /* SettingsView.swift */,
+				12B5A4002C04A71000455303 /* Dialog.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -459,6 +461,7 @@
 				12E5204C2C00E98A002F54AE /* LaneSelection.swift */,
 				12AE78F92C0294A70057764D /* TimeSelection.swift */,
 				12C8734F2C036B4100FA5C5E /* TrackSelection.swift */,
+				1287C2992C06026C008BDD46 /* TimeEdit.swift */,
 			);
 			path = Run;
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 				129359252BFE20290042F99E /* WaypointService.swift in Sources */,
 				127122902BEE41A000106069 /* ContentView.swift in Sources */,
 				124645EA2BF16A2400CB6EAC /* TPButton.swift in Sources */,
+				1287C29A2C06026C008BDD46 /* TimeEdit.swift in Sources */,
 				1293597B2BFEAD1D0042F99E /* Double.swift in Sources */,
 				12B5A4042C04AF6800455303 /* DialogVisibility.swift in Sources */,
 				129359732BFE66F30042F99E /* Handler.swift in Sources */,
