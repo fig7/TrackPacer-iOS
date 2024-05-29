@@ -22,7 +22,7 @@ struct CompletionView: View {
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
           Button(action: { viewModel.saveRun() }) { Text(" SAVE ") }
             .buttonStyle(ActionButtonStyleMax(disabledCol: false)).disabled(false)
-        }
+        }.padding(.bottom, 5)
       }.toolbar() {
         ToolbarItem(placement: .navigationBarTrailing) {
           StatusView()
