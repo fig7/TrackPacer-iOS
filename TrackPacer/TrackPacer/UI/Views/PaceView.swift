@@ -8,21 +8,11 @@
 import SwiftUI
 
 struct PaceView: View {
-  let viewModel: PaceViewModel
-  @ObservedObject var pacingStatus: PacingStatus
-  @ObservedObject var pacingOptions: PacingOptions
-  @ObservedObject var pacingProgress: PacingProgress
+  @EnvironmentObject var viewModel: PaceViewModel
 
-  init(viewModel: PaceViewModel, runViewModel: RunViewModel) {
-    self.viewModel = viewModel
-
-    pacingOptions  = viewModel.pacingOptions
-    pacingProgress = viewModel.pacingProgress
-    pacingStatus   = viewModel.statusViewModel.pacingStatus
-
-    (pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime) = runViewModel.fetchPacingOptions()
-    pacingProgress.resetProgress()
-  }
+  @EnvironmentObject var pacingOptions: PacingOptions
+  @EnvironmentObject var pacingProgress: PacingProgress
+  @EnvironmentObject var pacingStatus: PacingStatus
 
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
@@ -140,7 +130,7 @@ struct PaceView: View {
       }.padding(.bottom, 5)
     }.toolbar() {
       ToolbarItem(placement: .navigationBarTrailing) {
-        StatusView(viewModel: viewModel.statusViewModel)
+        StatusView()
       }
     }.navigationBarBackButtonHidden(pacingStatus.status != .NotPacing).padding(.horizontal, 20)
   }

@@ -20,7 +20,7 @@ private class MPPausingDelegate : NSObject, AVAudioPlayerDelegate {
   }
 }
 
-private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
+private class MPCancelledDelegate : NSObject, AVAudioPlayerDelegate {
   let viewModel: PaceViewModel
 
   init(viewModel: PaceViewModel) {
@@ -32,9 +32,23 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
   }
 }
 
-@MainActor class PaceViewModel : ServiceConnection {
+private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
+  let viewModel: PaceViewModel
+
+  init(viewModel: PaceViewModel) {
+    self.viewModel = viewModel
+  }
+
+  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    viewModel.setPacingStatus(pacingStatus: .NotPacing)
+    viewModel.pacingComplete()
+  }
+}
+
+@MainActor class PaceViewModel : ObservableObject, ServiceConnection {
   unowned let paceModel: PaceModel
   unowned var mainViewModel: MainViewModel!
+
   unowned var statusViewModel: StatusViewModel!
 
   var pacingOptions: PacingOptions
@@ -49,7 +63,8 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
   private var mpPacingCancelled: AVAudioPlayer!
 
   private var pausingDelegate: AVAudioPlayerDelegate!
-  private var finishingDelegate: AVAudioPlayerDelegate!
+  private var cancelledDelegate: AVAudioPlayerDelegate!
+  private var completionDelegate: AVAudioPlayerDelegate!
 
   private let handler = Handler()
 
@@ -80,15 +95,24 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
       pausingDelegate = MPPausingDelegate(viewModel: self)
       mpPacingPaused.delegate = pausingDelegate
 
-      finishingDelegate = MPFinishingDelegate(viewModel: self)
-      mpPacingCancelled.delegate = finishingDelegate
-      mpPacingComplete.delegate  = finishingDelegate
+      cancelledDelegate = MPCancelledDelegate(viewModel: self)
+      mpPacingCancelled.delegate = cancelledDelegate
+
+      completionDelegate = MPCompletionDelegate(viewModel: self)
+      mpPacingComplete.delegate  = completionDelegate
     } catch { }
   }
 
   func setMain(mainViewModel: MainViewModel) {
     self.mainViewModel   = mainViewModel
     self.statusViewModel = mainViewModel.statusViewModel
+  }
+
+  func setPacingOptions(_ runDist: String, _ runLane: Int, _ runTime: Double) {
+    pacingOptions.runDist = runDist
+    pacingOptions.runLane = runLane
+    pacingOptions.runTime = runTime
+    pacingProgress.resetProgress()
   }
 
   func startScreenReceiver() {
@@ -162,6 +186,7 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
       let pacingStatus = statusViewModel.pacingStatus.status
       if((pacingStatus == .PacingStart) || (pacingStatus == .PacingResume)) {
         setPacingStatus(pacingStatus: .Pacing)
+        if(pacingStatus == .PacingStart) { mainViewModel.initPacingResult() }
       } else {
         let distRun = waypointService.distOnPace(elapsedTime)
         pacingProgress.setDistRun(distRun)
@@ -190,10 +215,9 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func beginPacing() {
-    pacingProgress.setElapsedTime(0)
-    pacingProgress.resetWaypointProgress()
-
+    pacingProgress.resetProgress()
     setPacingStatus(pacingStatus: .ServiceStart)
+
     waypointService = WaypointService(serviceConnection: self)
   }
 
@@ -257,5 +281,9 @@ private class MPFinishingDelegate : NSObject, AVAudioPlayerDelegate {
   func resumePacing() {
     setPacingStatus(pacingStatus: .ServiceResume)
     waypointService = WaypointService(serviceConnection: self)
+  }
+
+  func pacingComplete() {
+    mainViewModel.pacingComplete()
   }
 }

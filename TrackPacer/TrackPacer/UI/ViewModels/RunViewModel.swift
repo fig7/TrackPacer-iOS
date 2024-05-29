@@ -7,7 +7,7 @@
 
 import Foundation
 
-@MainActor class RunViewModel {
+@MainActor class RunViewModel : ObservableObject {
   unowned let runModel: RunModel
   unowned var mainViewModel: MainViewModel!
 
@@ -132,7 +132,7 @@ import Foundation
     }
   }
 
-  func fetchPacingOptions() -> (String, Int, Double) {
+  func onYourMarks() {
     do {
       let distanceSelected = distanceSelection.selected
       let runDist = distanceSelected
@@ -143,9 +143,7 @@ import Foundation
       let timeSelected = timeSelection.selected
       let runTime = try runTimeFor(timeSelected)
 
-      return (runDist, runLane, runTime)
+      mainViewModel.onYourMarks(runDist, runLane, runTime)
     } catch { }
-
-    return ("", 0, 0.0)
   }
 }

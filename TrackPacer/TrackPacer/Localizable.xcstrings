@@ -19,6 +19,9 @@
     " ON  YOUR  MARKS " : {
 
     },
+    " SAVE " : {
+
+    },
     " SET " : {
 
     },
@@ -58,6 +61,9 @@
 
     },
     "Audio" : {
+
+    },
+    "Clips & Audio" : {
 
     },
     "Distance in lane %lld" : {
@@ -103,9 +109,6 @@
       }
     },
     "Hello, 2" : {
-
-    },
-    "Hello, 3" : {
 
     },
     "Hello, 4" : {
@@ -344,6 +347,9 @@
 
     },
     "Next up: %@" : {
+
+    },
+    "Pacing on" : {
 
     },
     "Profile" : {

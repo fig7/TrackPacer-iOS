@@ -50,6 +50,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
   private let runModel: RunModel
   private let paceModel: PaceModel
+  private let resultModel: ResultModel
 
   init() {
     runModel = RunModel()
@@ -58,8 +59,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
     }
 
-    paceModel = PaceModel()
-    mainViewModel = MainViewModel(runModel, paceModel)
+    paceModel     = PaceModel()
+    resultModel   = ResultModel()
+    mainViewModel = MainViewModel(runModel, paceModel, resultModel)
 
     do {
       try initialiseApp()
@@ -75,7 +77,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
   var body: some Scene {
     WindowGroup {
-      ContentView(viewModel: mainViewModel!)
+      ContentView()
+        .environmentObject(mainViewModel)
+        .environmentObject(mainViewModel.runViewStack)
     }
   }
 }

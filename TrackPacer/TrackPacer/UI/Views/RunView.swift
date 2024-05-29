@@ -8,26 +8,16 @@
 import SwiftUI
 
 struct RunView: View {
-  let viewModel: RunViewModel
-
-  @ObservedObject var distanceSelection: DistanceSelection
-  @ObservedObject var laneSelection: LaneSelection
-  @ObservedObject var timeSelection: TimeSelection
+  @EnvironmentObject var viewModel: RunViewModel
+  
+  @EnvironmentObject var distanceSelection: DistanceSelection
+  @EnvironmentObject var laneSelection: LaneSelection
+  @EnvironmentObject var timeSelection: TimeSelection
 
   @State var profileStr = "Fixed pace"
   var profileList = ["Fixed pace"]
 
-  @ObservedObject var trackSelection: TrackSelection
-
-  init(viewModel: RunViewModel) {
-    self.viewModel = viewModel
-
-    self.distanceSelection = viewModel.distanceSelection
-    self.laneSelection     = viewModel.laneSelection
-    self.timeSelection     = viewModel.timeSelection
-
-    self.trackSelection    = viewModel.trackSelection
-  }
+  @EnvironmentObject var trackSelection: TrackSelection
 
   var body: some View {
     VStack(spacing: 5) {
@@ -112,7 +102,9 @@ struct RunView: View {
 
       Spacer()
 
-      NavigationLink(" ON  YOUR  MARKS ", value: 1).buttonStyle(ActionButtonStyle())
+      Button(" ON  YOUR  MARKS ") {
+        viewModel.onYourMarks()
+      }.buttonStyle(ActionButtonStyle())
     }
   }
 }

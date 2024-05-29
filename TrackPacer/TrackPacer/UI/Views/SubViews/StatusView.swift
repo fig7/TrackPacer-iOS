@@ -8,15 +8,8 @@
 import SwiftUI
 
 struct StatusView: View {
-  let viewModel: StatusViewModel
-  @ObservedObject var pacingStatus: PacingStatus
-  @ObservedObject var pacingSettings: PacingSettings
-
-  init(viewModel: StatusViewModel) {
-    self.viewModel = viewModel
-    self.pacingStatus = viewModel.pacingStatus
-    self.pacingSettings = viewModel.pacingSettings
-  }
+  @EnvironmentObject var pacingStatus: PacingStatus
+  @EnvironmentObject var pacingSettings: PacingSettings
 
     var body: some View {
       HStack {

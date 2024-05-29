@@ -7,7 +7,7 @@
 
 import Foundation
 
-@MainActor class StatusViewModel {
+@MainActor class StatusViewModel : ObservableObject {
   var pacingStatus: PacingStatus
   var pacingSettings: PacingSettings
 
