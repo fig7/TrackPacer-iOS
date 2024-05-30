@@ -13,4 +13,11 @@ extension Array {
       return count
     }
   }
+
+  mutating func add(_ element: Element) {
+    append(element)
+  }
+
+  mutating func clear()
+  { removeAll() }
 }

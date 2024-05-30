@@ -49,7 +49,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
   private let runModel: RunModel
   private let paceModel: PaceModel
+
   private let resultModel: ResultModel
+  private let historyModel: HistoryModel
 
   init() {
     runModel = RunModel()
@@ -58,9 +60,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
     }
 
+    historyModel = HistoryModel()
+    if(!historyModel.historyDataOK) {
+      // val dialog = HistoryErrorDialog.newDialog("initializing", true)
+      // dialog.show(supportFragmentManager, "HISTORY_ERROR_DIALOG")
+    }
+
     paceModel     = PaceModel()
     resultModel   = ResultModel()
-    mainViewModel = MainViewModel(runModel, paceModel, resultModel)
+    mainViewModel = MainViewModel(runModel, paceModel, resultModel, historyModel)
 
     do {
       try initialiseApp()

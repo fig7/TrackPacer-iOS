@@ -29,7 +29,7 @@ class DistanceModel {
         try distanceManager.initDistances(defaultDistances: distanceArray)
       } catch {
         distanceDataOK = false
-        print(error.localizedDescription)
+        print("Failed to initialize distances. Error: \(error.localizedDescription)")
     }
   }
 }

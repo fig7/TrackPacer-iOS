@@ -15,6 +15,21 @@ struct CloseButton: View {
   }
 }
 
+struct ErrorDialog: View {
+  @ObservedObject var dialogContent: DialogContent
+
+  init(_ dialogContent: DialogContent) {
+    self.dialogContent = dialogContent
+  }
+
+  var body: some View {
+    Text(dialogContent.dialogTitle).bold().frame(maxWidth: .infinity, alignment: .leading)
+    Spacer().frame(height: 20)
+
+    Text(dialogContent.dialogText)
+  }
+}
+
 struct InfoDialog: View {
   @ObservedObject var dialogContent: DialogContent
   let closeAction: () -> ()
@@ -143,6 +158,9 @@ struct Dialog: View {
           switch(dialogContent.dialogType) {
           case .None:
             EmptyView()
+
+          case .Error:
+            ErrorDialog(dialogContent)
 
           case .Info:
             InfoDialog(dialogContent) { viewModel.dismissDialog() }

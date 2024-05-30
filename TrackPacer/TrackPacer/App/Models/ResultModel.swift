@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResultData {
+struct ResultData: Codable {
   var runVersion: String = TPVersion
   var resultUUID: String = ""
 

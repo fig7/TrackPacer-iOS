@@ -10,7 +10,9 @@ import Foundation
 @MainActor class MainViewModel : ObservableObject {
   unowned let runModel: RunModel
   unowned let paceModel: PaceModel
+
   unowned let resultModel: ResultModel
+  unowned let historyModel: HistoryModel
 
   var runViewModel: RunViewModel
   var runViewStack: RunViewStack
@@ -22,10 +24,12 @@ import Foundation
   let dialogVisibility: DialogVisibility
   let dialogContent: DialogContent
 
-  init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel) {
+  init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel, _ historyModel: HistoryModel) {
     self.runModel    = runModel
     self.paceModel   = paceModel
-    self.resultModel = resultModel
+
+    self.resultModel  = resultModel
+    self.historyModel = historyModel
 
     runViewModel = RunViewModel(runModel)
     runViewStack = RunViewStack()
@@ -40,6 +44,28 @@ import Foundation
     runViewModel.setMain(mainViewModel: self)
     paceViewModel.setMain(mainViewModel: self)
     completionViewModel.setMain(mainViewModel: self)
+  }
+
+  func loadHistory() {
+    historyModel.loadHistory()
+    if(!historyModel.historyDataOK) {
+      showErrorDialog(title: "Loading error",
+        message: "Loading pacing history failed. Please try re-starting the application. If that doesn't work, re-install the application.",
+        width: 342, height: 200)
+    }
+  }
+
+  func showErrorDialog(title: String, message: String, width: Int, height: Int) {
+    dialogContent.dialogType = .Error
+
+    dialogContent.dialogTitle = title
+    dialogContent.dialogText  = message
+
+    dialogContent.dialogWidth   = CGFloat(width)
+    dialogContent.dialogHeight  = CGFloat(height)
+    dialogContent.dialogPadding = CGFloat(20)
+
+    dialogVisibility.visible = true
   }
 
   func showInfoDialog(title: String, message: String, width: Int, height: Int) {
@@ -160,7 +186,17 @@ import Foundation
   func saveRun() {
     resultModel.setRunNotes(completionViewModel.runNotes)
 
-    // TODO: Save result
+    let historyManager = historyModel.historyManager
+    if(!historyManager.saveHistory(resultModel.resultData)) {
+      showInfoDialog(title: "Error saving result",
+        message:
+        "An error occurred while saving the pacing result." +
+        "The result was not saved. Please try saving again.",
+        width: 342, height: 200)
+
+      return
+    }
+
     runViewStack.popCompletionView()
   }
 

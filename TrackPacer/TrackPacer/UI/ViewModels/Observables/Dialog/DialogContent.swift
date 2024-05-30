@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum DialogType { case None, Info, Edit }
+enum DialogType { case None, Error, Info, Edit }
 
 @MainActor class DialogContent : ObservableObject {
   @Published var dialogType: DialogType = .None

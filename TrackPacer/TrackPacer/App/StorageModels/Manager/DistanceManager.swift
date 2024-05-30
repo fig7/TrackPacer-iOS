@@ -8,11 +8,9 @@
 import Foundation
 
 private let distanceVersion = "1.3"
-
 enum DistanceError : Error { case VersionError }
 
 class DistanceManager {
-  private let filesDir: File
   private let distanceDir: File
 
   var distanceArray: [String]!
@@ -21,8 +19,8 @@ class DistanceManager {
   private var currentVersion: String!
 
   init(filesDir: URL) {
-    self.filesDir    = File(url: filesDir)
-    self.distanceDir = File(file: self.filesDir, child: "Data", directoryHint: .isDirectory)
+    let filesDir     = File(url: filesDir)
+    self.distanceDir = File(file: filesDir, child: "Data", directoryHint: .isDirectory)
   }
 
   func initDistances(defaultDistances: [String]) throws {

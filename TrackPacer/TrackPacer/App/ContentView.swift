@@ -21,6 +21,7 @@ struct ContentView: View {
             .environmentObject(viewModel.runViewModel.laneSelection)
             .environmentObject(viewModel.runViewModel.timeSelection)
             .environmentObject(viewModel.runViewModel.trackSelection)
+            .onAppear { viewModel.loadHistory() }
 
           HistoryView().tabItem { Label("History", image: "baseline_history_24") }
 
