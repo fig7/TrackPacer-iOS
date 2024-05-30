@@ -12,6 +12,20 @@ import Foundation
 
   @Published var runDate = ""
 
+  @Published var runDist = ""
+  @Published var runLane = -1
+  @Published var runProf = ""
+
+  @Published var totalDist = ""
+  @Published var totalTime = ""
+  @Published var totalPace = ""
+
+  @Published var actualTime = ""
+  @Published var actualPace = ""
+  @Published var earlyLate  = ""
+
+  @Published var runNotes = ""
+
   func setMain(mainViewModel: MainViewModel) {
     self.mainViewModel = mainViewModel
   }

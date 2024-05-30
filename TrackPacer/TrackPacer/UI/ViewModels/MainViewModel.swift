@@ -97,29 +97,70 @@ import Foundation
   func initPacingResult()
   {
     resultModel.setPacingDate()
+    resultModel.setRunNotes("")
 
-    /* resultData.runDist   = pacingModel.runDist
-    resultData.runLane   = pacingModel.runLane
-    resultData.runProf   = pacingModel.runProf
+    let pacingOptions = paceViewModel.pacingOptions
+    resultModel.setRunDist(pacingOptions.runDist)
+    resultModel.setRunLane(pacingOptions.runLane)
+    resultModel.setRunProf(pacingOptions.runProf)
 
-    resultData.totalDistStr = pacingModel.totalDistStr
-    resultData.totalTimeStr = pacingModel.totalTimeStr
-    resultData.totalPaceStr = pacingModel.totalPaceStr */
+    resultModel.setTotalDist(pacingOptions.totalDistStr)
+    resultModel.setTotalTime(pacingOptions.totalTimeStr)
+    resultModel.setTotalPace(pacingOptions.totalPaceStr)
+  }
+
+  func setPacingResult() {
+    let pacingOptions  = paceViewModel.pacingOptions
+    let pacingProgress = paceViewModel.pacingProgress
+
+    let actualTime = pacingProgress.elapsedTime
+    resultModel.setActualTime(timeToAlmostFullString(timeInMS: actualTime))
+
+    let actualPace = (1000.0 * actualTime.toDouble()) / pacingOptions.totalDist
+    resultModel.setActualPace(timeToMinuteString(timeInMS: actualPace.toLong()))
+
+    let totalTime = pacingOptions.totalTime
+    var timeDiff  = actualTime - totalTime.toLong()
+    if(timeDiff <= -1000) {
+      timeDiff = -timeDiff
+
+      let timeDiffRes = (timeDiff  < 60000) ? "%@ seconds early" : "%@ early"
+      resultModel.setEarlyLate(String(format: timeDiffRes, timeToString(timeInMS: timeDiff)))
+    } else if(timeDiff > 2000) {
+      let timeDiffRes = (timeDiff  < 60000) ? "%@ seconds late" : "%@ late"
+      resultModel.setEarlyLate(String(format: timeDiffRes, timeToString(timeInMS: timeDiff)))
+    } else {
+      resultModel.setEarlyLate("Perfect pacing!")
+    }
   }
 
   func pacingComplete() {
-    // TODO: Init result model
-    let resultData = resultModel.resultData
-
-    let formatter        = DateFormatter()
+    let formatter = DateFormatter()
     formatter.dateFormat = "d MMM, yyyy 'at' HH:mm"
-    completionViewModel.runDate = formatter.string(from: resultData.runDate)
+
+    let resultData = resultModel.resultData
+    completionViewModel.runDate  = formatter.string(from: resultData.runDate)
+    completionViewModel.runNotes = resultData.runNotes
+
+    completionViewModel.runDist = resultData.runDist
+    completionViewModel.runLane = resultData.runLane
+    completionViewModel.runProf = resultData.runProf
+
+    completionViewModel.totalDist = resultData.totalDistStr
+    completionViewModel.totalTime = resultData.totalTimeStr
+    completionViewModel.totalPace = resultData.totalPaceStr
+
+    completionViewModel.actualTime = resultData.actualTimeStr
+    completionViewModel.actualPace = resultData.actualPaceStr
+    completionViewModel.earlyLate  = resultData.earlyLateStr
 
     runViewStack.pushCompletionView()
   }
 
   func saveRun() {
-    // TODO: Save run
+    resultModel.setRunNotes(completionViewModel.runNotes)
+
+    // TODO: Save result
     runViewStack.popCompletionView()
   }
 

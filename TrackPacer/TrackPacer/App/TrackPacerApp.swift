@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 import AVKit
 
 var mainViewModel: MainViewModel!

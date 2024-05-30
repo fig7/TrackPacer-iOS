@@ -256,8 +256,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
       if(silent) {
         setPacingStatus(pacingStatus: .NotPacing)
       } else if ((pacingStatus.status == .Pacing) && (pacingProgress.elapsedTime >= 40000)) {
-        // resultModel.setPacingResult(resources, pacingModel)
-        // statusModel.setPacingStatus(pacingStatus: .PacingComplete)
+        mainViewModel.setPacingResult()
         setPacingStatus(pacingStatus: .PacingComplete)
         mpPacingComplete.play()
       } else {
@@ -266,7 +265,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
       }
     } else if((pacingStatus.status == .PacingPaused) && !silent) {
       if(pacingProgress.elapsedTime >= 40000) {
-        // resultModel.setPacingResult(resources, pacingModel)
+        mainViewModel.setPacingResult()
         setPacingStatus(pacingStatus: .PacingComplete)
         mpPacingComplete.play()
       } else {

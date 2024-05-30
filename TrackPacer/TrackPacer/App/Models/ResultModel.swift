@@ -28,7 +28,20 @@ struct ResultData {
 }
 
 class ResultModel {
-  var resultData = ResultData()
+  private(set) var resultData = ResultData()
 
-  func setPacingDate() { resultData.runDate = Date() }
+  func setPacingDate()                  { resultData.runDate = Date() }
+  func setRunDist(_ runDist: String)    { resultData.runDist = runDist }
+  func setRunLane(_ runLane: Int)       { resultData.runLane = runLane }
+  func setRunProf(_ runProf: String)    { resultData.runProf = runProf }
+
+  func setTotalDist(_ totalDistStr: String) { resultData.totalDistStr = totalDistStr }
+  func setTotalTime(_ totalTimeStr: String) { resultData.totalTimeStr = totalTimeStr }
+  func setTotalPace(_ totalPaceStr: String) { resultData.totalPaceStr = totalPaceStr }
+
+  func setActualTime(_ actualTimeStr: String) { resultData.actualTimeStr = actualTimeStr }
+  func setActualPace(_ actualPaceStr: String) { resultData.actualPaceStr = actualPaceStr }
+  func setEarlyLate(_ earlyLateStr: String)   { resultData.earlyLateStr  = earlyLateStr }
+
+  func setRunNotes(_ runNotes: String) { resultData.runNotes = runNotes }
 }

@@ -37,6 +37,16 @@
     "%@" : {
 
     },
+    "%@ (%@ in L%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@ in L%3$lld)"
+          }
+        }
+      }
+    },
     "%@ (%@)" : {
       "localizations" : {
         "en" : {
@@ -60,6 +70,9 @@
     "%lld" : {
 
     },
+    "Actual time" : {
+
+    },
     "Audio" : {
 
     },
@@ -67,6 +80,9 @@
 
     },
     "Distance in lane %lld" : {
+
+    },
+    "Distance run (at \"%@\")" : {
 
     },
     "Distance run (on pace):" : {
@@ -349,6 +365,17 @@
     "Next up: %@" : {
 
     },
+    "notesTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your notes:"
+          }
+        }
+      }
+    },
     "Pacing on" : {
 
     },
@@ -377,6 +404,9 @@
 
     },
     "Time:" : {
+
+    },
+    "Your notes:" : {
 
     }
   },

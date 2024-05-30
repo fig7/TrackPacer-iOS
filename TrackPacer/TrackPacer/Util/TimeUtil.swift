@@ -55,6 +55,41 @@ func timeToString(timeInMS: Int64) -> String {
     }
 }
 
+func timeToMinuteString(timeInMS: Int64) -> String {
+  var timeLeft = abs(timeInMS)
+  let sgnStr   = (timeInMS < 0) ? "-" : ""
+
+  var hrs = timeLeft / 3600000
+  timeLeft -= hrs * 3600000
+
+  var mins = timeLeft / 60000
+  timeLeft -= mins * 60000
+
+  var secs = timeLeft / 1000
+  timeLeft -= secs * 1000
+
+  secs += 1
+  if(secs == 60) {
+    secs = 0
+    mins += 1
+    if(mins == 60) {
+      mins = 0
+      hrs += 1
+    }
+  }
+
+  if(hrs > 0) {
+    let hrsStr  = String(format: "%d", hrs)
+    let minsStr = String(format: "%02d", mins)
+    let secsStr = String(format: "%02d", secs)
+    return String(format: baseTimeHMS, sgnStr, hrsStr, minsStr, secsStr)
+  } else {
+    let minsStr = String(format: "%d", mins)
+    let secsStr = String(format: "%02d", secs)
+    return String(format: baseTimeMS, sgnStr, minsStr, secsStr)
+  }
+}
+
 func timeToAlmostFullString(timeInMS: Int64) -> String {
   var timeLeft = abs(timeInMS)
   let sgnStr   = (timeInMS < 0) ? "-" : ""

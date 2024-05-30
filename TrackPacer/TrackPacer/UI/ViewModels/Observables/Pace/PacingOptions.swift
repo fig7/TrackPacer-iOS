@@ -10,12 +10,9 @@ import Foundation
 @MainActor class PacingOptions : ObservableObject {
   var runDist = "" {
     didSet {
-      let totalDist = distanceFor(runDist, runLane)
-      totalDistStr  = formatDistance(totalDist)
-      runLaps       = rtLaps(runDist, runLane)
-
-      let totalTime = timeFor(runDist, runLane, runTime)
-      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
+      totalDist = distanceFor(runDist, runLane)
+      totalTime = timeFor(runDist, runLane, runTime)
+      runLaps   = rtLaps(runDist, runLane)
 
       let totalPace = (1000.0 * totalTime) / totalDist
       totalPaceStr = timeToString(timeInMS: totalPace.toLong())
@@ -24,12 +21,9 @@ import Foundation
 
   var runLane = 1 {
     didSet {
-      let totalDist = distanceFor(runDist, runLane)
-      totalDistStr  = formatDistance(totalDist)
-      runLaps       = rtLaps(runDist, runLane)
-
-      let totalTime = timeFor(runDist, runLane, runTime)
-      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
+      totalDist = distanceFor(runDist, runLane)
+      totalTime = timeFor(runDist, runLane, runTime)
+      runLaps   = rtLaps(runDist, runLane)
 
       let totalPace = (1000.0 * totalTime) / totalDist
       totalPaceStr = timeToString(timeInMS: totalPace.toLong())
@@ -38,12 +32,22 @@ import Foundation
 
   var runTime = 0.0 {
     didSet {
-      let totalDist = distanceFor(runDist, runLane)
-      let totalTime = timeFor(runDist, runLane, runTime)
-      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
+      totalTime = timeFor(runDist, runLane, runTime)
 
       let totalPace = (1000.0 * totalTime) / totalDist
       totalPaceStr = timeToString(timeInMS: totalPace.toLong())
+    }
+  }
+  
+  var totalDist: Double = 0.0 {
+    didSet {
+      totalDistStr = formatDistance(totalDist)
+    }
+  }
+
+  var totalTime: Double = 0.0 {
+    didSet {
+      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
     }
   }
 
