@@ -16,7 +16,7 @@ class ResultData : ObservableObject, Identifiable, Hashable {
     hasher.combine(id)
   }
 
-  var id = UUID().uuidString
+  @Published var id = UUID()
   @Published var runData: RunData
   @Published var computedData: RunDataExtra
 

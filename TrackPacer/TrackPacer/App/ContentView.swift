@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
   @EnvironmentObject var viewModel: MainViewModel
-  @EnvironmentObject var runViewStack: RunViewStack
+  @EnvironmentObject var mainViewStack: MainViewStack
 
   var body: some View {
     ZStack {
-      NavigationStack(path: $runViewStack.list) {
+      NavigationStack(path: $mainViewStack.list) {
         TabView {
           RunView().tabItem { Label("Run", image: "baseline_run_24") }
             .environmentObject(viewModel.runViewModel)
@@ -49,6 +49,14 @@ struct ContentView: View {
               .environmentObject(viewModel.statusViewModel.pacingSettings)
               .onDisappear { viewModel.loadHistory() }
 
+          case 3:
+            PastView()
+              .environmentObject(viewModel.pastViewModel)
+              .environmentObject(viewModel.pastViewModel.resultData)
+
+              .environmentObject(viewModel.statusViewModel)
+              .environmentObject(viewModel.statusViewModel.pacingStatus)
+              .environmentObject(viewModel.statusViewModel.pacingSettings)
           default:
             EmptyView()
           }
@@ -62,7 +70,14 @@ struct ContentView: View {
         }
       }
 
-      Dialog(viewModel)
+      Dialog()
+        .environmentObject(viewModel)
+        .environmentObject(viewModel.dialogContent)
+        .environmentObject(viewModel.dialogResult)
+        .environmentObject(viewModel.dialogVisibility)
+
+        .environmentObject(viewModel.runViewModel)
+        .environmentObject(viewModel.runViewModel.timeEdit)
     }
   }
 }

@@ -15,10 +15,15 @@ struct HistoryView: View {
       Text("Pacing history").font(.largeTitle).frame(maxWidth: .infinity, alignment: .leading)
       Spacer().frame(height: 32)
 
-      Color(.black).frame(height: 1).frame(maxWidth: .infinity)
       ScrollView {
+        if(viewModel.historyList.isEmpty) {
+          Text("No history yet").padding()
+        } else {
+          Color(.black).frame(height: 1).frame(maxWidth: .infinity)
+        }
+
         LazyVStack {
-          ForEach($viewModel.historyList) { $resultData in
+          ForEach(viewModel.historyList) { resultData in
             VStack(alignment: .leading, spacing: 0) {
               HStack(spacing: 0) {
                 WeightedHStack() { proxy in
@@ -32,7 +37,9 @@ struct HistoryView: View {
                 }
 
                 Text(">")
-              }.padding(.vertical, 16).onLongPressGesture(perform: { /* TODO: Delete action */})
+              }.padding(.vertical, 16)
+               .onTapGesture { viewModel.showHistory(resultData) }
+               .onLongPressGesture(perform: { viewModel.deleteHistory(resultData) })
 
               Color(.black).frame(height: 1).frame(maxWidth: .infinity)
             }.frame(maxWidth: .infinity)

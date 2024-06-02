@@ -12,6 +12,9 @@
 		122F8C992C0B3BBD00352AE0 /* Weighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C982C0B3BBD00352AE0 /* Weighted.swift */; };
 		122F8C9C2C0B429200352AE0 /* ResultData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C9B2C0B429200352AE0 /* ResultData.swift */; };
 		122F8C9F2C0BCAE100352AE0 /* RunData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C9E2C0BCAE100352AE0 /* RunData.swift */; };
+		122F8CA12C0CB45B00352AE0 /* DialogResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA02C0CB45B00352AE0 /* DialogResult.swift */; };
+		122F8CA32C0D29C100352AE0 /* PastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA22C0D29C100352AE0 /* PastView.swift */; };
+		122F8CA52C0D2A7A00352AE0 /* PastViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */; };
 		123F12612BFFE39600F5E6E6 /* ServiceConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12602BFFE39600F5E6E6 /* ServiceConnection.swift */; };
 		123F12632C00AAB500F5E6E6 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */; };
 		123F12652C00AE3100F5E6E6 /* PacingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12642C00AE3100F5E6E6 /* PacingSettings.swift */; };
@@ -82,7 +85,7 @@
 		129359792BFEAC180042F99E /* Int64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359782BFEAC180042F99E /* Int64.swift */; };
 		1293597B2BFEAD1D0042F99E /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597A2BFEAD1D0042F99E /* Double.swift */; };
 		1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597C2BFEADF50042F99E /* ContinousClock.swift */; };
-		12A2B92B2C0741F300EA4155 /* RunViewStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92A2C0741F300EA4155 /* RunViewStack.swift */; };
+		12A2B92B2C0741F300EA4155 /* MainViewStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92A2C0741F300EA4155 /* MainViewStack.swift */; };
 		12A2B92D2C0743BF00EA4155 /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92C2C0743BF00EA4155 /* CompletionView.swift */; };
 		12A2B92F2C074C2800EA4155 /* CompletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */; };
 		12AE78F82C0276440057764D /* Exception.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AE78F72C0276440057764D /* Exception.swift */; };
@@ -123,6 +126,9 @@
 		122F8C982C0B3BBD00352AE0 /* Weighted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weighted.swift; sourceTree = "<group>"; };
 		122F8C9B2C0B429200352AE0 /* ResultData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultData.swift; sourceTree = "<group>"; };
 		122F8C9E2C0BCAE100352AE0 /* RunData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunData.swift; sourceTree = "<group>"; };
+		122F8CA02C0CB45B00352AE0 /* DialogResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogResult.swift; sourceTree = "<group>"; };
+		122F8CA22C0D29C100352AE0 /* PastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastView.swift; sourceTree = "<group>"; };
+		122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastViewModel.swift; sourceTree = "<group>"; };
 		123F12602BFFE39600F5E6E6 /* ServiceConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceConnection.swift; sourceTree = "<group>"; };
 		123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 		123F12642C00AE3100F5E6E6 /* PacingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingSettings.swift; sourceTree = "<group>"; };
@@ -194,7 +200,7 @@
 		129359782BFEAC180042F99E /* Int64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int64.swift; sourceTree = "<group>"; };
 		1293597A2BFEAD1D0042F99E /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		1293597C2BFEADF50042F99E /* ContinousClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinousClock.swift; sourceTree = "<group>"; };
-		12A2B92A2C0741F300EA4155 /* RunViewStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewStack.swift; sourceTree = "<group>"; };
+		12A2B92A2C0741F300EA4155 /* MainViewStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewStack.swift; sourceTree = "<group>"; };
 		12A2B92C2C0743BF00EA4155 /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
 		12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionViewModel.swift; sourceTree = "<group>"; };
 		12AE78F72C0276440057764D /* Exception.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exception.swift; sourceTree = "<group>"; };
@@ -339,6 +345,7 @@
 				124645F12BF16E5900CB6EAC /* PaceView.swift */,
 				12A2B92C2C0743BF00EA4155 /* CompletionView.swift */,
 				127122A02BEE5B6100106069 /* HistoryView.swift */,
+				122F8CA22C0D29C100352AE0 /* PastView.swift */,
 				127122A22BEE5DCC00106069 /* AudioView.swift */,
 				127122A42BEE68D100106069 /* SettingsView.swift */,
 				12B5A4002C04A71000455303 /* Dialog.swift */,
@@ -362,12 +369,13 @@
 			children = (
 				127122A62BEE7ED300106069 /* Observables */,
 				127122AA2BEEDE5400106069 /* MainViewModel.swift */,
+				12A2B92A2C0741F300EA4155 /* MainViewStack.swift */,
 				124645E42BF1661000CB6EAC /* RunViewModel.swift */,
-				12A2B92A2C0741F300EA4155 /* RunViewStack.swift */,
 				124645F32BF1731900CB6EAC /* PaceViewModel.swift */,
 				123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */,
 				12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */,
 				122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */,
+				122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -485,8 +493,9 @@
 		12B5A4022C04AF3600455303 /* Dialog */ = {
 			isa = PBXGroup;
 			children = (
-				12B5A4032C04AF6800455303 /* DialogVisibility.swift */,
 				12B5A4052C04B97100455303 /* DialogContent.swift */,
+				122F8CA02C0CB45B00352AE0 /* DialogResult.swift */,
+				12B5A4032C04AF6800455303 /* DialogVisibility.swift */,
 			);
 			path = Dialog;
 			sourceTree = "<group>";
@@ -691,10 +700,12 @@
 				127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */,
 				12B5A3F02C04A07300455303 /* StatusModel.swift in Sources */,
 				124645ED2BF16A6C00CB6EAC /* ActionButtonStyle.swift in Sources */,
+				122F8CA32C0D29C100352AE0 /* PastView.swift in Sources */,
 				12B5A4012C04A71000455303 /* Dialog.swift in Sources */,
 				122F8C9C2C0B429200352AE0 /* ResultData.swift in Sources */,
 				12E530082C08C202007EB53C /* HistoryManager.swift in Sources */,
 				122F8C992C0B3BBD00352AE0 /* Weighted.swift in Sources */,
+				122F8CA52C0D2A7A00352AE0 /* PastViewModel.swift in Sources */,
 				12AE78FA2C0294A70057764D /* TimeSelection.swift in Sources */,
 				12B5A3FB2C04A39900455303 /* Waypoint.swift in Sources */,
 				12B144B62BF2D13700FCD2A7 /* PacingProgressStyle.swift in Sources */,
@@ -707,6 +718,7 @@
 				12E520522C014046002F54AE /* DistanceModel.swift in Sources */,
 				124645F02BF16B5600CB6EAC /* PacingStatus.swift in Sources */,
 				12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */,
+				122F8CA12C0CB45B00352AE0 /* DialogResult.swift in Sources */,
 				124645F42BF1731900CB6EAC /* PaceViewModel.swift in Sources */,
 				122F8C9F2C0BCAE100352AE0 /* RunData.swift in Sources */,
 				12E520542C014345002F54AE /* DistanceManager.swift in Sources */,
@@ -731,7 +743,7 @@
 				1271229D2BEE565200106069 /* StatusView.swift in Sources */,
 				12E530062C08C18E007EB53C /* HistoryModel.swift in Sources */,
 				1293591E2BFE0BAD0042F99E /* WaypointCalculator.swift in Sources */,
-				12A2B92B2C0741F300EA4155 /* RunViewStack.swift in Sources */,
+				12A2B92B2C0741F300EA4155 /* MainViewStack.swift in Sources */,
 				12AE78FC2C0297B10057764D /* RunModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

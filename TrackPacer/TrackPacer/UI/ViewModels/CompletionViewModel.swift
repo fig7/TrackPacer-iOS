@@ -23,8 +23,8 @@ import Foundation
     mainViewModel.finishRun()
   }
 
-  func setResultData(_ runData: RunData) {
-    resultData = ResultData(runData, RunDataExtra("", runData.runDate))
+  func setRunData(_ runData: RunData) {
+    resultData = ResultData(runData, RunDataExtra(runData.runDate))
   }
 
   func runNotes() -> String

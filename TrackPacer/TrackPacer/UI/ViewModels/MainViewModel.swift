@@ -14,16 +14,20 @@ import Foundation
   unowned let resultModel: ResultModel
   unowned let historyModel: HistoryModel
 
-  var runViewModel: RunViewModel
-  var runViewStack: RunViewStack
+  var mainViewStack: MainViewStack
+  var statusViewModel: StatusViewModel
 
+  var runViewModel: RunViewModel
   var paceViewModel: PaceViewModel
   var completionViewModel: CompletionViewModel
+
   var historyViewModel: HistoryViewModel
-  var statusViewModel: StatusViewModel
+  var pastViewModel: PastViewModel
 
   let dialogVisibility: DialogVisibility
   let dialogContent: DialogContent
+  let dialogResult: DialogResult
+  var dialogCompletion: () -> ()
 
   init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel, _ historyModel: HistoryModel) {
     self.runModel    = runModel
@@ -32,16 +36,20 @@ import Foundation
     self.resultModel  = resultModel
     self.historyModel = historyModel
 
-    runViewModel = RunViewModel(runModel)
-    runViewStack = RunViewStack()
+    mainViewStack   = MainViewStack()
+    statusViewModel = StatusViewModel()
 
+    runViewModel        = RunViewModel(runModel)
     paceViewModel       = PaceViewModel(paceModel)
     completionViewModel = CompletionViewModel()
-    historyViewModel    = HistoryViewModel()
-    statusViewModel     = StatusViewModel()
+
+    historyViewModel = HistoryViewModel(historyModel)
+    pastViewModel    = PastViewModel()
 
     dialogVisibility = DialogVisibility()
     dialogContent    = DialogContent()
+    dialogResult     = DialogResult()
+    dialogCompletion = { }
 
     runViewModel.setMain(mainViewModel: self)
     paceViewModel.setMain(mainViewModel: self)
@@ -69,7 +77,7 @@ import Foundation
     }
 
     let historyManager = historyModel.historyManager
-    historyViewModel.initList(historyManager.historyList)
+    historyViewModel.updateList(historyManager.historyList)
   }
 
   func showErrorDialog(title: String, message: String, width: Int, height: Int) {
@@ -98,6 +106,21 @@ import Foundation
     dialogVisibility.visible = true
   }
 
+  func showQuestionDialog(title: String, message: String, action: String, width: Int, height: Int, completion: @escaping () -> ()) {
+    dialogContent.dialogType = .Question
+
+    dialogContent.dialogTitle  = title
+    dialogContent.dialogText   = message
+    dialogContent.dialogAction = action
+
+    dialogContent.dialogWidth   = CGFloat(width)
+    dialogContent.dialogHeight  = CGFloat(height)
+    dialogContent.dialogPadding = CGFloat(20)
+
+    dialogCompletion = completion
+    dialogVisibility.visible = true
+  }
+
   func showEditTimeDialog(width: Int, height: Int) {
     dialogContent.dialogType = .Edit
 
@@ -111,11 +134,22 @@ import Foundation
   func dismissDialog() {
     dialogContent.dialogType = .None
     dialogVisibility.visible = false
+
+    if(dialogResult.action == .UserContinue) {
+      let completion = dialogCompletion
+
+      dialogCompletion = { }
+      dialogResult.action = .UserCancel
+
+      Task { @MainActor in
+        completion()
+      }
+    }
   }
 
   func onYourMarks(_ runDist: String, _ runLane: Int, _ runTime: Double) {
     paceViewModel.setPacingOptions(runDist, runLane, runTime)
-    runViewStack.pushPacingView()
+    mainViewStack.pushPacingView()
   }
 
   func handleIncomingIntent(begin: Bool, silent: Bool) {
@@ -178,8 +212,8 @@ import Foundation
   }
 
   func pacingComplete() {
-    completionViewModel.setResultData(resultModel.runData)
-    runViewStack.pushCompletionView()
+    completionViewModel.setRunData(resultModel.runData)
+    mainViewStack.pushCompletionView()
   }
 
   func saveRun() {
@@ -196,10 +230,15 @@ import Foundation
       return
     }
 
-    runViewStack.popCompletionView()
+    mainViewStack.popCompletionView()
   }
 
   func finishRun() {
-    runViewStack.popCompletionView()
+    mainViewStack.popCompletionView()
+  }
+
+  func showPastRun(_ resultData: ResultData) {
+    pastViewModel.setResultData(resultData)
+    mainViewStack.pushPastView()
   }
 }

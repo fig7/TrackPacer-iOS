@@ -16,11 +16,7 @@ struct CloseButton: View {
 }
 
 struct ErrorDialog: View {
-  @ObservedObject var dialogContent: DialogContent
-
-  init(_ dialogContent: DialogContent) {
-    self.dialogContent = dialogContent
-  }
+  @EnvironmentObject var dialogContent: DialogContent
 
   var body: some View {
     Text(dialogContent.dialogTitle).bold().frame(maxWidth: .infinity, alignment: .leading)
@@ -31,11 +27,10 @@ struct ErrorDialog: View {
 }
 
 struct InfoDialog: View {
-  @ObservedObject var dialogContent: DialogContent
+  @EnvironmentObject var dialogContent: DialogContent
   let closeAction: () -> ()
 
-  init(_ dialogContent: DialogContent, _ closeAction: @escaping () -> ()) {
-    self.dialogContent = dialogContent
+  init(_ closeAction: @escaping () -> ()) {
     self.closeAction   = closeAction
   }
 
@@ -44,27 +39,42 @@ struct InfoDialog: View {
     Spacer().frame(height: 20)
 
     Text(dialogContent.dialogText)
-
     Spacer()
 
     Button("  OK   ", action: closeAction).frame(maxWidth: .infinity, alignment: .trailing)
   }
 }
 
-struct EditTimeDialog: View {
-  unowned let viewModel: RunViewModel
+struct QuestionDialog: View {
+  @EnvironmentObject var dialogContent: DialogContent
+  @EnvironmentObject var dialogResult: DialogResult
   let closeAction: () -> ()
 
-  let timeSelected: String
-  @ObservedObject var timeEdit: TimeEdit
+  init(_ closeAction: @escaping () -> ()) {
+    self.closeAction   = closeAction
+  }
 
-  init(_ viewModel: RunViewModel, _ closeAction: @escaping () -> ()) {
-    self.viewModel   = viewModel
+  var body: some View {
+    Text(dialogContent.dialogTitle).bold().frame(maxWidth: .infinity, alignment: .leading)
+    Spacer().frame(height: 20)
+
+    Text(dialogContent.dialogText)
+    Spacer()
+
+    HStack {
+      Button("  CANCEL   ", action: closeAction)
+      Button("  \(dialogContent.dialogAction)   ", action: { dialogResult.action = .UserContinue;  closeAction() })
+    }.frame(maxWidth: .infinity, alignment: .trailing)
+  }
+}
+
+struct EditTimeDialog: View {
+  @EnvironmentObject var viewModel: RunViewModel
+  @EnvironmentObject var timeEdit: TimeEdit
+  let closeAction: () -> ()
+
+  init(_ closeAction: @escaping () -> ()) {
     self.closeAction = closeAction
-
-    let timeSelection = viewModel.timeSelection
-    self.timeSelected = timeSelection.selected
-    self.timeEdit     = viewModel.timeEdit
   }
 
   var body: some View {
@@ -72,7 +82,7 @@ struct EditTimeDialog: View {
     let gray2 = Color(red: 0.918, green: 0.929, blue: 0.941)
     
     HStack(alignment: .top) {
-      Text("Edit " + timeSelected).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
+      Text("Edit " + viewModel.timeSelection.selected).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
       CloseButton(closeAction: closeAction)
     }
 
@@ -135,38 +145,35 @@ struct EditTimeDialog: View {
 }
 
 struct Dialog: View {
-  let viewModel: MainViewModel
-  @ObservedObject var dialogContent: DialogContent
-  @ObservedObject var dialogVisibility: DialogVisibility
-
-  init(_ viewModel: MainViewModel) {
-    self.viewModel = viewModel
-
-    dialogContent    = viewModel.dialogContent
-    dialogVisibility = viewModel.dialogVisibility
-  }
+  @EnvironmentObject var viewModel: MainViewModel
+  @EnvironmentObject var dialogContent: DialogContent
+  @EnvironmentObject var dialogResult: DialogResult
+  @EnvironmentObject var dialogVisibility: DialogVisibility
 
   var body: some View {
-    let dialogOpacity = dialogVisibility.visible ? 1.0 : 0.0
-    let dialogScale   = dialogVisibility.visible ? 1.0 : 0.0
+    let dialogOpacity = (dialogVisibility.visible) ? 1.0 : 0.0
+    let dialogScale   = (dialogVisibility.visible) ? 1.0 : 0.0
 
     ZStack {
       Color(.black).frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity).ignoresSafeArea().opacity(0.56)
 
       VStack(spacing: 0) {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
           switch(dialogContent.dialogType) {
           case .None:
             EmptyView()
 
           case .Error:
-            ErrorDialog(dialogContent)
+            ErrorDialog()
 
           case .Info:
-            InfoDialog(dialogContent) { viewModel.dismissDialog() }
+            InfoDialog() { viewModel.dismissDialog() }
+
+          case .Question:
+            QuestionDialog() { viewModel.dismissDialog() }
 
           case .Edit:
-            EditTimeDialog(viewModel.runViewModel) { viewModel.dismissDialog() }
+            EditTimeDialog() { viewModel.dismissDialog() }
           }
         }
         .padding(.all, dialogContent.dialogPadding)

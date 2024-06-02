@@ -84,7 +84,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     WindowGroup {
       ContentView()
         .environmentObject(mainViewModel)
-        .environmentObject(mainViewModel.runViewStack)
+        .environmentObject(mainViewModel.mainViewStack)
     }
   }
 }

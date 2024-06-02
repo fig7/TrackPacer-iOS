@@ -28,16 +28,14 @@ struct RunData: Codable {
 }
 
 struct RunDataExtra {
-  var resultUUID: String = ""
+  var resultUUID: UUID?
 
   var shortRunDate: String = ""
   var fullRunDate: String  = ""
 
   init() { }
 
-  init(_ resultUUID: String, _ runDate: Date) {
-    self.resultUUID = resultUUID
-
+  init(_ runDate: Date) {
     let formatter = DateFormatter()
     formatter.dateFormat = "d MMM, yyyy 'at' HH:mm"
     fullRunDate  = formatter.string(from: runDate)
@@ -45,5 +43,10 @@ struct RunDataExtra {
     formatter.dateFormat = nil
     formatter.dateStyle = .short
     shortRunDate = formatter.string(from: runDate)
+  }
+
+  init(_ resultUUID: UUID, _ runDate: Date) {
+    self.init(runDate)
+    self.resultUUID = resultUUID
   }
 }

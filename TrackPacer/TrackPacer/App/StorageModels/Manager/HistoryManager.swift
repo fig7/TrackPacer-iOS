@@ -30,20 +30,17 @@ class HistoryManager {
     let lastModified = historyDirAttr[FileAttributeKey.modificationDate] as? Date
     guard let lastModified else { throw FileError.FileDataError }
     if(lastModified == historyModified) {
-      // Generate new ids.
-      // SwiftUI forEach needs them to change
-      for resultData in historyList {
-        resultData.id = UUID().uuidString
-      }
-
       return
     }
 
     let folderList = try historyDir.list()
     historyList.clear()
 
-    for resultUUID in folderList {
-      let resultFile = File(file: historyDir, child: resultUUID, directoryHint: .notDirectory)
+    for resultID in folderList {
+      let resultUUID = UUID(uuidString: resultID)
+      guard let resultUUID else { print("Invalid  result id"); continue }
+
+      let resultFile = File(file: historyDir, child: resultID, directoryHint: .notDirectory)
       let jsonData   = try resultFile.readData()
 
       let jsonDecoder = JSONDecoder()
@@ -80,10 +77,13 @@ class HistoryManager {
     return true
   }
 
-  func deleteHistory(resultIndex: Int) -> Bool {
-    let resultFile = File(file: historyDir, child: historyList[resultIndex].computedData.resultUUID, directoryHint: .notDirectory)
+  func deleteHistory(_ resultData: ResultData) -> Bool {
+    let id = resultData.computedData.resultUUID
+    guard let id else { return false }
+
+    let resultFile = File(file: historyDir, child: id.uuidString, directoryHint: .notDirectory)
     if(resultFile.delete()) {
-      historyList.remove(at: resultIndex)
+      historyList = historyList.filter { $0 != resultData }
       return true
     }
 
