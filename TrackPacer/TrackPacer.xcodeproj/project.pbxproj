@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1215D4072BFEC38C00DB07C3 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1215D4062BFEC38C00DB07C3 /* Int.swift */; };
+		122F8C972C0B37BC00352AE0 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */; };
+		122F8C992C0B3BBD00352AE0 /* Weighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C982C0B3BBD00352AE0 /* Weighted.swift */; };
+		122F8C9C2C0B429200352AE0 /* ResultData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C9B2C0B429200352AE0 /* ResultData.swift */; };
+		122F8C9F2C0BCAE100352AE0 /* RunData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C9E2C0BCAE100352AE0 /* RunData.swift */; };
 		123F12612BFFE39600F5E6E6 /* ServiceConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12602BFFE39600F5E6E6 /* ServiceConnection.swift */; };
 		123F12632C00AAB500F5E6E6 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */; };
 		123F12652C00AE3100F5E6E6 /* PacingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12642C00AE3100F5E6E6 /* PacingSettings.swift */; };
@@ -115,6 +119,10 @@
 
 /* Begin PBXFileReference section */
 		1215D4062BFEC38C00DB07C3 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		122F8C982C0B3BBD00352AE0 /* Weighted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weighted.swift; sourceTree = "<group>"; };
+		122F8C9B2C0B429200352AE0 /* ResultData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultData.swift; sourceTree = "<group>"; };
+		122F8C9E2C0BCAE100352AE0 /* RunData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunData.swift; sourceTree = "<group>"; };
 		123F12602BFFE39600F5E6E6 /* ServiceConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceConnection.swift; sourceTree = "<group>"; };
 		123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 		123F12642C00AE3100F5E6E6 /* PacingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingSettings.swift; sourceTree = "<group>"; };
@@ -233,12 +241,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		122F8C9A2C0B422F00352AE0 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				122F8C9B2C0B429200352AE0 /* ResultData.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		122F8C9D2C0BCAC600352AE0 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				122F8C9E2C0BCAE100352AE0 /* RunData.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		124645E62BF169A100CB6EAC /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
 				1271229C2BEE565200106069 /* StatusView.swift */,
 				124645E72BF169DF00CB6EAC /* TPPicker.swift */,
 				124645E92BF16A2400CB6EAC /* TPButton.swift */,
+				122F8C982C0B3BBD00352AE0 /* Weighted.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -325,8 +350,9 @@
 			isa = PBXGroup;
 			children = (
 				12B5A4022C04AF3600455303 /* Dialog */,
-				12E5204B2C00E968002F54AE /* Pace */,
 				12E5204A2C00E961002F54AE /* Run */,
+				12E5204B2C00E968002F54AE /* Pace */,
+				122F8C9A2C0B422F00352AE0 /* History */,
 			);
 			path = Observables;
 			sourceTree = "<group>";
@@ -341,6 +367,7 @@
 				124645F32BF1731900CB6EAC /* PaceViewModel.swift */,
 				123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */,
 				12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */,
+				122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -501,6 +528,7 @@
 		12E5204E2C013487002F54AE /* StorageModels */ = {
 			isa = PBXGroup;
 			children = (
+				122F8C9D2C0BCAC600352AE0 /* Data */,
 				12E520512C014046002F54AE /* DistanceModel.swift */,
 				12E530052C08C18E007EB53C /* HistoryModel.swift */,
 				12E520502C014019002F54AE /* Manager */,
@@ -664,7 +692,9 @@
 				12B5A3F02C04A07300455303 /* StatusModel.swift in Sources */,
 				124645ED2BF16A6C00CB6EAC /* ActionButtonStyle.swift in Sources */,
 				12B5A4012C04A71000455303 /* Dialog.swift in Sources */,
+				122F8C9C2C0B429200352AE0 /* ResultData.swift in Sources */,
 				12E530082C08C202007EB53C /* HistoryManager.swift in Sources */,
+				122F8C992C0B3BBD00352AE0 /* Weighted.swift in Sources */,
 				12AE78FA2C0294A70057764D /* TimeSelection.swift in Sources */,
 				12B5A3FB2C04A39900455303 /* Waypoint.swift in Sources */,
 				12B144B62BF2D13700FCD2A7 /* PacingProgressStyle.swift in Sources */,
@@ -678,6 +708,7 @@
 				124645F02BF16B5600CB6EAC /* PacingStatus.swift in Sources */,
 				12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */,
 				124645F42BF1731900CB6EAC /* PaceViewModel.swift in Sources */,
+				122F8C9F2C0BCAE100352AE0 /* RunData.swift in Sources */,
 				12E520542C014345002F54AE /* DistanceManager.swift in Sources */,
 				1255BF142C0797FE0059C7E0 /* Version.swift in Sources */,
 				12B5A3F92C04A29F00455303 /* DistanceUtil.swift in Sources */,
@@ -694,6 +725,7 @@
 				12A2B92F2C074C2800EA4155 /* CompletionViewModel.swift in Sources */,
 				12B5A4062C04B97100455303 /* DialogContent.swift in Sources */,
 				129359792BFEAC180042F99E /* Int64.swift in Sources */,
+				122F8C972C0B37BC00352AE0 /* HistoryViewModel.swift in Sources */,
 				124645F22BF16E5900CB6EAC /* PaceView.swift in Sources */,
 				1271228E2BEE41A000106069 /* TrackPacerApp.swift in Sources */,
 				1271229D2BEE565200106069 /* StatusView.swift in Sources */,

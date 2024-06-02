@@ -7,41 +7,22 @@
 
 import Foundation
 
-struct ResultData: Codable {
-  var runVersion: String = TPVersion
-  var resultUUID: String = ""
-
-  var runDate: Date!
-  var runDist: String = ""
-  var runLane: Int    = -1
-  var runProf: String = ""
-
-  var totalDistStr: String = ""
-  var totalTimeStr: String = ""
-  var totalPaceStr: String = ""
-
-  var actualTimeStr: String = ""
-  var actualPaceStr: String = ""
-  var earlyLateStr:  String = ""
-
-  var runNotes: String = ""
-}
-
 class ResultModel {
-  private(set) var resultData = ResultData()
+  private(set) var runData      = RunData()
+  private(set) var runDataExtra = RunDataExtra()
 
-  func setPacingDate()                  { resultData.runDate = Date() }
-  func setRunDist(_ runDist: String)    { resultData.runDist = runDist }
-  func setRunLane(_ runLane: Int)       { resultData.runLane = runLane }
-  func setRunProf(_ runProf: String)    { resultData.runProf = runProf }
+  func setPacingDate()                  { runData.runDate = Date() }
+  func setRunDist(_ runDist: String)    { runData.runDist = runDist }
+  func setRunLane(_ runLane: Int)       { runData.runLane = runLane }
+  func setRunProf(_ runProf: String)    { runData.runProf = runProf }
 
-  func setTotalDist(_ totalDistStr: String) { resultData.totalDistStr = totalDistStr }
-  func setTotalTime(_ totalTimeStr: String) { resultData.totalTimeStr = totalTimeStr }
-  func setTotalPace(_ totalPaceStr: String) { resultData.totalPaceStr = totalPaceStr }
+  func setTotalDist(_ totalDistStr: String) { runData.totalDistStr = totalDistStr }
+  func setTotalTime(_ totalTimeStr: String) { runData.totalTimeStr = totalTimeStr }
+  func setTotalPace(_ totalPaceStr: String) { runData.totalPaceStr = totalPaceStr }
 
-  func setActualTime(_ actualTimeStr: String) { resultData.actualTimeStr = actualTimeStr }
-  func setActualPace(_ actualPaceStr: String) { resultData.actualPaceStr = actualPaceStr }
-  func setEarlyLate(_ earlyLateStr: String)   { resultData.earlyLateStr  = earlyLateStr }
+  func setActualTime(_ actualTimeStr: String) { runData.actualTimeStr = actualTimeStr }
+  func setActualPace(_ actualPaceStr: String) { runData.actualPaceStr = actualPaceStr }
+  func setEarlyLate(_ earlyLateStr: String)   { runData.earlyLateStr  = earlyLateStr }
 
-  func setRunNotes(_ runNotes: String) { resultData.runNotes = runNotes }
+  func setRunNotes(_ runNotes: String) { runData.runNotes = runNotes }
 }

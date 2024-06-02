@@ -21,9 +21,9 @@ struct ContentView: View {
             .environmentObject(viewModel.runViewModel.laneSelection)
             .environmentObject(viewModel.runViewModel.timeSelection)
             .environmentObject(viewModel.runViewModel.trackSelection)
-            .onAppear { viewModel.loadHistory() }
 
           HistoryView().tabItem { Label("History", image: "baseline_history_24") }
+            .environmentObject(viewModel.historyViewModel)
 
           AudioView().tabItem { Label("Audio", image: "baseline_audio_24") }
 
@@ -42,10 +42,12 @@ struct ContentView: View {
           case 2:
             CompletionView()
               .environmentObject(viewModel.completionViewModel)
+              .environmentObject(viewModel.completionViewModel.resultData)
 
               .environmentObject(viewModel.statusViewModel)
               .environmentObject(viewModel.statusViewModel.pacingStatus)
               .environmentObject(viewModel.statusViewModel.pacingSettings)
+              .onDisappear { viewModel.loadHistory() }
 
           default:
             EmptyView()

@@ -9,34 +9,38 @@ import SwiftUI
 
 struct CompletionView: View {
   @EnvironmentObject var viewModel: CompletionViewModel
+  @EnvironmentObject var resultData: ResultData
 
   var body: some View {
     VStack {
       ScrollView {
         VStack(alignment: .leading, spacing: 4) {
+          let runData      = resultData.runData
+          let computedData = resultData.computedData
+
           Text("Pacing on")
-          Text(viewModel.runDate).font(.system(size: 30, weight: .regular, design: .default))
+          Text(computedData.fullRunDate).font(.system(size: 30, weight: .regular, design: .default))
 
           Spacer().frame(height: 10)
 
-          Text("Distance run (at \"\(viewModel.runProf)\")")
-          Text("\(viewModel.totalDist) (\(viewModel.runDist) in L\(viewModel.runLane))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
+          Text("Distance run (at \"\(runData.runProf)\")")
+          Text("\(runData.totalDistStr) (\(runData.runDist) in L\(runData.runLane))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
 
           Spacer().frame(height: 10)
 
           Text("Target time")
-          Text("\(viewModel.totalTime) (\(viewModel.totalPace)/km)").font(.system(size: 30, weight: .regular, design: .default))
+          Text("\(runData.totalTimeStr) (\(runData.totalPaceStr)/km)").font(.system(size: 30, weight: .regular, design: .default))
 
           Spacer().frame(height: 10)
 
           Text("Actual time")
-          Text("\(viewModel.actualTime) (\(viewModel.actualPace)/km)").font(.system(size: 30, weight: .regular, design: .default))
-          Text("\(viewModel.earlyLate)").font(.system(size: 30, weight: .regular, design: .default))
+          Text("\(runData.actualTimeStr) (\(runData.actualPaceStr)/km)").font(.system(size: 30, weight: .regular, design: .default))
+          Text("\(runData.earlyLateStr)").font(.system(size: 30, weight: .regular, design: .default))
 
           Spacer().frame(height: 10)
 
           Text("Your notes:")
-          TextEditor(text: $viewModel.runNotes)
+          TextEditor(text: $resultData.runData.runNotes)
             .padding(.top, 4).padding(.bottom, 5).frame(height: 142.0).border(.blue)
         }
       }.scrollDismissesKeyboard(.interactively)

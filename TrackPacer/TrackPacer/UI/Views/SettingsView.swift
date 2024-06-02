@@ -10,9 +10,10 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
       VStack {
-        Spacer()
+        Text("Settings").font(.largeTitle).frame(maxWidth: .infinity, alignment: .leading)
+        Spacer().frame(height: 32)
 
-        Text("Hello, 4")
-      }
+        Spacer()
+      }.padding(.horizontal, 20)
     }
 }

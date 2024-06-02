@@ -56,12 +56,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   init() {
     runModel = RunModel()
     if(!runModel.runModelOK) {
+      //TODO:
       // val dialog = DistanceErrorDialog.newDialog("initializing", true)
       // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
     }
 
     historyModel = HistoryModel()
     if(!historyModel.historyDataOK) {
+      // TODO:
       // val dialog = HistoryErrorDialog.newDialog("initializing", true)
       // dialog.show(supportFragmentManager, "HISTORY_ERROR_DIALOG")
     }
@@ -70,16 +72,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     resultModel   = ResultModel()
     mainViewModel = MainViewModel(runModel, paceModel, resultModel, historyModel)
 
-    do {
-      try initialiseApp()
-    } catch {
-      // TODO: Show dlg
-    }
+    initialiseApp()
   }
 
-  private func initialiseApp() throws {
-    let runViewModel = mainViewModel.runViewModel
-    try runViewModel.initDistances(runModel.distanceArray())
+  private func initialiseApp() {
+    mainViewModel.initDistances()
+    mainViewModel.loadHistory()
   }
 
   var body: some Scene {

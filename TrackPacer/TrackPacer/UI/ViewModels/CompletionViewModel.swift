@@ -9,22 +9,7 @@ import Foundation
 
 @MainActor class CompletionViewModel : ObservableObject {
   unowned var mainViewModel: MainViewModel!
-
-  @Published var runDate = ""
-
-  @Published var runDist = ""
-  @Published var runLane = -1
-  @Published var runProf = ""
-
-  @Published var totalDist = ""
-  @Published var totalTime = ""
-  @Published var totalPace = ""
-
-  @Published var actualTime = ""
-  @Published var actualPace = ""
-  @Published var earlyLate  = ""
-
-  @Published var runNotes = ""
+  var resultData: ResultData!
 
   func setMain(mainViewModel: MainViewModel) {
     self.mainViewModel = mainViewModel
@@ -37,4 +22,11 @@ import Foundation
   func finishRun() {
     mainViewModel.finishRun()
   }
+
+  func setResultData(_ runData: RunData) {
+    resultData = ResultData(runData, RunDataExtra("", runData.runDate))
+  }
+
+  func runNotes() -> String
+  { return resultData.runData.runNotes }
 }

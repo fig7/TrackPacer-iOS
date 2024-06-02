@@ -19,6 +19,7 @@ import Foundation
 
   var paceViewModel: PaceViewModel
   var completionViewModel: CompletionViewModel
+  var historyViewModel: HistoryViewModel
   var statusViewModel: StatusViewModel
 
   let dialogVisibility: DialogVisibility
@@ -36,6 +37,7 @@ import Foundation
 
     paceViewModel       = PaceViewModel(paceModel)
     completionViewModel = CompletionViewModel()
+    historyViewModel    = HistoryViewModel()
     statusViewModel     = StatusViewModel()
 
     dialogVisibility = DialogVisibility()
@@ -46,6 +48,18 @@ import Foundation
     completionViewModel.setMain(mainViewModel: self)
   }
 
+  func initDistances() {
+    let distanceArray = runModel.distanceArray()
+
+    do {
+      try runViewModel.initDistances(distanceArray)
+    } catch {
+      showErrorDialog(title: "Initialisation error",
+        message: "Reading track distances and times failed. Please try re-starting the application. If that doesn't work, re-install the application.",
+        width: 342, height: 200)
+    }
+  }
+
   func loadHistory() {
     historyModel.loadHistory()
     if(!historyModel.historyDataOK) {
@@ -53,6 +67,9 @@ import Foundation
         message: "Loading pacing history failed. Please try re-starting the application. If that doesn't work, re-install the application.",
         width: 342, height: 200)
     }
+
+    let historyManager = historyModel.historyManager
+    historyViewModel.initList(historyManager.historyList)
   }
 
   func showErrorDialog(title: String, message: String, width: Int, height: Int) {
@@ -161,33 +178,15 @@ import Foundation
   }
 
   func pacingComplete() {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "d MMM, yyyy 'at' HH:mm"
-
-    let resultData = resultModel.resultData
-    completionViewModel.runDate  = formatter.string(from: resultData.runDate)
-    completionViewModel.runNotes = resultData.runNotes
-
-    completionViewModel.runDist = resultData.runDist
-    completionViewModel.runLane = resultData.runLane
-    completionViewModel.runProf = resultData.runProf
-
-    completionViewModel.totalDist = resultData.totalDistStr
-    completionViewModel.totalTime = resultData.totalTimeStr
-    completionViewModel.totalPace = resultData.totalPaceStr
-
-    completionViewModel.actualTime = resultData.actualTimeStr
-    completionViewModel.actualPace = resultData.actualPaceStr
-    completionViewModel.earlyLate  = resultData.earlyLateStr
-
+    completionViewModel.setResultData(resultModel.runData)
     runViewStack.pushCompletionView()
   }
 
   func saveRun() {
-    resultModel.setRunNotes(completionViewModel.runNotes)
+    resultModel.setRunNotes(completionViewModel.runNotes())
 
     let historyManager = historyModel.historyManager
-    if(!historyManager.saveHistory(resultModel.resultData)) {
+    if(!historyManager.saveHistory(resultModel.runData)) {
       showInfoDialog(title: "Error saving result",
         message:
         "An error occurred while saving the pacing result." +
