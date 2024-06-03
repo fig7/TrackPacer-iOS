@@ -22,14 +22,14 @@ private let distanceArray = [
 
 class DistanceModel {
   let distanceManager = DistanceManager(filesDir: URL.documentsDirectory)
-    var distanceDataOK = true
+  var distanceDataOK = true
 
-    init() {
-      do {
-        try distanceManager.initDistances(defaultDistances: distanceArray)
-      } catch {
-        distanceDataOK = false
-        print("Failed to initialize distances. Error: \(error.localizedDescription)")
+  init() {
+    do {
+      try distanceManager.initDistances(defaultDistances: distanceArray)
+    } catch {
+      distanceDataOK = false
+      print("Failed to initialize distances. Error: \(error.localizedDescription)")
     }
   }
 }

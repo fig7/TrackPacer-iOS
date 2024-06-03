@@ -8,11 +8,10 @@
 import SwiftUI
 import AVKit
 
-var mainViewModel: MainViewModel!
+private var mainViewModel: MainViewModel!
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   @objc func onAppWillResignActive(notification: NSNotification) {
-    // Have a bool enabled or something in the statusViewModel (so, the code basically matches Android)
     let statusViewModel = mainViewModel.statusViewModel
     if(statusViewModel.screenReceiverActive) {
       mainViewModel.handleIncomingIntent(begin: true, silent: false)
@@ -49,9 +48,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
   private let runModel: RunModel
   private let paceModel: PaceModel
-
   private let resultModel: ResultModel
+
   private let historyModel: HistoryModel
+  private let settingsModel: SettingsModel
 
   init() {
     runModel = RunModel()
@@ -68,9 +68,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       // dialog.show(supportFragmentManager, "HISTORY_ERROR_DIALOG")
     }
 
+    settingsModel = SettingsModel()
+    if(!settingsModel.settingsDataOK) {
+      // TODO:
+      // val dialog = HistoryErrorDialog.newDialog("initializing", true)
+      // dialog.show(supportFragmentManager, "HISTORY_ERROR_DIALOG")
+    }
+
     paceModel     = PaceModel()
     resultModel   = ResultModel()
-    mainViewModel = MainViewModel(runModel, paceModel, resultModel, historyModel)
+    mainViewModel = MainViewModel(runModel, paceModel, resultModel, historyModel, settingsModel)
 
     initialiseApp()
   }

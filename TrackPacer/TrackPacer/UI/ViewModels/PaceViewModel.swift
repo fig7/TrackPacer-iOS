@@ -123,7 +123,9 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     let pacingStatus   = statusViewModel.pacingStatus.status
     let pacingSettings = statusViewModel.pacingSettings
     if(pacingStatus == .ServiceStart) {
-      waypointService.beginPacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, false)
+      let settingsModel   = mainViewModel.settingsModel
+      let settingsManager = settingsModel.settingsManager
+      waypointService.beginPacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, settingsManager.alternateStart)
 
       if(pacingSettings.powerStart) {
         // Power start
@@ -135,7 +137,8 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
         // Delay start
         setPacingStatus(pacingStatus: .PacingStart)
 
-        if(waypointService.delayStart(startDelay: 5000, quickStart: pacingSettings.quickStart)) {
+        let startDelay = try! settingsManager.startDelay.toDouble()
+        if(waypointService.delayStart(startDelayMS: (startDelay * 1000.0).toLong(), quickStart: pacingSettings.quickStart)) {
           handler.postDelayed(pacingRunnable, delayMS: 113)
         }  else {
           stopPacing(silent: true)

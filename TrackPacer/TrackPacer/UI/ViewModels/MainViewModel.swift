@@ -10,9 +10,10 @@ import Foundation
 @MainActor class MainViewModel : ObservableObject {
   unowned let runModel: RunModel
   unowned let paceModel: PaceModel
-
   unowned let resultModel: ResultModel
+
   unowned let historyModel: HistoryModel
+  unowned let settingsModel: SettingsModel
 
   var mainViewStack: MainViewStack
   var statusViewModel: StatusViewModel
@@ -24,20 +25,27 @@ import Foundation
   var historyViewModel: HistoryViewModel
   var pastViewModel: PastViewModel
 
+  var settingsViewModel: SettingsViewModel
+
   let dialogVisibility: DialogVisibility
   let dialogContent: DialogContent
   let dialogResult: DialogResult
   var dialogCompletion: () -> ()
 
-  init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel, _ historyModel: HistoryModel) {
+  init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel, _ historyModel: HistoryModel, _ settingsModel: SettingsModel) {
     self.runModel    = runModel
     self.paceModel   = paceModel
+    self.resultModel = resultModel
 
-    self.resultModel  = resultModel
-    self.historyModel = historyModel
+    self.historyModel  = historyModel
+
+    self.settingsModel  = settingsModel
+    let settingsManager = settingsModel.settingsManager
 
     mainViewStack   = MainViewStack()
+
     statusViewModel = StatusViewModel()
+    statusViewModel.setFromSettings(settingsManager)
 
     runViewModel        = RunViewModel(runModel)
     paceViewModel       = PaceViewModel(paceModel)
@@ -45,6 +53,9 @@ import Foundation
 
     historyViewModel = HistoryViewModel(historyModel)
     pastViewModel    = PastViewModel()
+
+    settingsViewModel = SettingsViewModel()
+    settingsViewModel.setFromSettings(settingsManager)
 
     dialogVisibility = DialogVisibility()
     dialogContent    = DialogContent()
@@ -54,6 +65,8 @@ import Foundation
     runViewModel.setMain(mainViewModel: self)
     paceViewModel.setMain(mainViewModel: self)
     completionViewModel.setMain(mainViewModel: self)
+    historyViewModel.setMain(mainViewModel: self)
+    settingsViewModel.setMain(mainViewModel: self)
   }
 
   func initDistances() {
@@ -240,5 +253,53 @@ import Foundation
   func showPastRun(_ resultData: ResultData) {
     pastViewModel.setResultData(resultData)
     mainViewStack.pushPastView()
+  }
+
+  func setStartDelay(_ newStartDelay: String) {
+    let settingsManager = settingsModel.settingsManager
+    if(!settingsManager.setStartDelay(newStartDelay)) {
+      // TODO: handleSettingsError()
+      // TODO: return
+    }
+
+    statusViewModel.pacingSettings.startDelay = settingsManager.startDelay
+  }
+
+  func setPowerStart(_ newPowerStart: Bool) {
+    let settingsManager = settingsModel.settingsManager
+    if(!settingsManager.setPowerStart(newPowerStart)) {
+      // TODO: handleSettingsError()
+      // TODO: return
+    }
+
+    statusViewModel.pacingSettings.powerStart = settingsManager.powerStart
+  }
+
+  func setQuickStart(_ newQuickStart: Bool) {
+    let settingsManager = settingsModel.settingsManager
+    if(!settingsManager.setQuickStart(newQuickStart)) {
+      // TODO: handleSettingsError()
+      // TODO: return
+    }
+
+    statusViewModel.pacingSettings.quickStart = settingsManager.quickStart
+  }
+
+  func setAlternateStart(_ newAlternateStart: Bool) {
+    let settingsManager = settingsModel.settingsManager
+    if(!settingsManager.setAlternateStart(newAlternateStart)) {
+      // TODO: handleSettingsError()
+      // TODO: return
+    }
+
+    runViewModel.updateTrackOverlay()
+  }
+
+  func setFlightMode(_ newFlightMode: Bool) {
+    let settingsManager = settingsModel.settingsManager
+    if(!settingsManager.setFlightMode(newFlightMode)) {
+      // TODO: handleSettingsError()
+      // TODO: return
+    }
   }
 }

@@ -78,7 +78,10 @@ import Foundation
     do {
       let runDist        = distanceSelection.selected
       let runLane        = try laneSelection.selected.toInt()
-      let alternateStart = false // TODO: settingsModel.settingsManager.alternateStart
+
+      let settingsModel   = mainViewModel.settingsModel
+      let settingsManager = settingsModel.settingsManager
+      let alternateStart  = settingsManager.alternateStart
 
       let totalDist = distanceFor(runDist, runLane)
       trackSelection.totalDist  = formatDist(runDist, runLane, totalDist)

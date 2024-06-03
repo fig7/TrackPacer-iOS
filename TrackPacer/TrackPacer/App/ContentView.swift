@@ -28,6 +28,7 @@ struct ContentView: View {
           AudioView().tabItem { Label("Audio", image: "baseline_audio_24") }
 
           SettingsView().tabItem { Label("Settings", image: "baseline_settings_24") }
+            .environmentObject(viewModel.settingsViewModel)
         }.navigationDestination(for: Int.self) { selection in
           switch(selection) {
           case 1:

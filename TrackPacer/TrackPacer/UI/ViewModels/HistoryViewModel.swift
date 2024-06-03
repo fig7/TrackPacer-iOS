@@ -8,11 +8,17 @@
 import Foundation
 
 @MainActor class HistoryViewModel : ObservableObject {
-  let historyModel: HistoryModel
+  unowned let historyModel: HistoryModel
+  unowned var mainViewModel: MainViewModel!
+
   @Published var historyList: [ResultData] = []
 
   init(_ historyModel: HistoryModel) {
     self.historyModel = historyModel
+  }
+
+  func setMain(mainViewModel: MainViewModel) {
+    self.mainViewModel = mainViewModel
   }
 
   func updateList(_ list: [ResultData]) {

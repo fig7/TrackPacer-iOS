@@ -20,6 +20,12 @@ import Foundation
     screenReceiverActive = false
   }
 
+  func setFromSettings(_ settingsManager: SettingsManager) {
+    pacingSettings.startDelay = settingsManager.startDelay
+    pacingSettings.powerStart = settingsManager.powerStart
+    pacingSettings.quickStart = settingsManager.quickStart
+  }
+
   func setPacingStatus(pacingStatus: PacingStatusVal) {
     self.pacingStatus.status = pacingStatus
   }

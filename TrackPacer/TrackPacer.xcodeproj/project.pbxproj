@@ -15,6 +15,10 @@
 		122F8CA12C0CB45B00352AE0 /* DialogResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA02C0CB45B00352AE0 /* DialogResult.swift */; };
 		122F8CA32C0D29C100352AE0 /* PastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA22C0D29C100352AE0 /* PastView.swift */; };
 		122F8CA52C0D2A7A00352AE0 /* PastViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */; };
+		122F8CA72C0DE7D000352AE0 /* Divider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA62C0DE7D000352AE0 /* Divider.swift */; };
+		122F8CA92C0E176300352AE0 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CA82C0E176300352AE0 /* SettingsViewModel.swift */; };
+		122F8CAF2C0E358300352AE0 /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CAE2C0E358300352AE0 /* SettingsManager.swift */; };
+		122F8CB12C0E363F00352AE0 /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8CB02C0E363F00352AE0 /* SettingsData.swift */; };
 		123F12612BFFE39600F5E6E6 /* ServiceConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12602BFFE39600F5E6E6 /* ServiceConnection.swift */; };
 		123F12632C00AAB500F5E6E6 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */; };
 		123F12652C00AE3100F5E6E6 /* PacingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F12642C00AE3100F5E6E6 /* PacingSettings.swift */; };
@@ -129,6 +133,10 @@
 		122F8CA02C0CB45B00352AE0 /* DialogResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogResult.swift; sourceTree = "<group>"; };
 		122F8CA22C0D29C100352AE0 /* PastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastView.swift; sourceTree = "<group>"; };
 		122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastViewModel.swift; sourceTree = "<group>"; };
+		122F8CA62C0DE7D000352AE0 /* Divider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Divider.swift; sourceTree = "<group>"; };
+		122F8CA82C0E176300352AE0 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		122F8CAE2C0E358300352AE0 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		122F8CB02C0E363F00352AE0 /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
 		123F12602BFFE39600F5E6E6 /* ServiceConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceConnection.swift; sourceTree = "<group>"; };
 		123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 		123F12642C00AE3100F5E6E6 /* PacingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingSettings.swift; sourceTree = "<group>"; };
@@ -259,17 +267,27 @@
 			isa = PBXGroup;
 			children = (
 				122F8C9E2C0BCAE100352AE0 /* RunData.swift */,
+				122F8CB02C0E363F00352AE0 /* SettingsData.swift */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		122F8CAA2C0E185B00352AE0 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				12A2B92A2C0741F300EA4155 /* MainViewStack.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		124645E62BF169A100CB6EAC /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				1271229C2BEE565200106069 /* StatusView.swift */,
+				122F8CA62C0DE7D000352AE0 /* Divider.swift */,
 				124645E72BF169DF00CB6EAC /* TPPicker.swift */,
 				124645E92BF16A2400CB6EAC /* TPButton.swift */,
 				122F8C982C0B3BBD00352AE0 /* Weighted.swift */,
+				1271229C2BEE565200106069 /* StatusView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -356,10 +374,11 @@
 		127122A62BEE7ED300106069 /* Observables */ = {
 			isa = PBXGroup;
 			children = (
-				12B5A4022C04AF3600455303 /* Dialog */,
+				122F8CAA2C0E185B00352AE0 /* Main */,
 				12E5204A2C00E961002F54AE /* Run */,
 				12E5204B2C00E968002F54AE /* Pace */,
 				122F8C9A2C0B422F00352AE0 /* History */,
+				12B5A4022C04AF3600455303 /* Dialog */,
 			);
 			path = Observables;
 			sourceTree = "<group>";
@@ -369,13 +388,13 @@
 			children = (
 				127122A62BEE7ED300106069 /* Observables */,
 				127122AA2BEEDE5400106069 /* MainViewModel.swift */,
-				12A2B92A2C0741F300EA4155 /* MainViewStack.swift */,
 				124645E42BF1661000CB6EAC /* RunViewModel.swift */,
 				124645F32BF1731900CB6EAC /* PaceViewModel.swift */,
-				123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */,
 				12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */,
 				122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */,
 				122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */,
+				122F8CA82C0E176300352AE0 /* SettingsViewModel.swift */,
+				123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -540,6 +559,7 @@
 				122F8C9D2C0BCAC600352AE0 /* Data */,
 				12E520512C014046002F54AE /* DistanceModel.swift */,
 				12E530052C08C18E007EB53C /* HistoryModel.swift */,
+				12B5A3F12C04A08800455303 /* SettingsModel.swift */,
 				12E520502C014019002F54AE /* Manager */,
 			);
 			path = StorageModels;
@@ -552,7 +572,6 @@
 				12F0E37A2C03A27700ECE1E0 /* PaceModel.swift */,
 				1255BF112C07902F0059C7E0 /* ResultModel.swift */,
 				12B5A3EF2C04A07300455303 /* StatusModel.swift */,
-				12B5A3F12C04A08800455303 /* SettingsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -562,6 +581,7 @@
 			children = (
 				12E520532C014345002F54AE /* DistanceManager.swift */,
 				12E530072C08C202007EB53C /* HistoryManager.swift */,
+				122F8CAE2C0E358300352AE0 /* SettingsManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -691,8 +711,10 @@
 				124645EA2BF16A2400CB6EAC /* TPButton.swift in Sources */,
 				1287C29A2C06026C008BDD46 /* TimeEdit.swift in Sources */,
 				1293597B2BFEAD1D0042F99E /* Double.swift in Sources */,
+				122F8CB12C0E363F00352AE0 /* SettingsData.swift in Sources */,
 				12B5A4042C04AF6800455303 /* DialogVisibility.swift in Sources */,
 				129359732BFE66F30042F99E /* Handler.swift in Sources */,
+				122F8CA72C0DE7D000352AE0 /* Divider.swift in Sources */,
 				12B5A3FF2C04A4F600455303 /* Audio.swift in Sources */,
 				1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */,
 				12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */,
@@ -715,9 +737,11 @@
 				12AE78F82C0276440057764D /* Exception.swift in Sources */,
 				123F12652C00AE3100F5E6E6 /* PacingSettings.swift in Sources */,
 				124645E82BF169DF00CB6EAC /* TPPicker.swift in Sources */,
+				122F8CA92C0E176300352AE0 /* SettingsViewModel.swift in Sources */,
 				12E520522C014046002F54AE /* DistanceModel.swift in Sources */,
 				124645F02BF16B5600CB6EAC /* PacingStatus.swift in Sources */,
 				12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */,
+				122F8CAF2C0E358300352AE0 /* SettingsManager.swift in Sources */,
 				122F8CA12C0CB45B00352AE0 /* DialogResult.swift in Sources */,
 				124645F42BF1731900CB6EAC /* PaceViewModel.swift in Sources */,
 				122F8C9F2C0BCAE100352AE0 /* RunData.swift in Sources */,

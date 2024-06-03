@@ -19,7 +19,7 @@ struct HistoryView: View {
         if(viewModel.historyList.isEmpty) {
           Text("No history yet").padding()
         } else {
-          Color(.black).frame(height: 1).frame(maxWidth: .infinity)
+          Divider()
         }
 
         LazyVStack {
@@ -41,7 +41,7 @@ struct HistoryView: View {
                .onTapGesture { viewModel.showHistory(resultData) }
                .onLongPressGesture(perform: { viewModel.deleteHistory(resultData) })
 
-              Color(.black).frame(height: 1).frame(maxWidth: .infinity)
+              Divider()
             }.frame(maxWidth: .infinity)
           }
         }

@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor class PastViewModel : ObservableObject {
   unowned var mainViewModel: MainViewModel!
-  var resultData: ResultData!
+  @Published var resultData: ResultData!
 
   func setMain(mainViewModel: MainViewModel) {
     self.mainViewModel = mainViewModel

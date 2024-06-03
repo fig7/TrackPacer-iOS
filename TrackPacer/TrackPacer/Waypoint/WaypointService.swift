@@ -123,15 +123,15 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     waypointCalculator.initRun(runDist, runLane, runTime)
   }
 
-  func delayStart(startDelay: Int64, quickStart: Bool) -> Bool {
+  func delayStart(startDelayMS: Int64, quickStart: Bool) -> Bool {
     mpStart = if(quickStart) { mpStart2 } else { mpStart1 }
 
     if(quickStart) {
       startRealtime = SystemClock.elapsedRealtime() + .milliseconds(Go1ClipDuration)
       handler.post(startRunnable)
     } else {
-      startRealtime = SystemClock.elapsedRealtime() + .milliseconds(startDelay)
-      handler.postDelayed(startRunnable, delayMS: startDelay - Go4ClipDuration)
+      startRealtime = SystemClock.elapsedRealtime() + .milliseconds(startDelayMS)
+      handler.postDelayed(startRunnable, delayMS: startDelayMS - Go4ClipDuration)
     }
 
     return true
