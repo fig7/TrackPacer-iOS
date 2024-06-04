@@ -13,7 +13,13 @@
     "  CANCEL   " : {
 
     },
+    "  GO TO SETTINGS   " : {
+
+    },
     "  OK   " : {
+
+    },
+    "  RUN   " : {
 
     },
     " ADD %@ " : {
@@ -97,6 +103,9 @@
     "Clips & Audio" : {
 
     },
+    "Disable reminder" : {
+
+    },
     "Distance in lane %lld" : {
 
     },
@@ -107,6 +116,9 @@
 
     },
     "Distance:" : {
+
+    },
+    "Do you want to run without it?" : {
 
     },
     "fl_200m" : {
@@ -143,6 +155,9 @@
       }
     },
     "Flight mode" : {
+
+    },
+    "Flight mode?" : {
 
     },
     "History" : {
@@ -393,6 +408,9 @@
           }
         }
       }
+    },
+    "Or use network settings to turn it on?" : {
+
     },
     "Pacing history" : {
 

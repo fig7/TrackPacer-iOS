@@ -85,7 +85,6 @@ struct EditTimeDialog: View {
       Text("Edit " + viewModel.timeSelection.selected).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
       CloseButton(closeAction: closeAction)
     }
-
     Spacer().frame(height: 5)
 
     RoundedRectangle(cornerRadius: 8).fill(LinearGradient(colors:[gray1, gray2], startPoint: .top, endPoint: .bottom)).strokeBorder(.black, lineWidth: 1).overlay(
@@ -144,6 +143,45 @@ struct EditTimeDialog: View {
   }
 }
 
+struct FMRDialog: View {
+  @EnvironmentObject var viewModel: MainViewModel
+  let closeAction: () -> ()
+
+  init(_ closeAction: @escaping () -> ()) {
+    self.closeAction = closeAction
+  }
+
+  var body: some View {
+    HStack(alignment: .top) {
+      Text("Flight mode?").font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
+      CloseButton(closeAction: closeAction)
+    }
+    Spacer().frame(height: 5)
+
+    Text("Do you want to run without it?")
+    Spacer().frame(height: 2)
+    Text("Or use network settings to turn it on?")
+
+    Spacer()
+
+    HStack (spacing: 15){
+      Spacer()
+
+      Text("Disable reminder")
+      Toggle("", isOn: $viewModel.disableReminder).labelsHidden().padding(2).padding(.trailing, 10)
+    }
+
+    Spacer().frame(height: 20)
+
+    HStack {
+      Button("  GO TO SETTINGS   ", action: { closeAction(); Task { @MainActor in viewModel.updateReminder(); viewModel.openSettings() } }).buttonStyle(SmallActionButtonStyle(disabledCol: false))
+      Spacer()
+
+      Button("  RUN   ", action: { closeAction(); Task { @MainActor in viewModel.updateReminder(); viewModel.launchPacing() } }).buttonStyle(SmallActionButtonStyle(disabledCol: false))
+    }.frame(maxWidth: .infinity, alignment: .trailing)
+  }
+}
+
 struct Dialog: View {
   @EnvironmentObject var viewModel: MainViewModel
   @EnvironmentObject var dialogContent: DialogContent
@@ -174,6 +212,9 @@ struct Dialog: View {
 
           case .Edit:
             EditTimeDialog() { viewModel.dismissDialog() }
+
+          case .FMR:
+            FMRDialog { viewModel.dismissDialog() }
           }
         }
         .padding(.all, dialogContent.dialogPadding)

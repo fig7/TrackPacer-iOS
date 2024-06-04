@@ -67,7 +67,7 @@ struct SettingsView: View {
 
               Spacer()
 
-              Toggle("", isOn: $viewModel.powerStart).padding(2).labelsHidden()
+              Toggle("", isOn: $viewModel.powerStart).labelsHidden().padding(2)
                 .onChange(of: viewModel.powerStart) { viewModel.powerStartChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
@@ -83,7 +83,7 @@ struct SettingsView: View {
 
               Spacer()
 
-              Toggle("", isOn: $viewModel.quickStart).padding(2).labelsHidden()
+              Toggle("", isOn: $viewModel.quickStart).labelsHidden().padding(2)
                 .onChange(of: viewModel.quickStart) { viewModel.quickStartChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
@@ -99,7 +99,7 @@ struct SettingsView: View {
 
               Spacer()
 
-              Toggle("", isOn: $viewModel.alternateStart).padding(2).labelsHidden()
+              Toggle("", isOn: $viewModel.alternateStart).labelsHidden().padding(2)
                 .onChange(of: viewModel.alternateStart) { viewModel.alternateStartChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
@@ -115,7 +115,7 @@ struct SettingsView: View {
 
               Spacer()
 
-              Toggle("", isOn: $viewModel.flightMode).padding(2).labelsHidden()
+              Toggle("", isOn: $viewModel.flightMode).labelsHidden().padding(2)
                 .onChange(of: viewModel.flightMode) { viewModel.flightModeChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 

@@ -36,8 +36,7 @@ import Foundation
   func deleteHistory(_ resultData: ResultData) {
     mainViewModel.showQuestionDialog(title: "Delete pacing",
       message: "Deleting history cannot be undone. Are you sure you want to delete this run?", action: "DELETE",
-      width: 342, height: 200)
-      { [weak self] in self?.completeDeleteHistory(resultData) }
+      width: 342, height: 200) { [weak self] in self?.completeDeleteHistory(resultData) }
   }
 
   func completeDeleteHistory(_ resultData: ResultData) {

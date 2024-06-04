@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import CoreTelephony
+import UIKit
 
 @MainActor class MainViewModel : ObservableObject {
   unowned let runModel: RunModel
@@ -31,6 +33,10 @@ import Foundation
   let dialogContent: DialogContent
   let dialogResult: DialogResult
   var dialogCompletion: () -> ()
+
+  // Hack until I find a better way to deal with custom dialogs
+  // Maybe they need their own view models, etc.
+  @Published var disableReminder = false
 
   init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel, _ historyModel: HistoryModel, _ settingsModel: SettingsModel) {
     self.runModel    = runModel
@@ -160,8 +166,56 @@ import Foundation
     }
   }
 
+  private func showFMRDialog(width: Int, height: Int) {
+    dialogContent.dialogType = .FMR
+
+    dialogContent.dialogWidth   = CGFloat(width)
+    dialogContent.dialogHeight  = CGFloat(height)
+    dialogContent.dialogPadding = CGFloat(8)
+
+    dialogVisibility.visible = true
+  }
+
+  func updateReminder() {
+    if(!disableReminder) { return }
+
+    let settingsManager = settingsModel.settingsManager
+    _ = settingsManager.setFlightMode(false)
+    // TODO: Handle all settings save errors
+
+    settingsViewModel.flightMode = settingsManager.flightMode
+  }
+
+  func openSettings() {
+    let url = URL(string: UIApplication.openSettingsURLString)
+    guard let url else { return }
+
+    UIApplication.shared.open(url)
+  }
+
+  private func isAirplaneModeEnabled() -> Bool {
+    let networkInfo = CTTelephonyNetworkInfo()
+    guard let radioAccessTechnology = networkInfo.serviceCurrentRadioAccessTechnology else {
+      return true
+    }
+    return radioAccessTechnology.isEmpty
+  }
+
   func onYourMarks(_ runDist: String, _ runLane: Int, _ runTime: Double) {
     paceViewModel.setPacingOptions(runDist, runLane, runTime)
+
+    let settingsManager    = settingsModel.settingsManager
+    let flightModeReminder = settingsManager.flightMode
+    if(!isAirplaneModeEnabled() && flightModeReminder) {
+      disableReminder = false
+      showFMRDialog(width: 342, height: 260)
+      return
+    }
+
+    launchPacing()
+  }
+
+  func launchPacing() {
     mainViewStack.pushPacingView()
   }
 
