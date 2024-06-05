@@ -11,22 +11,15 @@ import Foundation
   var pacingStatus: PacingStatus
   var pacingSettings: PacingSettings
 
-  var screenReceiverActive: Bool
-
   init() {
     pacingStatus   = PacingStatus()
     pacingSettings = PacingSettings()
-
-    screenReceiverActive = false
   }
 
   func setFromSettings(_ settingsManager: SettingsManager) {
-    pacingSettings.startDelay = settingsManager.startDelay
-    pacingSettings.powerStart = settingsManager.powerStart
-    pacingSettings.quickStart = settingsManager.quickStart
-  }
-
-  func setPacingStatus(pacingStatus: PacingStatusVal) {
-    self.pacingStatus.status = pacingStatus
+    pacingSettings.startDelay     = settingsManager.startDelay
+    pacingSettings.powerStart     = settingsManager.powerStart
+    pacingSettings.quickStart     = settingsManager.quickStart
+    pacingSettings.alternateStart = settingsManager.alternateStart
   }
 }

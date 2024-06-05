@@ -8,8 +8,9 @@
 import Foundation
 
 @MainActor class PacingSettings : ObservableObject {
-  @Published var powerStart = true
-  @Published var quickStart = false
   @Published var startDelay = "5.00"
 
+  @Published var powerStart     = true
+  @Published var quickStart     = false
+  @Published var alternateStart = false
 }

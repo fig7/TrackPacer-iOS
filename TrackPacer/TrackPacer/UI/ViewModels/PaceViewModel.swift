@@ -16,7 +16,7 @@ private class MPPausingDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    viewModel.setPacingStatus(pacingStatus: .PacingPaused)
+    viewModel.setPacingStatus(.PacingPaused)
   }
 }
 
@@ -28,7 +28,7 @@ private class MPCancelledDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    viewModel.setPacingStatus(pacingStatus: .NotPacing)
+    viewModel.setPacingStatus(.NotPacing)
   }
 }
 
@@ -40,16 +40,17 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    viewModel.setPacingStatus(pacingStatus: .NotPacing)
+    viewModel.setPacingStatus(.NotPacing)
     viewModel.pacingComplete()
   }
 }
 
 @MainActor class PaceViewModel : ObservableObject, ServiceConnection {
   unowned let paceModel: PaceModel
-  unowned var mainViewModel: MainViewModel!
 
-  unowned var statusViewModel: StatusViewModel!
+  unowned var mainViewModel: MainViewModel!
+  unowned var pacingStatus: PacingStatus!
+  unowned var pacingSettings: PacingSettings!
 
   var pacingOptions: PacingOptions
   var pacingProgress: PacingProgress
@@ -67,6 +68,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   private var completionDelegate: AVAudioPlayerDelegate!
 
   private let handler = Handler()
+  var appPlayer: AVAudioPlayer!
 
   private func pacingRunnable(delayMS: Int64) {
     timer = Timer.scheduledTimer(withTimeInterval: delayMS.toDouble()/1000.0, repeats: true) { _ in
@@ -104,8 +106,11 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func setMain(mainViewModel: MainViewModel) {
-    self.mainViewModel   = mainViewModel
-    self.statusViewModel = mainViewModel.statusViewModel
+    self.mainViewModel = mainViewModel
+
+    let statusViewModel = mainViewModel.statusViewModel
+    self.pacingStatus   = statusViewModel.pacingStatus
+    self.pacingSettings = statusViewModel.pacingSettings
   }
 
   func setPacingOptions(_ runDist: String, _ runLane: Int, _ runTime: Double) {
@@ -115,29 +120,21 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     pacingProgress.resetProgress()
   }
 
-  func startScreenReceiver() {
-    statusViewModel.screenReceiverActive = true
-  }
-
   func onServiceConnected() {
-    let pacingStatus   = statusViewModel.pacingStatus.status
-    let pacingSettings = statusViewModel.pacingSettings
+    let pacingStatus = pacingStatus.status
     if(pacingStatus == .ServiceStart) {
-      let settingsModel   = mainViewModel.settingsModel
-      let settingsManager = settingsModel.settingsManager
-      waypointService.beginPacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, settingsManager.alternateStart)
+      waypointService.beginPacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, pacingSettings.alternateStart)
 
       if(pacingSettings.powerStart) {
-        // Power start
-        setPacingStatus(pacingStatus: .PacingWait)
+        setPacingStatus(.PacingWait)
 
-        // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        startScreenReceiver()
+        // TODO: Ideally, notify the controller that the service is up and then start the screen receiver
+        mainViewModel.startScreenReceiver()
       } else {
         // Delay start
-        setPacingStatus(pacingStatus: .PacingStart)
+        setPacingStatus(.PacingStart)
 
-        let startDelay = try! settingsManager.startDelay.toDouble()
+        let startDelay = try! pacingSettings.startDelay.toDouble()
         if(waypointService.delayStart(startDelayMS: (startDelay * 1000.0).toLong(), quickStart: pacingSettings.quickStart)) {
           handler.postDelayed(pacingRunnable, delayMS: 113)
         }  else {
@@ -145,11 +142,8 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
         }
       }
     } else if(pacingStatus == .ServiceResume) {
-      setPacingStatus(pacingStatus: .PacingResume)
-
-      if(pacingSettings.powerStart) {
-        startScreenReceiver()
-      }
+      setPacingStatus(.PacingResume)
+      if(pacingSettings.powerStart) { mainViewModel.startScreenReceiver() }
 
       if(waypointService.resumePacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, false, pacingProgress.elapsedTime)) {
         handler.postDelayed(pacingRunnable, delayMS: 113)
@@ -163,15 +157,15 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     stopPacing(silent: true)
   }
 
-  func setPacingStatus(pacingStatus: PacingStatusVal) {
-    statusViewModel.setPacingStatus(pacingStatus: pacingStatus)
+  func setPacingStatus(_ newPacingStatus: PacingStatusVal) {
+    pacingStatus.status = newPacingStatus
   }
 
   func powerStart() {
     guard let waypointService else { return }
 
-    setPacingStatus(pacingStatus: .PacingStart)
-    if(waypointService.powerStart(quickStart: statusViewModel.pacingSettings.quickStart)) {
+    setPacingStatus(.PacingStart)
+    if(waypointService.powerStart(quickStart: pacingSettings.quickStart)) {
       timer = Timer.scheduledTimer(withTimeInterval: 0.113, repeats: true) { _ in
         Task { @MainActor in
           self.handleTimeUpdate()
@@ -186,9 +180,9 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     guard let waypointService else { return }
     let elapsedTime = waypointService.elapsedTime()
     if(elapsedTime >= 0) {
-      let pacingStatus = statusViewModel.pacingStatus.status
+      let pacingStatus = pacingStatus.status
       if((pacingStatus == .PacingStart) || (pacingStatus == .PacingResume)) {
-        setPacingStatus(pacingStatus: .Pacing)
+        setPacingStatus(.Pacing)
         if(pacingStatus == .PacingStart) { mainViewModel.initPacingResult() }
       } else {
         let distRun = waypointService.distOnPace(elapsedTime)
@@ -205,11 +199,8 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func stopService() {
-    let pacingSettings = statusViewModel.pacingSettings
-    if(pacingSettings.powerStart) {
-      // window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-      statusViewModel.screenReceiverActive = false
-    }
+    let powerStart = pacingSettings.powerStart
+    if(powerStart) { mainViewModel.stopScreenReceiver() }
 
     timer?.invalidate()
     timer = nil
@@ -218,8 +209,18 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func beginPacing() {
+    let powerStart = pacingSettings.powerStart
+    let quickStart = pacingSettings.quickStart
+    if(!quickStart || powerStart) {
+      do {
+        let urlOYM  = Bundle.main.url(forResource: "set", withExtension: ".m4a")!
+        appPlayer = try AVAudioPlayer(contentsOf: urlOYM)
+        appPlayer.play()
+      } catch { }
+    }
+
     pacingProgress.resetProgress()
-    setPacingStatus(pacingStatus: .ServiceStart)
+    setPacingStatus(.ServiceStart)
 
     waypointService = WaypointService(serviceConnection: self)
   }
@@ -244,44 +245,43 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
 
     // Update the status
     if(silent) {
-      setPacingStatus(pacingStatus: .PacingPaused)
+      setPacingStatus(.PacingPaused)
     } else {
-      setPacingStatus(pacingStatus: .PacingPause)
+      setPacingStatus(.PacingPause)
       mpPacingPaused.play()
     }
   }
 
   func stopPacing(silent: Bool) {
-    let pacingStatus = statusViewModel.pacingStatus
     if(pacingStatus.isPacing) {
       stopService()
 
       if(silent) {
-        setPacingStatus(pacingStatus: .NotPacing)
+        setPacingStatus(.NotPacing)
       } else if ((pacingStatus.status == .Pacing) && (pacingProgress.elapsedTime >= 40000)) {
         mainViewModel.setPacingResult()
-        setPacingStatus(pacingStatus: .PacingComplete)
+        setPacingStatus(.PacingComplete)
         mpPacingComplete.play()
       } else {
-        setPacingStatus(pacingStatus: .PacingCancel)
+        setPacingStatus(.PacingCancel)
         mpPacingCancelled.play()
       }
     } else if((pacingStatus.status == .PacingPaused) && !silent) {
       if(pacingProgress.elapsedTime >= 40000) {
         mainViewModel.setPacingResult()
-        setPacingStatus(pacingStatus: .PacingComplete)
+        setPacingStatus(.PacingComplete)
         mpPacingComplete.play()
       } else {
-        setPacingStatus(pacingStatus: .PacingCancel)
+        setPacingStatus(.PacingCancel)
         mpPacingCancelled.play()
       }
     } else {
-      setPacingStatus(pacingStatus: .NotPacing)
+      setPacingStatus(.NotPacing)
     }
   }
 
   func resumePacing() {
-    setPacingStatus(pacingStatus: .ServiceResume)
+    setPacingStatus(.ServiceResume)
     waypointService = WaypointService(serviceConnection: self)
   }
 

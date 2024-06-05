@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1215D4072BFEC38C00DB07C3 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1215D4062BFEC38C00DB07C3 /* Int.swift */; };
+		1228356C2C10AC4F003FCE65 /* set.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1228356A2C10AC4F003FCE65 /* set.m4a */; };
+		1228356D2C10AC4F003FCE65 /* oym.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1228356B2C10AC4F003FCE65 /* oym.m4a */; };
 		122F8C972C0B37BC00352AE0 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */; };
 		122F8C992C0B3BBD00352AE0 /* Weighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C982C0B3BBD00352AE0 /* Weighted.swift */; };
 		122F8C9C2C0B429200352AE0 /* ResultData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C9B2C0B429200352AE0 /* ResultData.swift */; };
@@ -126,6 +128,8 @@
 
 /* Begin PBXFileReference section */
 		1215D4062BFEC38C00DB07C3 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		1228356A2C10AC4F003FCE65 /* set.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = set.m4a; sourceTree = "<group>"; };
+		1228356B2C10AC4F003FCE65 /* oym.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = oym.m4a; sourceTree = "<group>"; };
 		122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		122F8C982C0B3BBD00352AE0 /* Weighted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weighted.swift; sourceTree = "<group>"; };
 		122F8C9B2C0B429200352AE0 /* ResultData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultData.swift; sourceTree = "<group>"; };
@@ -330,7 +334,6 @@
 			isa = PBXGroup;
 			children = (
 				12C873562C03785800FA5C5E /* App */,
-				12B144B82BF3CCFC00FCD2A7 /* Audio */,
 				12AE78F62C0275F40057764D /* Errors */,
 				1293591F2BFE1B910042F99E /* Ext */,
 				12B5A3F32C04A12300455303 /* Global */,
@@ -341,6 +344,7 @@
 				12B144B72BF3BDAA00FCD2A7 /* Info.plist */,
 				127122912BEE41A200106069 /* Assets.xcassets */,
 				12C873542C0376F100FA5C5E /* Localizable.xcstrings */,
+				12B144B82BF3CCFC00FCD2A7 /* Audio */,
 				127122932BEE41A200106069 /* Preview Content */,
 			);
 			path = TrackPacer;
@@ -453,6 +457,8 @@
 		12B144B82BF3CCFC00FCD2A7 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				1228356B2C10AC4F003FCE65 /* oym.m4a */,
+				1228356A2C10AC4F003FCE65 /* set.m4a */,
 				129359392BFE4D8C0042F99E /* cancelled.m4a */,
 				129359362BFE4D8C0042F99E /* complete.m4a */,
 				129359462BFE4D8D0042F99E /* fifty.m4a */,
@@ -644,6 +650,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1228356D2C10AC4F003FCE65 /* oym.m4a in Resources */,
+				1228356C2C10AC4F003FCE65 /* set.m4a in Resources */,
 				12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */,
 				129359552BFE4D8D0042F99E /* lap13.m4a in Resources */,
 				1293595E2BFE4D8D0042F99E /* lap20.m4a in Resources */,

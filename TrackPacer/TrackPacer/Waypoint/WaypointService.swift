@@ -57,15 +57,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 }
 
 @MainActor class WaypointService /* : OnAudioFocusChangeListener */ {
+  private let handler = Handler()
+
   private var startRealtime: ContinuousClock.Instant!
   private var prevTime = -1.0
-
-  // TODO: Add notifications and handle interruptions
-  // private lateinit var mNM: NotificationManager
-  // private lateinit var audioManager: AudioManager
-  // private lateinit var focusRequest: AudioFocusRequest
-
-  private let handler = Handler()
 
   private func waypointRunnable(delayMS: Int64) {
     handleWaypoint(delayMS)

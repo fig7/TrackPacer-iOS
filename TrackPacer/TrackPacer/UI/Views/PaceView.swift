@@ -12,7 +12,9 @@ struct PaceView: View {
 
   @EnvironmentObject var pacingOptions: PacingOptions
   @EnvironmentObject var pacingProgress: PacingProgress
+
   @EnvironmentObject var pacingStatus: PacingStatus
+  @EnvironmentObject var pacingSettings: PacingSettings
 
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
@@ -59,30 +61,32 @@ struct PaceView: View {
       Spacer()
 
       HStack {
+        let goText       = (!pacingSettings.quickStart || pacingSettings.powerStart) ? " SET " : " GO! "
         let pacingStatus = pacingStatus.status
+
         switch(pacingStatus) {
         case .NotPacing:
           Button(action: { }) { Text(" ").overlay { Image("stop2") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
-          Button(action: { viewModel.beginPacing() }) { Text(" SET ") }
+          Button(action: { viewModel.beginPacing() }) { Text(goText) }
             .buttonStyle(ActionButtonStyleMax(disabledCol: false)).disabled(false)
 
         case .ServiceStart:
           Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
-          Button(action: { }) { Text(" SET ") }
+          Button(action: { }) { Text(goText) }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
 
         case .PacingWait:
           Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
-          Button(action: { }) { Text(" SET ") }
+          Button(action: { }) { Text(goText) }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
 
         case .PacingStart:
           Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
-          Button(action: { }) { Text(" SET ") }
+          Button(action: { }) { Text(goText) }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
 
         case .Pacing:
@@ -118,13 +122,13 @@ struct PaceView: View {
         case .PacingComplete:
           Button(action: { }) { Text(" ").overlay { Image("stop2") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
-          Button(action: { }) { Text(" SET ") }
+          Button(action: { }) { Text(goText) }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
 
         case .PacingCancel:
           Button(action: { }) { Text(" ").overlay { Image("stop2") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
-          Button(action: { }) { Text(" SET ") }
+          Button(action: { }) { Text(goText) }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(true)
         }
       }.padding(.bottom, 5)

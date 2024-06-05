@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreTelephony
+import AVKit
 import UIKit
 
 @MainActor class MainViewModel : ObservableObject {
@@ -37,6 +38,10 @@ import UIKit
   // Hack until I find a better way to deal with custom dialogs
   // Maybe they need their own view models, etc.
   @Published var disableReminder = false
+
+  var screenReceiverActive = false
+  let uiApp = UIApplication.shared
+  var appPlayer: AVAudioPlayer!
 
   init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel, _ historyModel: HistoryModel, _ settingsModel: SettingsModel) {
     self.runModel    = runModel
@@ -190,7 +195,7 @@ import UIKit
     let url = URL(string: UIApplication.openSettingsURLString)
     guard let url else { return }
 
-    UIApplication.shared.open(url)
+    uiApp.open(url)
   }
 
   private func isAirplaneModeEnabled() -> Bool {
@@ -216,6 +221,12 @@ import UIKit
   }
 
   func launchPacing() {
+    do {
+      let urlOYM  = Bundle.main.url(forResource: "oym", withExtension: ".m4a")!
+      appPlayer = try AVAudioPlayer(contentsOf: urlOYM)
+      appPlayer.play()
+    } catch { }
+
     mainViewStack.pushPacingView()
   }
 
@@ -346,6 +357,7 @@ import UIKit
       // TODO: return
     }
 
+    statusViewModel.pacingSettings.alternateStart = settingsManager.alternateStart
     runViewModel.updateTrackOverlay()
   }
 
@@ -355,5 +367,15 @@ import UIKit
       // TODO: handleSettingsError()
       // TODO: return
     }
+  }
+
+  func startScreenReceiver() {
+    screenReceiverActive      = true
+    uiApp.isIdleTimerDisabled = true
+  }
+
+  func stopScreenReceiver() {
+    screenReceiverActive      = false
+    uiApp.isIdleTimerDisabled = false
   }
 }

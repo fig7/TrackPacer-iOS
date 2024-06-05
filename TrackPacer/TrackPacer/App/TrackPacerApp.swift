@@ -12,17 +12,32 @@ private var mainViewModel: MainViewModel!
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   @objc func onAppWillResignActive(notification: NSNotification) {
-    let statusViewModel = mainViewModel.statusViewModel
-    if(statusViewModel.screenReceiverActive) {
+    if(mainViewModel.screenReceiverActive) {
       mainViewModel.handleIncomingIntent(begin: true, silent: false)
     }
   }
 
+  @objc func onAudioInterruption(notification: Notification) {
+    mainViewModel.handleIncomingIntent(begin: false, silent: true)
+  }
+
+  override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    let application = UIApplication.shared
+    if(application.applicationState != .active) {
+      if(mainViewModel.screenReceiverActive) {
+        mainViewModel.handleIncomingIntent(begin: false, silent: false)
+      }
+    }
+  }
+
   func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    NotificationCenter.default.addObserver(self, selector: #selector(onAppWillResignActive),   name: UIApplication.willResignActiveNotification, object: nil)
+    let nc           = NotificationCenter.default
+    let audioSession = AVAudioSession.sharedInstance();
+
+    nc.addObserver(self, selector: #selector(onAppWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+    nc.addObserver(self, selector: #selector(onAudioInterruption),   name: AVAudioSession.interruptionNotification, object: nil)
 
     do {
-      let audioSession = AVAudioSession.sharedInstance();
       try audioSession.setCategory(.playback, options: [.duckOthers])
       try audioSession.setActive(true)
 
@@ -30,16 +45,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     } catch { }
 
     return true
-  }
-
-  override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-    let application = UIApplication.shared
-    if(application.applicationState != .active) {
-      let statusViewModel = mainViewModel.statusViewModel
-      if(statusViewModel.screenReceiverActive) {
-        mainViewModel.handleIncomingIntent(begin: false, silent: false)
-      }
-    }
   }
 }
 
