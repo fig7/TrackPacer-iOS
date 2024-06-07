@@ -116,7 +116,7 @@ import UIKit
     }
 
     loadHistory()
-    initViews()
+    initRunView()
   }
 
   func loadHistory() {
@@ -130,6 +130,9 @@ import UIKit
         "If that doesn't work, re-install it.",
         width: 342, height: 200)
     }
+
+    let historyManager = historyModel.historyManager
+    historyViewModel.updateList(historyManager.historyList)
   }
 
   func initRunView() {
@@ -146,16 +149,6 @@ import UIKit
         "If that doesn't work, re-install it.",
         width: 342, height: 200)
     }
-  }
-
-  func initHistoryView() {
-    let historyManager = historyModel.historyManager
-    historyViewModel.updateList(historyManager.historyList)
-  }
-
-  func initViews() {
-    initRunView()
-    initHistoryView()
   }
 
   func showErrorDialog(title: String, message: String, width: Int, height: Int) {
