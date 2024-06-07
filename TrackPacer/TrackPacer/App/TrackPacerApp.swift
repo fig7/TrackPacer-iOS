@@ -52,44 +52,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
   private let runModel: RunModel
-  private let paceModel: PaceModel
+  private let pacingModel: PacingModel
   private let resultModel: ResultModel
 
   private let historyModel: HistoryModel
   private let settingsModel: SettingsModel
 
   init() {
-    runModel = RunModel()
-    if(!runModel.runModelOK) {
-      //TODO:
-      // val dialog = DistanceErrorDialog.newDialog("initializing", true)
-      // dialog.show(supportFragmentManager, "DISTANCE_ERROR_DIALOG")
-    }
-
-    historyModel = HistoryModel()
-    if(!historyModel.historyDataOK) {
-      // TODO:
-      // val dialog = HistoryErrorDialog.newDialog("initializing", true)
-      // dialog.show(supportFragmentManager, "HISTORY_ERROR_DIALOG")
-    }
-
+    runModel      = RunModel()
+    historyModel  = HistoryModel()
     settingsModel = SettingsModel()
-    if(!settingsModel.settingsDataOK) {
-      // TODO:
-      // val dialog = HistoryErrorDialog.newDialog("initializing", true)
-      // dialog.show(supportFragmentManager, "HISTORY_ERROR_DIALOG")
-    }
 
-    paceModel     = PaceModel()
+    pacingModel   = PacingModel()
     resultModel   = ResultModel()
-    mainViewModel = MainViewModel(runModel, paceModel, resultModel, historyModel, settingsModel)
-
-    initialiseApp()
-  }
-
-  private func initialiseApp() {
-    mainViewModel.initDistances()
-    mainViewModel.loadHistory()
+    mainViewModel = MainViewModel(runModel, pacingModel, resultModel, historyModel, settingsModel)
   }
 
   var body: some Scene {

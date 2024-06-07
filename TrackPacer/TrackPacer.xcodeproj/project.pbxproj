@@ -123,7 +123,7 @@
 		12E530062C08C18E007EB53C /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E530052C08C18E007EB53C /* HistoryModel.swift */; };
 		12E530082C08C202007EB53C /* HistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E530072C08C202007EB53C /* HistoryManager.swift */; };
 		12E5300A2C08C554007EB53C /* FileTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E530092C08C554007EB53C /* FileTime.swift */; };
-		12F0E37B2C03A27700ECE1E0 /* PaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0E37A2C03A27700ECE1E0 /* PaceModel.swift */; };
+		12F0E37B2C03A27700ECE1E0 /* PacingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0E37A2C03A27700ECE1E0 /* PacingModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -245,7 +245,7 @@
 		12E530052C08C18E007EB53C /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		12E530072C08C202007EB53C /* HistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryManager.swift; sourceTree = "<group>"; };
 		12E530092C08C554007EB53C /* FileTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTime.swift; sourceTree = "<group>"; };
-		12F0E37A2C03A27700ECE1E0 /* PaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaceModel.swift; sourceTree = "<group>"; };
+		12F0E37A2C03A27700ECE1E0 /* PacingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -575,7 +575,7 @@
 			isa = PBXGroup;
 			children = (
 				12AE78FB2C0297B10057764D /* RunModel.swift */,
-				12F0E37A2C03A27700ECE1E0 /* PaceModel.swift */,
+				12F0E37A2C03A27700ECE1E0 /* PacingModel.swift */,
 				1255BF112C07902F0059C7E0 /* ResultModel.swift */,
 				12B5A3EF2C04A07300455303 /* StatusModel.swift */,
 			);
@@ -709,7 +709,7 @@
 				127122A52BEE68D100106069 /* SettingsView.swift in Sources */,
 				12B5A3FD2C04A4C400455303 /* Clock.swift in Sources */,
 				1271229F2BEE5AC600106069 /* RunView.swift in Sources */,
-				12F0E37B2C03A27700ECE1E0 /* PaceModel.swift in Sources */,
+				12F0E37B2C03A27700ECE1E0 /* PacingModel.swift in Sources */,
 				1215D4072BFEC38C00DB07C3 /* Int.swift in Sources */,
 				123F12632C00AAB500F5E6E6 /* StatusViewModel.swift in Sources */,
 				12E5300A2C08C554007EB53C /* FileTime.swift in Sources */,

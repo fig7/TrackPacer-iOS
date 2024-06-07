@@ -7,5 +7,5 @@
 
 import Foundation
 
-class PaceModel {
+class PacingModel {
 }

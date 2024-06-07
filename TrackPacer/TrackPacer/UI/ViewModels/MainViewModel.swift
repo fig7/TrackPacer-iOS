@@ -12,7 +12,7 @@ import UIKit
 
 @MainActor class MainViewModel : ObservableObject {
   unowned let runModel: RunModel
-  unowned let paceModel: PaceModel
+  unowned let pacingModel: PacingModel
   unowned let resultModel: ResultModel
 
   unowned let historyModel: HistoryModel
@@ -39,27 +39,27 @@ import UIKit
   // Maybe they need their own view models, etc.
   @Published var disableReminder = false
 
-  var screenReceiverActive = false
+  var handlingSettingsError = false
+  var screenReceiverActive  = false
   let uiApp = UIApplication.shared
   var appPlayer: AVAudioPlayer!
 
-  init(_ runModel: RunModel, _ paceModel: PaceModel, _ resultModel: ResultModel, _ historyModel: HistoryModel, _ settingsModel: SettingsModel) {
+  init(_ runModel: RunModel, _ pacingModel: PacingModel, _ resultModel: ResultModel, _ historyModel: HistoryModel, _ settingsModel: SettingsModel) {
     self.runModel    = runModel
-    self.paceModel   = paceModel
+    self.pacingModel = pacingModel
     self.resultModel = resultModel
 
-    self.historyModel  = historyModel
-
+    self.historyModel   = historyModel
     self.settingsModel  = settingsModel
     let settingsManager = settingsModel.settingsManager
 
-    mainViewStack   = MainViewStack()
+    mainViewStack = MainViewStack()
 
     statusViewModel = StatusViewModel()
     statusViewModel.setFromSettings(settingsManager)
 
     runViewModel        = RunViewModel(runModel)
-    paceViewModel       = PaceViewModel(paceModel)
+    paceViewModel       = PaceViewModel(pacingModel)
     completionViewModel = CompletionViewModel()
 
     historyViewModel = HistoryViewModel(historyModel)
@@ -78,30 +78,84 @@ import UIKit
     completionViewModel.setMain(mainViewModel: self)
     historyViewModel.setMain(mainViewModel: self)
     settingsViewModel.setMain(mainViewModel: self)
-  }
 
-  func initDistances() {
-    let distanceArray = runModel.distanceArray()
+    if(!runModel.runModelOK) {
+      showErrorDialog(title: "Initialization error",
+        message:
+        "An error occurred while reading distances and times.\n\n" +
 
-    do {
-      try runViewModel.initDistances(distanceArray)
-    } catch {
-      showErrorDialog(title: "Initialisation error",
-        message: "Reading track distances and times failed. Please try re-starting the application. If that doesn't work, re-install the application.",
+        "Please try re-starting the app.\n" +
+        "If that doesn't work, re-install it.",
         width: 342, height: 200)
+
+      return
     }
+
+    if(!historyModel.historyDataOK) {
+      showErrorDialog(title: "Initialization error",
+        message:
+        "An error occurred while accessing pacing history.\n\n" +
+
+        "Please try re-starting the app.\n" +
+        "If that doesn't work, re-install it.",
+        width: 342, height: 200)
+
+      return
+    }
+
+    if(!settingsModel.settingsDataOK) {
+      showErrorDialog(title: "Initialization error",
+        message:
+       "An error occurred while reading settings.\n\n" +
+
+       "Please try re-starting the app.\n" +
+       "If that doesn't work, re-install it.",
+        width: 342, height: 200)
+
+      return
+    }
+
+    loadHistory()
+    initViews()
   }
 
   func loadHistory() {
     historyModel.loadHistory()
     if(!historyModel.historyDataOK) {
       showErrorDialog(title: "Loading error",
-        message: "Loading pacing history failed. Please try re-starting the application. If that doesn't work, re-install the application.",
+        message:
+        "An error occurred while reading pacing history.\n\n" +
+
+        "Please try re-starting the app.\n" +
+        "If that doesn't work, re-install it.",
         width: 342, height: 200)
     }
+  }
 
+  func initRunView() {
+    let distanceArray = runModel.distanceArray()
+
+    do {
+      try runViewModel.initDistances(distanceArray)
+    } catch {
+      showErrorDialog(title: "Loading error",
+        message:
+        "An error occurred while accessing distances and times.\n\n" +
+
+        "Please try re-starting the app.\n" +
+        "If that doesn't work, re-install it.",
+        width: 342, height: 200)
+    }
+  }
+
+  func initHistoryView() {
     let historyManager = historyModel.historyManager
     historyViewModel.updateList(historyManager.historyList)
+  }
+
+  func initViews() {
+    initRunView()
+    initHistoryView()
   }
 
   func showErrorDialog(title: String, message: String, width: Int, height: Int) {
@@ -117,7 +171,7 @@ import UIKit
     dialogVisibility.visible = true
   }
 
-  func showInfoDialog(title: String, message: String, width: Int, height: Int) {
+  func showInfoDialog(title: String, message: String, width: Int, height: Int, completion: @escaping () -> () = { }) {
     dialogContent.dialogType = .Info
 
     dialogContent.dialogTitle = title
@@ -127,6 +181,7 @@ import UIKit
     dialogContent.dialogHeight  = CGFloat(height)
     dialogContent.dialogPadding = CGFloat(20)
 
+    dialogCompletion = completion
     dialogVisibility.visible = true
   }
 
@@ -156,18 +211,29 @@ import UIKit
   }
 
   func dismissDialog() {
+    let dialogType = dialogContent.dialogType
+
     dialogContent.dialogType = .None
     dialogVisibility.visible = false
 
-    if(dialogResult.action == .UserContinue) {
-      let completion = dialogCompletion
+    switch(dialogType) {
+    case .Question:
+      if(dialogResult.action == .UserContinue) {
+        let completion = dialogCompletion
 
-      dialogCompletion = { }
-      dialogResult.action = .UserCancel
+        dialogCompletion = { }
+        dialogResult.action = .UserCancel
 
-      Task { @MainActor in
-        completion()
+        Task { @MainActor in
+          completion()
+        }
       }
+
+    case .Edit:
+      runViewModel.performTimeEdit()
+
+    default:
+      break
     }
   }
 
@@ -186,7 +252,6 @@ import UIKit
 
     let settingsManager = settingsModel.settingsManager
     _ = settingsManager.setFlightMode(false)
-    // TODO: Handle all settings save errors
 
     settingsViewModel.flightMode = settingsManager.flightMode
   }
@@ -301,8 +366,10 @@ import UIKit
     if(!historyManager.saveHistory(resultModel.runData)) {
       showInfoDialog(title: "Error saving result",
         message:
-        "An error occurred while saving the pacing result." +
-        "The result was not saved. Please try saving again.",
+        "An error occurred while saving the pacing result.\n\n" +
+
+        "The result was not saved.\n" +
+        "Please try saving again.",
         width: 342, height: 200)
 
       return
@@ -320,41 +387,84 @@ import UIKit
     mainViewStack.pushPastView()
   }
 
+  func handleDistanceError() {
+    // We need to let the edit dialog disappear (or partially disappear)
+    // So, run a task that starts with a slight delay (half a second seems to be enough)
+    Task { @MainActor in
+      try await Task.sleep(nanoseconds: 500000000)
+
+      showInfoDialog(title: "Error editing times",
+      message:
+        "An error occurred while saving the new times.\n\n" +
+
+        "The changes were not saved.\n" +
+        "Please try again.",
+        width: 342, height: 225)
+    }
+  }
+
+  func handleSettingsError() {
+    handlingSettingsError = true
+
+    showInfoDialog(title: "Error saving settings",
+      message:
+      "An error occurred while saving the new settings.\n\n" +
+
+      "The changes were not saved.\n" +
+      "Please try again.",
+      width: 342, height: 225,
+      completion: { [weak self] in
+        guard let self else { return }
+
+        let settingsManager = settingsModel.settingsManager
+        statusViewModel.setFromSettings(settingsManager)
+        settingsViewModel.setFromSettings(settingsManager)
+    })
+  }
+
   func setStartDelay(_ newStartDelay: String) {
+    if(handlingSettingsError) { handlingSettingsError = false; return }
+
     let settingsManager = settingsModel.settingsManager
     if(!settingsManager.setStartDelay(newStartDelay)) {
-      // TODO: handleSettingsError()
-      // TODO: return
+      handleSettingsError()
+      return
     }
 
     statusViewModel.pacingSettings.startDelay = settingsManager.startDelay
   }
 
   func setPowerStart(_ newPowerStart: Bool) {
+    if(handlingSettingsError) { handlingSettingsError = false; return }
+
     let settingsManager = settingsModel.settingsManager
-    if(!settingsManager.setPowerStart(newPowerStart)) {
-      // TODO: handleSettingsError()
-      // TODO: return
+    if(settingsManager.setPowerStart(newPowerStart)) {
+      handleSettingsError()
+      return
     }
 
     statusViewModel.pacingSettings.powerStart = settingsManager.powerStart
   }
 
   func setQuickStart(_ newQuickStart: Bool) {
+    if(handlingSettingsError) { handlingSettingsError = false; return }
+
     let settingsManager = settingsModel.settingsManager
     if(!settingsManager.setQuickStart(newQuickStart)) {
-      // TODO: handleSettingsError()
-      // TODO: return
+      handleSettingsError()
+      return
     }
 
     statusViewModel.pacingSettings.quickStart = settingsManager.quickStart
   }
 
   func setAlternateStart(_ newAlternateStart: Bool) {
+    if(handlingSettingsError) { handlingSettingsError = false; return }
+
     let settingsManager = settingsModel.settingsManager
     if(!settingsManager.setAlternateStart(newAlternateStart)) {
-      // TODO: handleSettingsError()
-      // TODO: return
+      handleSettingsError()
+      return
     }
 
     statusViewModel.pacingSettings.alternateStart = settingsManager.alternateStart
@@ -362,10 +472,12 @@ import UIKit
   }
 
   func setFlightMode(_ newFlightMode: Bool) {
+    if(handlingSettingsError) { handlingSettingsError = false; return }
+
     let settingsManager = settingsModel.settingsManager
     if(!settingsManager.setFlightMode(newFlightMode)) {
-      // TODO: handleSettingsError()
-      // TODO: return
+      handleSettingsError()
+      return
     }
   }
 

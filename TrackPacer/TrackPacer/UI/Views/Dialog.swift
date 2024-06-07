@@ -28,25 +28,6 @@ struct ErrorDialog: View {
 
 struct InfoDialog: View {
   @EnvironmentObject var dialogContent: DialogContent
-  let closeAction: () -> ()
-
-  init(_ closeAction: @escaping () -> ()) {
-    self.closeAction   = closeAction
-  }
-
-  var body: some View {
-    Text(dialogContent.dialogTitle).bold().frame(maxWidth: .infinity, alignment: .leading)
-    Spacer().frame(height: 20)
-
-    Text(dialogContent.dialogText)
-    Spacer()
-
-    Button("  OK   ", action: closeAction).frame(maxWidth: .infinity, alignment: .trailing)
-  }
-}
-
-struct QuestionDialog: View {
-  @EnvironmentObject var dialogContent: DialogContent
   @EnvironmentObject var dialogResult: DialogResult
   let closeAction: () -> ()
 
@@ -61,16 +42,36 @@ struct QuestionDialog: View {
     Text(dialogContent.dialogText)
     Spacer()
 
+    Button("  OK   ", action: { dialogResult.action = .UserContinue; closeAction() }).frame(maxWidth: .infinity, alignment: .trailing)
+  }
+}
+
+struct QuestionDialog: View {
+  @EnvironmentObject var dialogContent: DialogContent
+  @EnvironmentObject var dialogResult: DialogResult
+  let closeAction: () -> ()
+
+  init(_ closeAction: @escaping () -> ()) {
+    self.closeAction = closeAction
+  }
+
+  var body: some View {
+    Text(dialogContent.dialogTitle).bold().frame(maxWidth: .infinity, alignment: .leading)
+    Spacer().frame(height: 20)
+
+    Text(dialogContent.dialogText)
+    Spacer()
+
     HStack {
       Button("  CANCEL   ", action: closeAction)
-      Button("  \(dialogContent.dialogAction)   ", action: { dialogResult.action = .UserContinue;  closeAction() })
+      Button("  \(dialogContent.dialogAction)   ", action: { dialogResult.action = .UserContinue; closeAction() })
     }.frame(maxWidth: .infinity, alignment: .trailing)
   }
 }
 
 struct EditTimeDialog: View {
-  @EnvironmentObject var viewModel: RunViewModel
   @EnvironmentObject var timeEdit: TimeEdit
+  @EnvironmentObject var timeSelection: TimeSelection
   let closeAction: () -> ()
 
   init(_ closeAction: @escaping () -> ()) {
@@ -82,7 +83,7 @@ struct EditTimeDialog: View {
     let gray2 = Color(red: 0.918, green: 0.929, blue: 0.941)
     
     HStack(alignment: .top) {
-      Text("Edit " + viewModel.timeSelection.selected).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
+      Text("Edit " + timeSelection.selected).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
       CloseButton(closeAction: closeAction)
     }
     Spacer().frame(height: 5)
@@ -126,18 +127,18 @@ struct EditTimeDialog: View {
 
     HStack {
       Button(" DELETE ") {
-        viewModel.deleteTime()
+        timeEdit.editAction = .UserDelete
         closeAction()
       }.buttonStyle(SmallActionButtonStyle(disabledCol: !timeEdit.deleteOK)).disabled(!timeEdit.deleteOK).frame(maxWidth: .infinity, alignment: .leading)
       Button(" ADD \(timeEdit.timeStr) ") {
-        viewModel.addTime()
+        timeEdit.editAction = .UserAdd
         closeAction()
       }.buttonStyle(SmallActionButtonStyle(disabledCol: !timeEdit.editOK)).disabled(!timeEdit.editOK).frame(maxWidth: .infinity, alignment: .trailing)
     }
 
     Spacer().frame(height: 10)
     Button(" SET TO \(timeEdit.timeStr) ") {
-      viewModel.setTime()
+      timeEdit.editAction = .UserSet
       closeAction()
     }.buttonStyle(SmallActionButtonStyle(disabledCol: !timeEdit.editOK)).disabled(!timeEdit.editOK).frame(maxWidth: .infinity, alignment: .trailing)
   }
@@ -218,7 +219,7 @@ struct Dialog: View {
           }
         }
         .padding(.all, dialogContent.dialogPadding)
-        .frame(width: dialogContent.dialogWidth, height: dialogContent.dialogHeight).background(.white).scaleEffect(CGSize(width: dialogScale, height: dialogScale))
+        .frame(width: dialogContent.dialogWidth, height: dialogContent.dialogHeight, alignment: .topLeading).background(.white).scaleEffect(CGSize(width: dialogScale, height: dialogScale))
 
         Spacer().frame(height: 20)
       }

@@ -56,8 +56,8 @@ import Foundation
     distanceSelection.list           = distanceArray.map { (pickerBugWorkaround: String) in " " + pickerBugWorkaround + " "}
     distanceSelection.selectedPadded = distanceSelection.list[0]
 
-    laneSelection.list         = ["1", "2", "3", "4", "5", "6", "7", "8"]
-    laneSelection.selected     = laneSelection.list[0]
+    laneSelection.list     = ["1", "2", "3", "4", "5", "6", "7", "8"]
+    laneSelection.selected = laneSelection.list[0]
 
     try initTimes()
     initCallbacks()
@@ -66,10 +66,12 @@ import Foundation
 
   func initTimes(_ selectedDistance: String) throws {
     let timeArray = try runModel.timesFor(selectedDistance)
-    updateTimes(timeArray, selected: 0)
+    try updateTimes(timeArray, selected: 0)
   }
 
-  func updateTimes(_ timeArray: [String], selected: Int) {
+  func updateTimes(_ timeArray: [String], selected: Int) throws {
+    guard (selected < timeArray.count) else { throw Exception.IllegalArgumentException }
+
     timeSelection.list     = timeArray
     timeSelection.selected = timeSelection.list[selected]
   }
@@ -115,7 +117,7 @@ import Foundation
     do {
       (timeSelection.list, timeSelection.selected) = try runModel.deleteTime(timeSelection.selected, distanceSelection.selected)
     } catch {
-      // TODO: mainViewModel.handleUpdatingDistanceError()
+      mainViewModel.handleDistanceError()
     }
   }
 
@@ -123,7 +125,7 @@ import Foundation
     do {
       (timeSelection.list, timeSelection.selected) = try runModel.addTime(timeEdit.timeStr, distanceSelection.selected)
     } catch {
-      // TODO: mainViewModel.handleUpdatingDistanceError()
+      mainViewModel.handleDistanceError()
     }
   }
 
@@ -131,7 +133,28 @@ import Foundation
     do {
       (timeSelection.list, timeSelection.selected) = try runModel.setTime(timeSelection.selected, timeEdit.timeStr, distanceSelection.selected)
     } catch {
-      // TODO: mainViewModel.handleUpdatingDistanceError()
+      mainViewModel.handleDistanceError()
+    }
+  }
+
+  func performTimeEdit() {
+    let editAction = timeEdit.editAction
+    timeEdit.editAction = .UserCancel
+
+    Task { @MainActor in
+      switch(editAction) {
+      case .UserAdd:
+        addTime()
+
+      case .UserSet:
+        setTime()
+
+      case .UserDelete:
+        deleteTime()
+
+      default:
+        break
+      }
     }
   }
 

@@ -79,6 +79,7 @@ struct ContentView: View {
 
         .environmentObject(viewModel.runViewModel)
         .environmentObject(viewModel.runViewModel.timeEdit)
+        .environmentObject(viewModel.runViewModel.timeSelection)
     }
   }
 }

@@ -7,6 +7,8 @@
 
 import Foundation
 
+enum EditResponse { case UserCancel, UserDelete, UserAdd, UserSet }
+
 @MainActor class TimeEdit: ObservableObject {
   unowned let timeSelection: TimeSelection
 
@@ -18,9 +20,11 @@ import Foundation
   @Published var secs = 0 { didSet { updateComputed() } }
   @Published var hths = 0 { didSet { updateComputed() } }
 
-  @Published var timeStr = ""
-  @Published var editOK    = true
-  @Published var deleteOK  = true
+  @Published var timeStr  = ""
+  @Published var editOK   = true
+  @Published var deleteOK = true
+
+  @Published var editAction: EditResponse = .UserCancel
 
   private func timeInvalid() -> Bool {
     // TODO: This should really use a waypoint check (min 5s between waypoints)

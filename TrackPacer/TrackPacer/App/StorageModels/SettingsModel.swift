@@ -23,7 +23,7 @@ class SettingsModel {
     do {
       try settingsManager.initSettings(defaultSettings: settingsArray)
     } catch {
-    settingsDataOK = false
+      settingsDataOK = false
     }
   }
 }

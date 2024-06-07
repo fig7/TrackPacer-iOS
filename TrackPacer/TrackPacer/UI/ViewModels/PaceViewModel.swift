@@ -46,7 +46,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
 }
 
 @MainActor class PaceViewModel : ObservableObject, ServiceConnection {
-  unowned let paceModel: PaceModel
+  unowned let paceModel: PacingModel
 
   unowned var mainViewModel: MainViewModel!
   unowned var pacingStatus: PacingStatus!
@@ -78,7 +78,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     }
   }
 
-  init(_ paceModel: PaceModel) {
+  init(_ paceModel: PacingModel) {
     self.paceModel = paceModel
 
     pacingOptions  = PacingOptions()
