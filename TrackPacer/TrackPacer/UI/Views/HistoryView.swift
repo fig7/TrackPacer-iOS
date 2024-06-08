@@ -30,13 +30,13 @@ struct HistoryView: View {
                   let runData      = resultData.runData
                   let computedData = resultData.computedData
 
-                  Text(runData.runDist).weighted(0.25, proxy)
-                  Text(computedData.shortRunDate).weighted(0.28, proxy)
+                  Text(runData.runDist).weighted(0.24, proxy)
+                  Text(computedData.shortRunDate).weighted(0.30, proxy)
                   Text(runData.actualTimeStr).weighted(0.24, proxy)
-                  Text(runData.actualPaceStr + "/km").weighted(0.23, proxy)
+                  Text(runData.actualPaceStr + "/km").weighted(0.22, proxy)
                 }
 
-                Text(">")
+                Text("  >")
               }.padding(.vertical, 16)
                .onTapGesture { viewModel.showHistory(resultData) }
                .onLongPressGesture(perform: { viewModel.deleteHistory(resultData) })

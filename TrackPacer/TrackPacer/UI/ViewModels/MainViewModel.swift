@@ -210,7 +210,7 @@ import UIKit
     dialogVisibility.visible = false
 
     switch(dialogType) {
-    case .Question:
+    case .Info, .Question:
       if(dialogResult.action == .UserContinue) {
         let completion = dialogCompletion
 
@@ -431,7 +431,7 @@ import UIKit
     if(handlingSettingsError) { handlingSettingsError = false; return }
 
     let settingsManager = settingsModel.settingsManager
-    if(settingsManager.setPowerStart(newPowerStart)) {
+    if(!settingsManager.setPowerStart(newPowerStart)) {
       handleSettingsError()
       return
     }

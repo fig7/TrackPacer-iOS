@@ -40,8 +40,7 @@ struct CompletionView: View {
           Spacer().frame(height: 10)
 
           Text("Your notes:")
-          TextEditor(text: $resultData.runData.runNotes)
-            .padding(.top, 4).padding(.bottom, 5).frame(height: 142.0).border(.blue)
+          TextEditor(text: $resultData.runData.runNotes).padding(.horizontal, 5).frame(height: 142.0).border(.blue)
         }
       }.scrollDismissesKeyboard(.interactively)
 

@@ -45,7 +45,7 @@ struct PastView: View {
 
         let runNotes = resultData.runData.runNotes
         Text(runNotes.isEmpty ? "*No notes added*" : runNotes)
-          .padding(4).frame(maxWidth: .infinity, alignment: .leading).frame(maxHeight: .infinity, alignment: .top)
+          .padding(5).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
       }.toolbar() {
         ToolbarItem(placement: .navigationBarTrailing) {
           StatusView()

@@ -17,6 +17,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
   }
 
+  @objc func onAppDidBecomeActive(notification: NSNotification) {
+    let audioSession = AVAudioSession.sharedInstance()
+
+    do {
+      try audioSession.setCategory(.playback, options: [.duckOthers])
+      try audioSession.setActive(true)
+    } catch { }
+  }
+
   @objc func onAudioInterruption(notification: Notification) {
     mainViewModel.handleIncomingIntent(begin: false, silent: true)
   }
@@ -31,18 +40,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   }
 
   func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    let nc           = NotificationCenter.default
-    let audioSession = AVAudioSession.sharedInstance();
-
+    let nc = NotificationCenter.default
     nc.addObserver(self, selector: #selector(onAppWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
-    nc.addObserver(self, selector: #selector(onAudioInterruption),   name: AVAudioSession.interruptionNotification, object: nil)
+    nc.addObserver(self, selector: #selector(onAppDidBecomeActive),  name: UIApplication.didBecomeActiveNotification,  object: nil)
+    nc.addObserver(self, selector: #selector(onAudioInterruption),   name: AVAudioSession.interruptionNotification,    object: nil)
 
-    do {
-      try audioSession.setCategory(.playback, options: [.duckOthers])
-      try audioSession.setActive(true)
-
-      audioSession.addObserver(self, forKeyPath: "outputVolume", options: [], context: nil);
-    } catch { }
+    let audioSession = AVAudioSession.sharedInstance()
+    audioSession.addObserver(self, forKeyPath: "outputVolume", options: [], context: nil);
 
     return true
   }
