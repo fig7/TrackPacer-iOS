@@ -17,7 +17,8 @@ import Foundation
   var timeSelection: TimeSelection = TimeSelection()
   let timeEdit: TimeEdit
 
-  var trackSelection: TrackSelection = TrackSelection()
+  var profileSelection: ProfileSelection = ProfileSelection()
+  var trackSelection: TrackSelection     = TrackSelection()
 
   init(_ runModel: RunModel) {
     self.runModel  = runModel
@@ -59,6 +60,9 @@ import Foundation
     laneSelection.list     = ["1", "2", "3", "4", "5", "6", "7", "8"]
     laneSelection.selected = laneSelection.list[0]
 
+    profileSelection.list     = ["Fixed pace"]
+    profileSelection.selected = profileSelection.list[0]
+
     try initTimes()
     initCallbacks()
     updateTrackOverlay()
@@ -94,6 +98,11 @@ import Foundation
 
       trackSelection.trackOverlay = rtOverlay(runDist, runLane, alternateStart)
     } catch { }
+  }
+
+  func editProfile() {
+    let runDist = distanceSelection.selected
+    mainViewModel.editProfile(runDist, profileSelection.selected)
   }
 
   func showProfileHelp() {

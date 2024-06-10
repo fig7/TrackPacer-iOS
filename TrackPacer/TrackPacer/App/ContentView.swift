@@ -20,6 +20,7 @@ struct ContentView: View {
             .environmentObject(viewModel.runViewModel.distanceSelection)
             .environmentObject(viewModel.runViewModel.laneSelection)
             .environmentObject(viewModel.runViewModel.timeSelection)
+            .environmentObject(viewModel.runViewModel.profileSelection)
             .environmentObject(viewModel.runViewModel.trackSelection)
 
           HistoryView().tabItem { Label("History", image: "baseline_history_24") }
@@ -58,6 +59,15 @@ struct ContentView: View {
               .environmentObject(viewModel.statusViewModel)
               .environmentObject(viewModel.statusViewModel.pacingStatus)
               .environmentObject(viewModel.statusViewModel.pacingSettings)
+
+          case 4:
+            ProfileView()
+              .environmentObject(viewModel.profileViewModel)
+
+              .environmentObject(viewModel.statusViewModel)
+              .environmentObject(viewModel.statusViewModel.pacingStatus)
+              .environmentObject(viewModel.statusViewModel.pacingSettings)
+
           default:
             EmptyView()
           }

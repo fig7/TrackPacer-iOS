@@ -23,6 +23,7 @@ import UIKit
 
   var runViewModel: RunViewModel
   var paceViewModel: PaceViewModel
+  var profileViewModel: ProfileViewModel
   var completionViewModel: CompletionViewModel
 
   var historyViewModel: HistoryViewModel
@@ -60,6 +61,7 @@ import UIKit
 
     runViewModel        = RunViewModel(runModel)
     paceViewModel       = PaceViewModel(pacingModel)
+    profileViewModel    = ProfileViewModel()
     completionViewModel = CompletionViewModel()
 
     historyViewModel = HistoryViewModel(historyModel)
@@ -75,6 +77,7 @@ import UIKit
 
     runViewModel.setMain(mainViewModel: self)
     paceViewModel.setMain(mainViewModel: self)
+    profileViewModel.setMain(mainViewModel: self)
     completionViewModel.setMain(mainViewModel: self)
     historyViewModel.setMain(mainViewModel: self)
     settingsViewModel.setMain(mainViewModel: self)
@@ -230,6 +233,12 @@ import UIKit
     }
   }
 
+  func editProfile(_ runDist: String, _ runProfile: String) {
+    // profileViewModel.setProfileOptions(runDist, runProfile)
+
+    mainViewStack.pushProfileView()
+  }
+
   private func showFMRDialog(width: Int, height: Int) {
     dialogContent.dialogType = .FMR
 
@@ -373,6 +382,14 @@ import UIKit
 
   func finishRun() {
     mainViewStack.popCompletionView()
+  }
+
+  func saveProfile() {
+
+  }
+
+  func finishProfile() {
+    mainViewStack.popProfileView()
   }
 
   func showPastRun(_ resultData: ResultData) {

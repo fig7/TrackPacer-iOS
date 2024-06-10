@@ -16,4 +16,8 @@ import Foundation
 
   func pushPastView() { list.append(3) }
   func popPastView()  { list.removeAll() }
+
+
+  func pushProfileView() { list.append(4) }
+  func popProfileView()  { list.removeAll() }
 }

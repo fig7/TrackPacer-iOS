@@ -13,9 +13,7 @@ struct RunView: View {
   @EnvironmentObject var distanceSelection: DistanceSelection
   @EnvironmentObject var laneSelection: LaneSelection
   @EnvironmentObject var timeSelection: TimeSelection
-
-  @State var profileStr = "Fixed pace"
-  var profileList = ["Fixed pace"]
+  @EnvironmentObject var profileSelection: ProfileSelection
 
   @EnvironmentObject var trackSelection: TrackSelection
 
@@ -68,12 +66,18 @@ struct RunView: View {
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $profileStr, list: profileList).frame(width: 200, height: 42, alignment: .center)
+        TPPicker(selected: $profileSelection.selected, list: profileSelection.list).frame(width: 200, height: 42, alignment: .center)
         Spacer().frame(width: 15)
 
-        TPButton(iconName: "baseline_help_outline_42") {
-          viewModel.showProfileHelp()
-        }.frame(width: 60, height: 42, alignment: .center)
+        if(profileSelection.profilesEnabled) {
+          TPButton(iconName: "baseline_edit_42") {
+            viewModel.editProfile()
+          }.frame(width: 60, height: 42, alignment: .center)
+        } else {
+          TPButton(iconName: "baseline_help_outline_42") {
+            viewModel.showProfileHelp()
+          }.frame(width: 60, height: 42, alignment: .center)
+        }
 
         Spacer()
       }.padding(.horizontal, 20)
