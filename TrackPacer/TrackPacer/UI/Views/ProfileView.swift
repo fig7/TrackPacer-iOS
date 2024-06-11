@@ -13,14 +13,13 @@ let axisDef: (color: Color, width: CGFloat, extent: CGFloat) = (.black, 3.0, 1.5
 let strokeGrad = LinearGradient(colors: [.blue, .green, .red], startPoint:.bottom, endPoint: .top)
 let strokeDef  = StrokeStyle(lineWidth: lineDef.width, lineCap: .round, lineJoin: .round)
 
-
 let rampWidth: CGFloat = 20.0
 let flatWidth: CGFloat = 150.0
 
-let sectionWidth  = rampWidth + flatWidth
+let sectionWidth = rampWidth + flatWidth
 let sectionWidth2 = sectionWidth / 2.0
 
-let sectionHeight  = 340.0
+let sectionHeight: CGFloat = 340.0
 let sectionHeight2 = sectionHeight / 2.0
 
 func clamped(_ a: CGFloat, _ b: ClosedRange<CGFloat>) -> CGFloat { min(max(a, b.lowerBound), b.upperBound) }
@@ -112,21 +111,73 @@ struct YAxis: View {
   }
 }
 
+struct LineSegment : View {
+  @Binding var waypoint: ProfileWaypoint
+
+  var body : some View {
+    LineD(y1: waypoint.prevOffset, y2: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
+    LineH(y: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
+      .gesture(DragGesture().onChanged { gesture in waypoint = ProfileWaypoint(name: waypoint.name, waitTime: waypoint.waitTime, offset: gesture.location.y, prevOffset: waypoint.prevOffset)  })
+  }
+}
+
+struct LineSegment2 : View {
+  @Binding var waypoint: ProfileWaypoint
+  @Binding var waypoint2: ProfileWaypoint
+
+  var body : some View {
+    LineD(y1: waypoint.prevOffset, y2: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
+    LineH(y: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
+      .gesture(DragGesture().onChanged { gesture in
+        waypoint  = ProfileWaypoint(name: waypoint.name, waitTime: waypoint.waitTime, offset: gesture.location.y, prevOffset: waypoint.prevOffset)
+        waypoint2 = ProfileWaypoint(name: waypoint2.name, waitTime: waypoint2.waitTime, offset: waypoint2.offset, prevOffset: gesture.location.y)
+      })
+  }
+}
+
 struct ProfileView: View {
   @EnvironmentObject var viewModel: ProfileViewModel
 
-  @State var profileName = "Fixed pace"
-  @State private var offset: CGFloat  = sectionHeight2
-  @State private var offset2: CGFloat = sectionHeight2
-  @State private var offset3: CGFloat = sectionHeight2
-  @State private var offset4: CGFloat = sectionHeight2
-  @State private var offset5: CGFloat = sectionHeight2
-  @State private var offset6: CGFloat = sectionHeight2
-  @State private var offset7: CGFloat = sectionHeight2
-  @State private var offset8: CGFloat = sectionHeight2
+  func timeForOffset(_ offset: CGFloat) -> Double {
+    let offsetClamped = clamped(offset, 0.0...sectionHeight)
+
+    let scaleFactor: Double
+    switch(offset) {
+      case 0.0...sectionHeight2:
+        let range = 1.5 - 1.0
+        scaleFactor = 1.0 + range*(1.0 - offsetClamped/sectionHeight2)
+
+      default:
+        let oneThird = 1.0/3.0
+        let range    = 1.0 - oneThird
+        scaleFactor = oneThird + range*((sectionHeight - offsetClamped)/sectionHeight2)
+    }
+
+    return (15.0/scaleFactor).rounded(toPlaces: 1)
+  }
+
+  func offsetForTime(_ time: Double) -> CGFloat {
+    let scaleFactor = 15.0/time
+
+    let offset: CGFloat
+    switch(scaleFactor) {
+    case 1.0...:
+      let range = 0.5
+      offset = sectionHeight2 - sectionHeight2*((scaleFactor - 1.0)/range)
+
+    default:
+      let oneThird = 1.0/3.0
+      let range    = 1.0 - oneThird
+      offset = sectionHeight2 + sectionHeight2*((1.0 - scaleFactor)/range)
+    }
+
+    return offset
+  }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 5) {
+      Spacer().frame(height: 5)
+
       ScrollView(.horizontal) {
         HStack(alignment: .top, spacing: 0) {
           VStack(alignment: .leading) {
@@ -134,85 +185,53 @@ struct ProfileView: View {
             Spacer()
             Text("100%")
             Spacer()
-            Text("20%")
+            Text("33%")
           }.frame(height: sectionHeight + 20)
 
           VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .bottomLeading){
-              XAxis().padding(.leading, 3.0)
-              YAxis().padding(.bottom, 3.0)
+              XAxis().padding(.leading, axisDef.width)
+              YAxis().padding(.bottom, axisDef.width)
 
               HStack(alignment: .top, spacing: 0) {
-                LineD(y1: sectionHeight, y2: offset).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset = gesture.location.y})
+                ForEach(viewModel.waypointList.indices, id: \.self) { i in
+                  let beforeEnd = ((i+1) < viewModel.waypointList.count)
+                  if(beforeEnd) {
+                    LineD(y1: viewModel.waypointList[i].prevOffset, y2: viewModel.waypointList[i].offset)
+                      .stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
 
-                LineD(y1: offset, y2: offset2).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset2).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset2 = gesture.location.y})
-
-                LineD(y1: offset2, y2: offset3).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset3).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset3 = gesture.location.y})
-
-                LineD(y1: offset3, y2: offset4).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset4).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset4 = gesture.location.y})
-
-                LineD(y1: offset4, y2: offset5).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset5).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset5 = gesture.location.y})
-
-                LineD(y1: offset5, y2: offset6).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset6).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset6 = gesture.location.y})
-
-                LineD(y1: offset6, y2: offset7).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset7).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset7 = gesture.location.y})
-
-                LineD(y1: offset7, y2: offset8).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-                LineH(y: offset8).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight).gesture(DragGesture().onChanged { gesture in offset8 = gesture.location.y})
-              }.padding(.leading, 4.5).padding(.bottom, 4.5)
+                    LineH(y: viewModel.waypointList[i].offset)
+                      .stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
+                      .gesture(DragGesture()
+                        .onChanged { gesture in
+                          viewModel.waypointList[i]   = ProfileWaypoint(other: viewModel.waypointList[i],   offset: gesture.location.y)
+                          viewModel.waypointList[i+1] = ProfileWaypoint(other: viewModel.waypointList[i+1], prevOffset: gesture.location.y)
+                        }
+                        .onEnded { gesture in
+                          let time   = timeForOffset(gesture.location.y)
+                          let offset = offsetForTime(time)
+                          viewModel.waypointList[i]   = ProfileWaypoint(other: viewModel.waypointList[i],   offset: offset)
+                          viewModel.waypointList[i+1] = ProfileWaypoint(other: viewModel.waypointList[i+1], prevOffset: offset)
+                          viewModel.updateTimes()
+                        })
+                  }
+                }
+              }.padding(.leading, axisDef.width+axisDef.extent).padding(.bottom, axisDef.width+axisDef.extent)
             }.padding(.horizontal, 15).padding(.vertical, 10).frame(height: sectionHeight + 20)
 
             HStack(alignment: .top, spacing: 0) {
-              Text("  0m --->").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
+              ForEach(viewModel.waypointList.indices, id: \.self) { i in
+                let afterStart = (i > 0)
+                let beforeEnd  = ((i+1) < viewModel.waypointList.count)
 
-              VStack {
-                HStack(alignment: .top, spacing: 0) {
-                  Text(" 50m").monospacedDigit()
-                  Text("🛑 1:00 --->").monospacedDigit().frame(maxWidth: .infinity, alignment: .center)
-                }.frame(width: sectionWidth, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-              }
+                VStack {
+                  HStack(alignment: .top, spacing: 0) {
+                    Text(viewModel.waypointList[i].name).monospacedDigit()
+                    if(beforeEnd) { Text(viewModel.waypointList[i].waitTimeStr).monospacedDigit().frame(maxWidth: .infinity, alignment: .center) }
+                  }.frame(width: sectionWidth, alignment: .leading)
 
-              VStack {
-                Text("100m --->").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-              }
-
-              VStack {
-                Text("150m --->").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-              }
-
-              VStack {
-                Text("200m --->").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-              }
-
-              VStack {
-                Text("250m --->").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-              }
-
-              VStack {
-                Text("300m --->").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-              }
-
-              VStack {
-                Text("350m --->").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth, alignment: .leading)
-              }
-
-              VStack {
-                Text("400m").monospacedDigit().frame(width: sectionWidth2, alignment: .leading)
-                Text("15.0s").monospacedDigit().frame(width: sectionWidth2, alignment: .leading)
+                  if(afterStart) { Text("\(viewModel.waypointList[i].timeStr)").monospacedDigit().frame(width: sectionWidth, alignment: .leading) }
+                }
               }
             }
           }
@@ -222,12 +241,12 @@ struct ProfileView: View {
       Spacer().frame(height: 15)
 
       HStack {
-        Text("Profile name:")
-        TextField("", text: $profileName).textFieldStyle(.roundedBorder)
+        Text("\(viewModel.profileDist) profile:")
+        TextField("", text: $viewModel.profileName).textFieldStyle(.roundedBorder)
       }
 
-      Text("Running time: 2:00.00 (15.0/50m, 5:00/km)")
-      Text("Rest time: 1:00.00")
+      Text("Ref. time: \(viewModel.profileTime) \(viewModel.profilePace)").foregroundColor(viewModel.profileTimeCol)
+      Text("Rest time: \(viewModel.profileWait)")
 
       Spacer()
 

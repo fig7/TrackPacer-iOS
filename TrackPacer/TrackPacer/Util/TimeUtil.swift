@@ -90,6 +90,32 @@ func timeToMinuteString(timeInMS: Int64) -> String {
   }
 }
 
+// TODO: Figure out why we added a second to the first version!
+func timeToMinuteString2(timeInMS: Int64) -> String {
+  var timeLeft = abs(timeInMS)
+  let sgnStr   = (timeInMS < 0) ? "-" : ""
+
+  let hrs = timeLeft / 3600000
+  timeLeft -= hrs * 3600000
+
+  let mins = timeLeft / 60000
+  timeLeft -= mins * 60000
+
+  let secs = timeLeft / 1000
+  timeLeft -= secs * 1000
+
+  if(hrs > 0) {
+    let hrsStr  = String(format: "%d", hrs)
+    let minsStr = String(format: "%02d", mins)
+    let secsStr = String(format: "%02d", secs)
+    return String(format: baseTimeHMS, sgnStr, hrsStr, minsStr, secsStr)
+  } else {
+    let minsStr = String(format: "%d", mins)
+    let secsStr = String(format: "%02d", secs)
+    return String(format: baseTimeMS, sgnStr, minsStr, secsStr)
+  }
+}
+
 func timeToAlmostFullString(timeInMS: Int64) -> String {
   var timeLeft = abs(timeInMS)
   let sgnStr   = (timeInMS < 0) ? "-" : ""

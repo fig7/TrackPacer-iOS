@@ -234,7 +234,7 @@ import UIKit
   }
 
   func editProfile(_ runDist: String, _ runProfile: String) {
-    // profileViewModel.setProfileOptions(runDist, runProfile)
+    profileViewModel.setProfileOptions(runDist, runProfile, 15.0)
 
     mainViewStack.pushProfileView()
   }

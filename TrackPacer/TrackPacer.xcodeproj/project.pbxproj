@@ -400,13 +400,13 @@
 				127122A62BEE7ED300106069 /* Observables */,
 				127122AA2BEEDE5400106069 /* MainViewModel.swift */,
 				124645E42BF1661000CB6EAC /* RunViewModel.swift */,
+				12A2F4A52C1659F50062367B /* ProfileViewModel.swift */,
 				124645F32BF1731900CB6EAC /* PaceViewModel.swift */,
 				12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */,
 				122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */,
 				122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */,
 				122F8CA82C0E176300352AE0 /* SettingsViewModel.swift */,
 				123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */,
-				12A2F4A52C1659F50062367B /* ProfileViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
