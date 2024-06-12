@@ -135,44 +135,21 @@ struct LineSegment2 : View {
   }
 }
 
+func colorForProfileValidity(_ validity: ProfileValidity) -> Color {
+  switch(validity) {
+  case .OK:
+    return .black
+
+  case .TooFast:
+    return .red
+
+  case .TooSlow:
+    return .blue
+  }
+}
+
 struct ProfileView: View {
   @EnvironmentObject var viewModel: ProfileViewModel
-
-  func timeForOffset(_ offset: CGFloat) -> Double {
-    let offsetClamped = clamped(offset, 0.0...sectionHeight)
-
-    let scaleFactor: Double
-    switch(offset) {
-      case 0.0...sectionHeight2:
-        let range = 1.5 - 1.0
-        scaleFactor = 1.0 + range*(1.0 - offsetClamped/sectionHeight2)
-
-      default:
-        let oneThird = 1.0/3.0
-        let range    = 1.0 - oneThird
-        scaleFactor = oneThird + range*((sectionHeight - offsetClamped)/sectionHeight2)
-    }
-
-    return (15.0/scaleFactor).rounded(toPlaces: 1)
-  }
-
-  func offsetForTime(_ time: Double) -> CGFloat {
-    let scaleFactor = 15.0/time
-
-    let offset: CGFloat
-    switch(scaleFactor) {
-    case 1.0...:
-      let range = 0.5
-      offset = sectionHeight2 - sectionHeight2*((scaleFactor - 1.0)/range)
-
-    default:
-      let oneThird = 1.0/3.0
-      let range    = 1.0 - oneThird
-      offset = sectionHeight2 + sectionHeight2*((1.0 - scaleFactor)/range)
-    }
-
-    return offset
-  }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 5) {
@@ -204,12 +181,7 @@ struct ProfileView: View {
                       .stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
                       .gesture(DragGesture()
                         .onChanged { gesture in
-                          viewModel.waypointList[i]   = ProfileWaypoint(other: viewModel.waypointList[i],   offset: gesture.location.y)
-                          viewModel.waypointList[i+1] = ProfileWaypoint(other: viewModel.waypointList[i+1], prevOffset: gesture.location.y)
-                        }
-                        .onEnded { gesture in
-                          let time   = timeForOffset(gesture.location.y)
-                          let offset = offsetForTime(time)
+                          let offset = snapTo(gesture.location.y)
                           viewModel.waypointList[i]   = ProfileWaypoint(other: viewModel.waypointList[i],   offset: offset)
                           viewModel.waypointList[i+1] = ProfileWaypoint(other: viewModel.waypointList[i+1], prevOffset: offset)
                           viewModel.updateTimes()
@@ -231,7 +203,7 @@ struct ProfileView: View {
                   }.frame(width: sectionWidth, alignment: .leading)
 
                   if(afterStart) { Text("\(viewModel.waypointList[i].timeStr)").monospacedDigit().frame(width: sectionWidth, alignment: .leading) }
-                }
+                }.onTapGesture { if(afterStart) { viewModel.editWaypoint(i, !beforeEnd) } }
               }
             }
           }
@@ -245,7 +217,7 @@ struct ProfileView: View {
         TextField("", text: $viewModel.profileName).textFieldStyle(.roundedBorder)
       }
 
-      Text("Ref. time: \(viewModel.profileTime) \(viewModel.profilePace)").foregroundColor(viewModel.profileTimeCol)
+      Text("Ref. time: \(viewModel.profileTime) \(viewModel.profilePace)").foregroundColor(colorForProfileValidity(viewModel.profileValidity))
       Text("Rest time: \(viewModel.profileWait)")
 
       Spacer()

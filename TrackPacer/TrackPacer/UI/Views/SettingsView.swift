@@ -56,6 +56,7 @@ struct SettingsView: View {
 
             Divider()
           }
+            .textFieldSelectAll()
 
           VStack(alignment:.leading, spacing: 0) {
             HStack {

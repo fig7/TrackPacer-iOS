@@ -144,6 +144,68 @@ struct EditTimeDialog: View {
   }
 }
 
+struct EditWaypointDialog: View {
+  @EnvironmentObject var viewModel: ProfileViewModel
+  @EnvironmentObject var waypointEdit: WaypointEdit
+
+  @State var timeValid = true
+  @State var waitValid = true
+
+  let closeAction: () -> ()
+
+  init(_ closeAction: @escaping () -> ()) {
+    self.closeAction = closeAction
+  }
+
+  var body: some View {
+    HStack(alignment: .top) {
+      Text("Edit waypoint: " + waypointEdit.name).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
+      CloseButton(closeAction: closeAction)
+    }
+    Spacer().frame(height: 10)
+
+    HStack {
+      VStack(alignment: .leading) {
+        Text("Time to waypoint (s)")
+        Text("(between 5.00 and 60.00)").font(.caption)
+      }
+      Spacer()
+
+      TextField("", text: $waypointEdit.waypointTime).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 100)
+        .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.decimalPad)
+        .onChange(of: waypointEdit.waypointTime) { timeValid = viewModel.validateSecs(waypointEdit.waypointTime, 5.0...60.0) }
+    }
+    Spacer().frame(height: 20)
+
+    HStack {
+      VStack(alignment: .leading) {
+        Text("Wait time (mm:ss):")
+        Text("(between 00:10 and 05:00)").font(.caption)
+      }
+
+      Spacer()
+
+      HStack {
+        TextField("", text: $waypointEdit.waypointWaitMM).foregroundColor(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad).disabled(waypointEdit.atEnd)
+          .onChange(of: waypointEdit.waypointWaitMM) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM + ":" + waypointEdit.waypointWaitSS, 10...300) }
+
+        Text(":")
+
+        TextField("", text: $waypointEdit.waypointWaitSS).foregroundColor(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad).disabled(waypointEdit.atEnd)
+          .onChange(of: waypointEdit.waypointWaitSS) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM + ":" + waypointEdit.waypointWaitSS, 10...300) }
+      }
+    }.opacity(waypointEdit.atEnd ? 0.5 : 1.0)
+
+    Spacer()
+
+    HStack {
+      Button("  MAKE CHANGES  ", action: { closeAction(); Task { @MainActor in viewModel.saveWaypoint() } }).buttonStyle(SmallActionButtonStyle(disabledCol: !timeValid || !waitValid))
+    }.frame(maxWidth: .infinity, alignment: .trailing)
+  }
+}
+
 struct FMRDialog: View {
   @EnvironmentObject var viewModel: MainViewModel
   let closeAction: () -> ()
@@ -213,6 +275,10 @@ struct Dialog: View {
 
           case .Edit:
             EditTimeDialog() { viewModel.dismissDialog() }
+
+          case .Waypoint:
+            EditWaypointDialog() { viewModel.dismissDialog() }
+              .textFieldSelectAll()
 
           case .FMR:
             FMRDialog { viewModel.dismissDialog() }

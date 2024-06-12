@@ -90,6 +90,9 @@ struct ContentView: View {
         .environmentObject(viewModel.runViewModel)
         .environmentObject(viewModel.runViewModel.timeEdit)
         .environmentObject(viewModel.runViewModel.timeSelection)
+
+        .environmentObject(viewModel.profileViewModel)
+        .environmentObject(viewModel.profileViewModel.waypointEdit)
     }
   }
 }

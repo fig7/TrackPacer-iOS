@@ -206,6 +206,16 @@ import UIKit
     dialogVisibility.visible = true
   }
 
+  func showEditWaypointDialog(width: Int, height: Int) {
+    dialogContent.dialogType = .Waypoint
+
+    dialogContent.dialogWidth   = CGFloat(width)
+    dialogContent.dialogHeight  = CGFloat(height)
+    dialogContent.dialogPadding = CGFloat(8)
+
+    dialogVisibility.visible = true
+  }
+
   func dismissDialog() {
     let dialogType = dialogContent.dialogType
 
