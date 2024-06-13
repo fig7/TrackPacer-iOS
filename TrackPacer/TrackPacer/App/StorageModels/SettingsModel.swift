@@ -13,6 +13,7 @@ private let settingsArray: [Any] = [
   false,   // Quick start
   false,   // Alternate start
   true,    // Flight mode
+  "5:00"   // Ref pace
 ]
 
 class SettingsModel {

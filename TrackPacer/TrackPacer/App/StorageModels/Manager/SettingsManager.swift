@@ -24,7 +24,8 @@ class SettingsManager {
   var powerStart: Bool     { get { return settingsData.powerStart } }
   var quickStart: Bool     { get { return settingsData.quickStart } }
   var alternateStart: Bool { get { return settingsData.alternateStart } }
-  var flightMode:     Bool { get { return settingsData.flightMode } }
+  var flightMode: Bool     { get { return settingsData.flightMode } }
+  var refPace: String      { get { return settingsData.refPace } }
 
   func initSettings(defaultSettings: [Any]) throws {
     settingsFromDefaults(defaultSettings)
@@ -42,10 +43,11 @@ class SettingsManager {
   }
 
   func setStartDelay(_ startDelay: String) -> Bool {
-    do {
-      var newSettingsData = settingsData!
-      newSettingsData.startDelay = startDelay
+    var newSettingsData = settingsData!
+    if(newSettingsData.startDelay == startDelay) { return true }
 
+    do {
+      newSettingsData.startDelay = startDelay
       try writeData(newSettingsData)
     } catch {
       return false
@@ -56,10 +58,11 @@ class SettingsManager {
   }
 
   func setPowerStart(_ powerStart: Bool) -> Bool {
-    do {
-      var newSettingsData = settingsData!
-      newSettingsData.powerStart = powerStart
+    var newSettingsData = settingsData!
+    if(newSettingsData.powerStart == powerStart) { return true }
 
+    do {
+      newSettingsData.powerStart = powerStart
       try writeData(newSettingsData)
     } catch {
       return false
@@ -70,10 +73,11 @@ class SettingsManager {
   }
 
   func setQuickStart(_ quickStart: Bool) -> Bool {
-    do {
-      var newSettingsData = settingsData!
-      newSettingsData.quickStart = quickStart
+    var newSettingsData = settingsData!
+    if(newSettingsData.quickStart == quickStart) { return true }
 
+    do {
+      newSettingsData.quickStart = quickStart
       try writeData(newSettingsData)
     } catch {
       return false
@@ -84,10 +88,11 @@ class SettingsManager {
   }
 
   func setAlternateStart(_ alternateStart: Bool) -> Bool {
-    do {
-      var newSettingsData = settingsData!
-      newSettingsData.alternateStart = alternateStart
+    var newSettingsData = settingsData!
+    if(newSettingsData.alternateStart == alternateStart) { return true }
 
+    do {
+      newSettingsData.alternateStart = alternateStart
       try writeData(newSettingsData)
     } catch {
       return false
@@ -99,14 +104,22 @@ class SettingsManager {
 
   func setFlightMode(_ flightMode: Bool) -> Bool {
     // NB Flight mode reminder is not saved
-    /* try {
-      val newSettingsData = settingsData.copy(flightMode = mutableStateOf(flightMode))
-      writeData(newSettingsData)
-    } catch(_: Exception) {
-      return false
-    } */
-
     settingsData.flightMode = flightMode
+    return true
+  }
+
+  func setRefPace(_ refPace: String) -> Bool {
+    var newSettingsData = settingsData!
+    if(newSettingsData.refPace == refPace) { return true }
+
+    do {
+      newSettingsData.refPace = refPace
+      try writeData(newSettingsData)
+    } catch {
+      return false
+    }
+
+    settingsData.refPace = refPace
     return true
   }
 
@@ -129,6 +142,7 @@ class SettingsManager {
     settingsData.quickStart     = defaultSettings[2] as! Bool
     settingsData.alternateStart = defaultSettings[3] as! Bool
     settingsData.flightMode     = defaultSettings[4] as! Bool
+    settingsData.refPace        = defaultSettings[5] as! String
   }
 
   private func initData() throws {

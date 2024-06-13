@@ -171,9 +171,17 @@ struct EditWaypointDialog: View {
       }
       Spacer()
 
-      TextField("", text: $waypointEdit.waypointTime).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 100)
-        .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.decimalPad)
-        .onChange(of: waypointEdit.waypointTime) { timeValid = viewModel.validateSecs(waypointEdit.waypointTime, 5.0...60.0) }
+      HStack {
+        TextField("", text: $waypointEdit.waypointTimeSS).foregroundStyle(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+          .onChange(of: waypointEdit.waypointTimeSS) { timeValid = viewModel.validateSecs(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH, 10...300) }
+
+        Text(".")
+
+        TextField("", text: $waypointEdit.waypointTimeHH).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+          .onChange(of: waypointEdit.waypointTimeHH) { timeValid = viewModel.validateSecs(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH, 10...300) }
+      }
     }
     Spacer().frame(height: 20)
 
@@ -186,15 +194,15 @@ struct EditWaypointDialog: View {
       Spacer()
 
       HStack {
-        TextField("", text: $waypointEdit.waypointWaitMM).foregroundColor(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+        TextField("", text: $waypointEdit.waypointWaitMM).foregroundStyle(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
           .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad).disabled(waypointEdit.atEnd)
-          .onChange(of: waypointEdit.waypointWaitMM) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM + ":" + waypointEdit.waypointWaitSS, 10...300) }
+          .onChange(of: waypointEdit.waypointWaitMM) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM, waypointEdit.waypointWaitSS, 10...300) }
 
         Text(":")
 
-        TextField("", text: $waypointEdit.waypointWaitSS).foregroundColor(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+        TextField("", text: $waypointEdit.waypointWaitSS).foregroundStyle(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
           .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad).disabled(waypointEdit.atEnd)
-          .onChange(of: waypointEdit.waypointWaitSS) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM + ":" + waypointEdit.waypointWaitSS, 10...300) }
+          .onChange(of: waypointEdit.waypointWaitSS) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM, waypointEdit.waypointWaitSS, 10...300) }
       }
     }.opacity(waypointEdit.atEnd ? 0.5 : 1.0)
 

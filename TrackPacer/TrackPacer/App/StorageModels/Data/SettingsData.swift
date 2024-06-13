@@ -13,4 +13,5 @@ struct SettingsData: Codable {
   var quickStart     = false
   var alternateStart = false
   var flightMode     = true
+  var refPace        = "5:00"
 }

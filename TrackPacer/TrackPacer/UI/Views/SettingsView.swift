@@ -23,7 +23,6 @@ extension StringProtocol {
 
 struct SettingsView: View {
   @EnvironmentObject var viewModel: SettingsViewModel
-  @FocusState var startDelayFocus
 
   var body: some View {
     VStack {
@@ -44,14 +43,15 @@ struct SettingsView: View {
 
               Spacer()
 
-              TextField("", text: $viewModel.startDelay).lineLimit(1).multilineTextAlignment(.center).keyboardType(.decimalPad)
-                .foregroundColor(viewModel.startDelayValid ? .primary : .red).focused($startDelayFocus)
-                .padding(12).frame(width: 75).border(startDelayFocus ? .blue : viewModel.startDelayValid ? .secondary : .red)
-                .onChange(of: viewModel.startDelay) { viewModel.startDelayChanged() }
+              HStack {
+                TextField("", text: $viewModel.startDelaySS).foregroundStyle(viewModel.startDelayValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                  .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
 
-              // This doesn't work. Adding an onSubmit callback somehow breaks the onChange()
-              // IDK, in any case it doesn't really matter.
-              // .onSubmit { viewModel.onSubmit() }
+                Text(".")
+                
+                TextField("", text: $viewModel.startDelayHH).foregroundStyle(viewModel.startDelayValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                  .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+              }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
             Divider()
@@ -69,7 +69,6 @@ struct SettingsView: View {
               Spacer()
 
               Toggle("", isOn: $viewModel.powerStart).labelsHidden().padding(2)
-                .onChange(of: viewModel.powerStart) { viewModel.powerStartChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
             Divider()
@@ -85,13 +84,12 @@ struct SettingsView: View {
               Spacer()
 
               Toggle("", isOn: $viewModel.quickStart).labelsHidden().padding(2)
-                .onChange(of: viewModel.quickStart) { viewModel.quickStartChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
             Divider()
           }
 
-          VStack(alignment:.leading, spacing: 0) {
+          VStack(alignment: .leading, spacing: 0) {
             HStack {
               VStack(alignment: .leading, spacing: 5) {
                 Text("Alternate start").fontWeight(.bold)
@@ -101,7 +99,6 @@ struct SettingsView: View {
               Spacer()
 
               Toggle("", isOn: $viewModel.alternateStart).labelsHidden().padding(2)
-                .onChange(of: viewModel.alternateStart) { viewModel.alternateStartChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
             Divider()
@@ -117,13 +114,45 @@ struct SettingsView: View {
               Spacer()
 
               Toggle("", isOn: $viewModel.flightMode).labelsHidden().padding(2)
-                .onChange(of: viewModel.flightMode) { viewModel.flightModeChanged() }
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
             Divider()
           }
+
+          VStack(alignment:.leading, spacing: 0) {
+            HStack {
+              VStack(alignment: .leading, spacing: 5) {
+                Text("Reference pace").fontWeight(.bold)
+                Text("Pace used with profiles").font(.caption)
+                Text("(between 2:30/km and 15:00/km)").font(.caption)
+              }
+
+              Spacer()
+
+              HStack {
+                TextField("", text: $viewModel.refPaceMM).foregroundStyle(viewModel.refPaceValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                  .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+
+                Text(":")
+
+                TextField("", text: $viewModel.refPaceSS).foregroundStyle(viewModel.refPaceValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                  .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+              }
+            }.padding(.horizontal, 1).padding(.vertical, 16)
+
+              Divider()
+            }
+            .textFieldSelectAll()
         }
       }
+      .onChange(of: viewModel.startDelaySS)   { viewModel.startDelayChanged() }
+      .onChange(of: viewModel.startDelayHH)   { viewModel.startDelayChanged() }
+      .onChange(of: viewModel.powerStart)     { viewModel.powerStartChanged() }
+      .onChange(of: viewModel.quickStart)     { viewModel.quickStartChanged() }
+      .onChange(of: viewModel.alternateStart) { viewModel.alternateStartChanged() }
+      .onChange(of: viewModel.flightMode)     { viewModel.flightModeChanged() }
+      .onChange(of: viewModel.refPaceMM)      { viewModel.refPaceChanged() }
+      .onChange(of: viewModel.refPaceSS)      { viewModel.refPaceChanged() }
     }.padding(.horizontal, 20).scrollDismissesKeyboard(.interactively)
   }
 }

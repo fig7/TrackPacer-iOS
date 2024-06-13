@@ -141,26 +141,26 @@ struct ProfileWaypoint {
     profileWait      = timeToMinuteString2(timeInMS: restTimeMS)
   }
 
-  func validateSecs(_ secsStr: String, _ secsRange: ClosedRange<Double>) -> Bool {
+  func validateSecs(_ secsStr: String, _ hthsStr: String, _ secsRange: ClosedRange<Double>) -> Bool {
+    if(secsStr.count > 2)  { return false }
+    if(hthsStr.count != 2) { return false }
+
     do {
-      let val = try secsStr.toDouble()
+      let secs = try secsStr.toInt()
+      let hths = try hthsStr.toInt()
+
+      let val = Double(secs) + Double(hths)/100.0
       if(secsRange.contains(val)) { return true }
     } catch { }
 
     return false
   }
 
-  func validateMinsSecs(_ minSecsStr: String, _ secsRange: ClosedRange<Int>) -> Bool {
+  func validateMinsSecs(_ minsStr: String, _ secsStr: String, _ secsRange: ClosedRange<Int>) -> Bool {
+    if(minsStr.count > 2)  { return false }
+    if(secsStr.count != 2) { return false }
+
     do {
-      let components = minSecsStr.split(separator: ":")
-      if(components.count != 2) { return false }
-      
-      let minsStr = String(components[0])
-      if(minsStr.count > 2) { return false }
-      
-      let secsStr = String(components[1])
-      if(secsStr.count != 2) { return false }
-      
       let mins = try minsStr.toInt()
       let secs = try secsStr.toInt()
       if(secs > 59) { return false }
@@ -178,14 +178,18 @@ struct ProfileWaypoint {
 
     let waypoint = waypointList[i]
     waypointEdit.name = waypoint.name
-    waypointEdit.waypointTime = String(format: "%.1f", waypoint.timeSecs)
 
-    let waitTimeSecs = waypoint.waitTime / 1000
-    let mins = waitTimeSecs / 60
-    waypointEdit.waypointWaitMM = String(format: "%d", mins)
+    let secs = waypoint.timeSecs.toInt()
+    let hths = ((waypoint.timeSecs - secs.toDouble())*100.0).rounded().toInt()
+    waypointEdit.waypointTimeSS = String(secs)
+    waypointEdit.waypointTimeHH = String(format: "%02d", hths)
 
-    let secs = waitTimeSecs - mins*60
-    waypointEdit.waypointWaitSS = String(format: "%02d", secs)
+    let waitTime = waypoint.waitTime / 1000
+    let waitMins = waitTime / 60
+    waypointEdit.waypointWaitMM = String(format: "%d", waitMins)
+
+    let waitSecs = waitTime - waitMins*60
+    waypointEdit.waypointWaitSS = String(format: "%02d", waitSecs)
 
     mainViewModel.showEditWaypointDialog(width: 342, height: 260)
   }
@@ -195,12 +199,14 @@ struct ProfileWaypoint {
     let oldWaypoint1 = waypointList[i]
     let oldWaypoint2 = waypointList[i-1]
 
-    let timeSecs = try! waypointEdit.waypointTime.toDouble()
-    let offset   = offsetForTime(timeSecs)
+    let secs = try! waypointEdit.waypointTimeSS.toInt()
+    let hths = try! waypointEdit.waypointTimeHH.toInt()
+    let time = Double(secs) + Double(hths)/100.0
+    let offset = offsetForTime(time)
 
-    let mins = try! waypointEdit.waypointWaitMM.toInt64()
-    let secs = try! waypointEdit.waypointWaitSS.toInt64()
-    let waitTime = (mins*60 + secs)*1000
+    let waitMins = try! waypointEdit.waypointWaitMM.toInt64()
+    let waitSecs = try! waypointEdit.waypointWaitSS.toInt64()
+    let waitTime = (waitMins*60 + waitSecs)*1000
 
     waypointList[i]   = ProfileWaypoint(other: oldWaypoint1, waitTime: waitTime, prevOffset: offset)
     waypointList[i-1] = ProfileWaypoint(other: oldWaypoint2, offset: offset)

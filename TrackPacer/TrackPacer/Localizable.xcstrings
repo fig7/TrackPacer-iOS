@@ -52,6 +52,9 @@
     "(between 00:10 and 05:00)" : {
 
     },
+    "(between 2:30/km and 15:00/km)" : {
+
+    },
     "(between 5.00 and 30.00)" : {
 
     },
@@ -430,6 +433,9 @@
     "Or use network settings to turn it on?" : {
 
     },
+    "Pace used with profiles" : {
+
+    },
     "Pacing history" : {
 
     },
@@ -460,6 +466,9 @@
           }
         }
       }
+    },
+    "Reference pace" : {
+
     },
     "Rest time: %@" : {
 

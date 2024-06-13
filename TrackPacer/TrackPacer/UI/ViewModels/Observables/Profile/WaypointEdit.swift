@@ -12,7 +12,9 @@ import Foundation
   @Published var atEnd: Bool = false
 
   @Published var name = ""
-  @Published var waypointTime = ""
+
+  @Published var waypointTimeSS = ""
+  @Published var waypointTimeHH = ""
 
   @Published var waypointWaitMM = ""
   @Published var waypointWaitSS = ""

@@ -501,6 +501,16 @@ import UIKit
     }
   }
 
+  func setRefPace(_ newRefPace: String) {
+    if(handlingSettingsError) { handlingSettingsError = false; return }
+
+    let settingsManager = settingsModel.settingsManager
+    if(!settingsManager.setRefPace(newRefPace)) {
+      handleSettingsError()
+      return
+    }
+  }
+
   func startScreenReceiver() {
     screenReceiverActive      = true
     uiApp.isIdleTimerDisabled = true
