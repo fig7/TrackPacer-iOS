@@ -60,8 +60,8 @@ import UIKit
     statusViewModel.setFromSettings(settingsManager)
 
     runViewModel        = RunViewModel(runModel)
-    paceViewModel       = PaceViewModel(pacingModel)
     profileViewModel    = ProfileViewModel()
+    paceViewModel       = PaceViewModel(pacingModel)
     completionViewModel = CompletionViewModel()
 
     historyViewModel = HistoryViewModel(historyModel)
@@ -244,8 +244,11 @@ import UIKit
   }
 
   func editProfile(_ runDist: String, _ runProfile: String) {
-    profileViewModel.setProfileOptions(runDist, runProfile, 15.0)
+    let settingsManager = settingsModel.settingsManager
+    let alternateStart  = (settingsManager.alternateStart && hasAlternateStart(runDist))
+    let refPace         = settingsManager.refPace
 
+    profileViewModel.setProfileOptions(runDist, alternateStart, runProfile, refPace)
     mainViewStack.pushProfileView()
   }
 
@@ -488,7 +491,6 @@ import UIKit
     }
 
     statusViewModel.pacingSettings.alternateStart = settingsManager.alternateStart
-    runViewModel.updateTrackOverlay()
   }
 
   func setFlightMode(_ newFlightMode: Bool) {

@@ -68,28 +68,17 @@ struct LineD: Shape {
 }
 
 struct XAxis: View {
+  let waypointCount: Int
+
   var body: some View {
     VStack(alignment:.leading, spacing: 0) {
-      LineH(y: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: 8.0*sectionWidth + axisDef.width, height: axisDef.width)
+      LineH(y: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: CGFloat(waypointCount-1)*sectionWidth + axisDef.width, height: axisDef.width)
 
       HStack(alignment:.top, spacing: 0) {
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
-        Spacer().frame(width: sectionWidth-axisDef.width)
-        LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
+        ForEach(0..<waypointCount, id: \.self) { _ in
+          LineV(x: axisDef.extent).stroke(axisDef.color, lineWidth: axisDef.width).frame(width: axisDef.width, height: axisDef.width)
+          Spacer().frame(width: sectionWidth-axisDef.width)
+        }
       }
     }
   }
@@ -108,30 +97,6 @@ struct YAxis: View {
 
       LineV(x: axisDef.extent).stroke(.black, lineWidth: axisDef.width).frame(width: axisDef.width, height: sectionHeight+axisDef.width)
     }
-  }
-}
-
-struct LineSegment : View {
-  @Binding var waypoint: ProfileWaypoint
-
-  var body : some View {
-    LineD(y1: waypoint.prevOffset, y2: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-    LineH(y: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
-      .gesture(DragGesture().onChanged { gesture in waypoint = ProfileWaypoint(name: waypoint.name, waitTime: waypoint.waitTime, offset: gesture.location.y, prevOffset: waypoint.prevOffset)  })
-  }
-}
-
-struct LineSegment2 : View {
-  @Binding var waypoint: ProfileWaypoint
-  @Binding var waypoint2: ProfileWaypoint
-
-  var body : some View {
-    LineD(y1: waypoint.prevOffset, y2: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
-    LineH(y: waypoint.offset).stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
-      .gesture(DragGesture().onChanged { gesture in
-        waypoint  = ProfileWaypoint(name: waypoint.name, waitTime: waypoint.waitTime, offset: gesture.location.y, prevOffset: waypoint.prevOffset)
-        waypoint2 = ProfileWaypoint(name: waypoint2.name, waitTime: waypoint2.waitTime, offset: waypoint2.offset, prevOffset: gesture.location.y)
-      })
   }
 }
 
@@ -167,13 +132,14 @@ struct ProfileView: View {
 
           VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .bottomLeading){
-              XAxis().padding(.leading, axisDef.width)
+              XAxis(waypointCount: viewModel.waypointList.count).padding(.leading, axisDef.width)
               YAxis().padding(.bottom, axisDef.width)
 
               HStack(alignment: .top, spacing: 0) {
                 ForEach(viewModel.waypointList.indices, id: \.self) { i in
-                  let beforeEnd = ((i+1) < viewModel.waypointList.count)
-                  if(beforeEnd) {
+                  let afterStart = (i > 0)
+                  let beforeEnd  = ((i+1) < viewModel.waypointList.count)
+                  if(afterStart) {
                     LineD(y1: viewModel.waypointList[i].prevOffset, y2: viewModel.waypointList[i].offset)
                       .stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
 
@@ -181,9 +147,11 @@ struct ProfileView: View {
                       .stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
                       .gesture(DragGesture()
                         .onChanged { gesture in
-                          let offset = snapTo(gesture.location.y)
-                          viewModel.waypointList[i]   = ProfileWaypoint(other: viewModel.waypointList[i],   offset: offset)
-                          viewModel.waypointList[i+1] = ProfileWaypoint(other: viewModel.waypointList[i+1], prevOffset: offset)
+                          let dist   = viewModel.waypointList[i].dist
+                          let offset = viewModel.snapTo(gesture.location.y, forDist: dist)
+
+                          viewModel.waypointList[i] = ProfileWaypoint(other: viewModel.waypointList[i],   offset: offset, roundTime: true)
+                          if(beforeEnd) { viewModel.waypointList[i+1] = ProfileWaypoint(other: viewModel.waypointList[i+1], prevOffset: offset) }
                           viewModel.updateTimes()
                         })
                   }
@@ -213,7 +181,7 @@ struct ProfileView: View {
       Spacer().frame(height: 15)
 
       HStack {
-        Text("\(viewModel.profileDist) profile:")
+        Text("\(viewModel.profileDesc):")
         TextField("", text: $viewModel.profileName).textFieldStyle(.roundedBorder)
       }
 

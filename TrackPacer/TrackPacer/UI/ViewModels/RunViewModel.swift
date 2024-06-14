@@ -65,7 +65,6 @@ import Foundation
 
     try initTimes()
     initCallbacks()
-    updateTrackOverlay()
   }
 
   func initTimes(_ selectedDistance: String) throws {
@@ -82,8 +81,8 @@ import Foundation
 
   func updateTrackOverlay() {
     do {
-      let runDist        = distanceSelection.selected
-      let runLane        = try laneSelection.selected.toInt()
+      let runDist = distanceSelection.selected
+      let runLane = try laneSelection.selected.toInt()
 
       let settingsModel   = mainViewModel.settingsModel
       let settingsManager = settingsModel.settingsManager

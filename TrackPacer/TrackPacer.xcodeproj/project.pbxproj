@@ -116,8 +116,8 @@
 		12B5A4042C04AF6800455303 /* DialogVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B5A4032C04AF6800455303 /* DialogVisibility.swift */; };
 		12B5A4062C04B97100455303 /* DialogContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B5A4052C04B97100455303 /* DialogContent.swift */; };
 		12BB67F72C19F251000E34E8 /* WaypointEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67F62C19F251000E34E8 /* WaypointEdit.swift */; };
-		12BB67F92C1A2B86000E34E8 /* ProfileUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67F82C1A2B86000E34E8 /* ProfileUtil.swift */; };
 		12BB67FB2C1A363E000E34E8 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67FA2C1A363E000E34E8 /* View.swift */; };
+		12BB67FD2C1BB261000E34E8 /* StringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67FC2C1BB261000E34E8 /* StringProtocol.swift */; };
 		12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C8734F2C036B4100FA5C5E /* TrackSelection.swift */; };
 		12C873532C03740500FA5C5E /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C873522C03740500FA5C5E /* R.swift */; };
 		12C873552C0376F100FA5C5E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 12C873542C0376F100FA5C5E /* Localizable.xcstrings */; };
@@ -244,8 +244,8 @@
 		12B5A4032C04AF6800455303 /* DialogVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogVisibility.swift; sourceTree = "<group>"; };
 		12B5A4052C04B97100455303 /* DialogContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogContent.swift; sourceTree = "<group>"; };
 		12BB67F62C19F251000E34E8 /* WaypointEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointEdit.swift; sourceTree = "<group>"; };
-		12BB67F82C1A2B86000E34E8 /* ProfileUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUtil.swift; sourceTree = "<group>"; };
 		12BB67FA2C1A363E000E34E8 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		12BB67FC2C1BB261000E34E8 /* StringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringProtocol.swift; sourceTree = "<group>"; };
 		12C8734F2C036B4100FA5C5E /* TrackSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSelection.swift; sourceTree = "<group>"; };
 		12C873522C03740500FA5C5E /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = R.swift; sourceTree = "<group>"; };
 		12C873542C0376F100FA5C5E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -437,6 +437,7 @@
 				1215D4062BFEC38C00DB07C3 /* Int.swift */,
 				129359782BFEAC180042F99E /* Int64.swift */,
 				12E5205B2C015AD5002F54AE /* String.swift */,
+				12BB67FC2C1BB261000E34E8 /* StringProtocol.swift */,
 				12BB67FA2C1A363E000E34E8 /* View.swift */,
 			);
 			path = Ext;
@@ -466,7 +467,6 @@
 			children = (
 				12B144B12BF2889600FCD2A7 /* TimeUtil.swift */,
 				12B5A3F82C04A29F00455303 /* DistanceUtil.swift */,
-				12BB67F82C1A2B86000E34E8 /* ProfileUtil.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -751,9 +751,9 @@
 				129359732BFE66F30042F99E /* Handler.swift in Sources */,
 				122F8CA72C0DE7D000352AE0 /* Divider.swift in Sources */,
 				12B5A3FF2C04A4F600455303 /* Audio.swift in Sources */,
-				12BB67F92C1A2B86000E34E8 /* ProfileUtil.swift in Sources */,
 				1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */,
 				12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */,
+				12BB67FD2C1BB261000E34E8 /* StringProtocol.swift in Sources */,
 				12B144AF2BF2854A00FCD2A7 /* PacingProgress.swift in Sources */,
 				127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */,
 				12B5A3F02C04A07300455303 /* StatusModel.swift in Sources */,

@@ -88,7 +88,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   private var finalDelegate: AVAudioPlayerDelegate!
 
   private let waypointCalculator = WaypointCalculator()
-  private var clipIndexList: [Int]!
+  private var waypointIndexList: [Int]!
 
   private unowned let serviceConnection: ServiceConnection
 
@@ -101,19 +101,9 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     }
   }
 
-  private func clipKeyFromArgs(_ runDist: String, _ alternateStart: Bool) -> String {
-    var clipKey = runDist
-    if(alternateStart && (["1000m", "3000m", "5000m"].contains(runDist))) {
-      clipKey += "_a"
-    }
-
-    return clipKey
-  }
-
   func beginPacing(_ runDist: String, _ runLane: Int, _ runTime: Double, _ alternateStart: Bool) {
-    let clipKey   = clipKeyFromArgs(runDist, alternateStart)
-    clipIndexList = clipMap[clipKey]!
-    prevTime      = 0.0
+    waypointIndexList  = waypointsFor(runDist, alternateStart)
+    prevTime           = 0.0
 
     waypointCalculator.initRun(runDist, runLane, runTime)
   }
@@ -147,9 +137,8 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func resumePacing(_ runDist: String, _ runLane: Int, _ runTime: Double, _ alternateStart: Bool, _ resumeTime: Int64) -> Bool {
-    let clipKey   = clipKeyFromArgs(runDist, alternateStart)
-    clipIndexList = clipMap[clipKey]!
-    prevTime      = waypointCalculator.initResume(runDist, runLane, runTime, resumeTime.toDouble())
+    waypointIndexList = waypointsFor(runDist, alternateStart)
+    prevTime          = waypointCalculator.initResume(runDist, runLane, runTime, resumeTime.toDouble())
 
     startRealtime = SystemClock.elapsedRealtime() - .milliseconds(resumeTime)
     handler.post(resumeRunnable)
@@ -177,7 +166,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
   func waypointName() -> String {
       let waypointNum = waypointCalculator.waypointNum()
-      return clipNames[clipIndexList[waypointNum]]
+      return waypointNames[waypointIndexList[waypointNum]]
   }
 
   func waypointProgress(_ elapsedTime: Int64) -> Double {
@@ -276,7 +265,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   } */
 
   private func handleWaypoint(_ delayMS: Int64) {
-    let i = clipIndexList[waypointCalculator.waypointNum()]
+    let i = waypointIndexList[waypointCalculator.waypointNum()]
     // let res = audioManager.requestAudioFocus(focusRequest)
     // if(res == AUDIOFOCUS_REQUEST_GRANTED) {
       mpResume.stop()

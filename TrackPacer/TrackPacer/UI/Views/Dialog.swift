@@ -167,20 +167,20 @@ struct EditWaypointDialog: View {
     HStack {
       VStack(alignment: .leading) {
         Text("Time to waypoint (s)")
-        Text("(between 5.00 and 60.00)").font(.caption)
+        Text("(between \(viewModel.waypointTimeMinStr) and \(viewModel.waypointTimeMaxStr))").font(.caption)
       }
       Spacer()
 
       HStack {
         TextField("", text: $waypointEdit.waypointTimeSS).foregroundStyle(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
           .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-          .onChange(of: waypointEdit.waypointTimeSS) { timeValid = viewModel.validateSecs(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH, 10...300) }
+          .onChange(of: waypointEdit.waypointTimeSS) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
 
         Text(".")
 
         TextField("", text: $waypointEdit.waypointTimeHH).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
           .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-          .onChange(of: waypointEdit.waypointTimeHH) { timeValid = viewModel.validateSecs(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH, 10...300) }
+          .onChange(of: waypointEdit.waypointTimeHH) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
       }
     }
     Spacer().frame(height: 20)

@@ -14,3 +14,7 @@ func formatDist(_ runDist: String, _ runLane: Int, _ totalDist: Double) -> Strin
     if(runLane == 1) { return String(format: "%dm", totalDist.toInt()) } else { return String(format: "%.2fm", totalDist) }
   }
 }
+
+func hasAlternateStart(_ runDist: String) -> Bool {
+  return ["1000m", "3000m", "5000m"].contains(runDist)
+}

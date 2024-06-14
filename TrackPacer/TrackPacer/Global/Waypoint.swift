@@ -7,7 +7,7 @@
 
 import Foundation
 
-let distanceMap = [
+let runDistances = [
   "400m"   :   400.0,
   "800m"   :   800.0,
   "1000m"  :  1000.0,
@@ -20,18 +20,58 @@ let distanceMap = [
   "10000m" : 10000.0,
   "1 mile" : 1609.34]
 
-let waypointMap = [
-  "400m"    : (0 ..<   8).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "800m"    : (0 ..<  16).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "1000m"   : (0 ..<  20).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "1200m"   : (0 ..<  24).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "1500m"   : (0 ..<  30).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "2000m"   : (0 ..<  40).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "3000m"   : (0 ..<  60).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "4000m"   : (0 ..<  80).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "5000m"   : (0 ..< 100).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "10000m"  : (0 ..< 200).map { (i: Int) in  50.0 + 50.0*i.toDouble() },
-  "1 mile"  : (0 ..<  32).map { (i: Int) in 59.34 + 50.0*i.toDouble() }]
+let waypointDistances = [
+  "400m"    : (0 ..<   9).map { (i: Int) in  50.0*i.toDouble() },
+  "800m"    : (0 ..<  17).map { (i: Int) in  50.0*i.toDouble() },
+  "1000m"   : (0 ..<  21).map { (i: Int) in  50.0*i.toDouble() },
+  "1200m"   : (0 ..<  25).map { (i: Int) in  50.0*i.toDouble() },
+  "1500m"   : (0 ..<  31).map { (i: Int) in  50.0*i.toDouble() },
+  "2000m"   : (0 ..<  41).map { (i: Int) in  50.0*i.toDouble() },
+  "3000m"   : (0 ..<  61).map { (i: Int) in  50.0*i.toDouble() },
+  "4000m"   : (0 ..<  81).map { (i: Int) in  50.0*i.toDouble() },
+  "5000m"   : (0 ..< 101).map { (i: Int) in  50.0*i.toDouble() },
+  "10000m"  : (0 ..< 201).map { (i: Int) in  50.0*i.toDouble() },
+  "1 mile"  : (0 ..<  33).map { (i: Int) in  (i == 0) ? 0.0 : 59.34 + 50.0*(i-1).toDouble() }]
+
+let waypointNames = [
+  "Start",
+  
+  "50m", "100m", "150m", "200m", "250m", "300m", "350m",
+  
+  "Lap 2",  "Lap 3",  "Lap 4",  "Lap 5",  "Lap 6",  "Lap 7",  "Lap 8",  "Lap 9",
+  "Lap 10", "Lap 11", "Lap 12", "Lap 13", "Lap 14", "Lap 15", "Lap 16", "Lap 17",
+  "Lap 18", "Lap 19", "Lap 20", "Lap 21", "Lap 22", "Lap 23", "Lap 24", "Lap 25",
+  
+  "Finish"]
+
+let fL = waypointNames.size - 1
+let waypointsMap = [
+  "400m"    : [ 0, 1, 2, 3, 4, 5 ,6, 7, fL],
+  "800m"    : [ 0, 1, 2, 3, 4, 5 ,6, 7,  8, 1, 2, 3, 4, 5, 6, 7, fL],
+  "1000m"   : [             0, 1, 2, 3,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, fL],
+  "1000m_a" : [ 0, 1, 2, 3, 4, 5, 6, 7,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, fL],
+  "1200m"   : [ 0, 1, 2, 3, 4, 5 ,6, 7,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, fL],
+  "1500m"   : [       0, 1, 2, 3 ,4, 5,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, fL],
+  "2000m"   : [ 0, 1, 2, 3, 4, 5 ,6, 7,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, 11, 1, 2, 3, 4, 5, 6, 7, fL],
+  "3000m"   : [             0, 1, 2, 3,  8, 1 ,2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, 11, 1, 2, 3, 4, 5, 6, 7,
+               12, 1, 2, 3, 4, 5, 6, 7, 13, 1, 2, 3, 4, 5, 6, 7, 14, 1, 2, 3, 4, 5, 6, 7, fL],
+  "3000m_a" : [ 0, 1, 2, 3, 4, 5, 6, 7,  8, 1 ,2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, 11, 1 ,2, 3, 4, 5, 6, 7,
+               12, 1, 2, 3, 4, 5, 6, 7, 13, 1, 2, 3, 4, 5, 6, 7, 14, 1, 2, 3, fL],
+  "4000m"   : [ 0, 1, 2, 3, 4, 5 ,6, 7,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, 11, 1, 2, 3, 4, 5, 6, 7,
+               12, 1, 2, 3, 4, 5 ,6, 7, 13, 1, 2, 3, 4, 5, 6, 7, 14, 1, 2, 3, 4, 5, 6, 7, 15, 1, 2, 3, 4, 5, 6, 7, 16, 1, 2, 3, 4, 5, 6, 7, fL],
+  "5000m"   : [             0, 1, 2, 3,  8, 1 ,2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, 11, 1, 2, 3, 4, 5, 6, 7,
+               12, 1, 2, 3, 4, 5, 6, 7, 13, 1, 2, 3, 4, 5, 6, 7, 14, 1, 2, 3, 4, 5, 6, 7, 15, 1, 2, 3, 4, 5, 6, 7, 16, 1, 2, 3, 4, 5, 6, 7,
+               17, 1, 2, 3, 4, 5, 6, 7, 18, 1, 2, 3, 4, 5, 6, 7, 19, 1, 2, 3, 4, 5, 6, 7, fL],
+  "5000m_a" : [ 0, 1, 2, 3, 4, 5, 6, 7,  8, 1 ,2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, 11, 1, 2, 3, 4, 5, 6, 7,
+               12, 1, 2, 3, 4, 5, 6, 7, 13, 1, 2, 3, 4, 5, 6, 7, 14, 1, 2, 3, 4, 5, 6, 7, 15, 1, 2, 3, 4, 5, 6, 7, 16, 1, 2, 3, 4, 5, 6, 7,
+               17, 1, 2, 3, 4, 5, 6, 7, 18, 1, 2, 3, 4, 5, 6, 7, 19, 1, 2, 3, fL],
+  "10000m"  : [ 0, 1, 2, 3, 4, 5 ,6, 7,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, 11, 1, 2, 3, 4, 5, 6, 7,
+               12, 1, 2, 3, 4, 5, 6, 7, 13, 1, 2, 3, 4, 5, 6, 7, 14, 1, 2, 3, 4, 5, 6, 7, 15, 1, 2, 3, 4, 5, 6, 7, 16, 1, 2, 3, 4, 5, 6, 7,
+               17, 1, 2, 3, 4, 5, 6, 7, 18, 1, 2, 3, 4, 5, 6, 7, 19, 1, 2, 3, 4, 5, 6, 7, 20, 1, 2, 3, 4, 5, 6, 7, 21, 1, 2, 3, 4, 5, 6, 7,
+               22, 1, 2, 3, 4, 5, 6, 7, 23, 1, 2, 3, 4, 5, 6, 7, 24, 1, 2, 3, 4, 5, 6, 7, 25, 1, 2, 3, 4, 5, 6, 7, 26, 1, 2, 3, 4, 5, 6, 7,
+               27, 1, 2, 3, 4, 5, 6, 7, 28, 1, 2, 3, 4, 5, 6, 7, 29, 1, 2, 3, 4, 5, 6, 7, 30, 1, 2, 3, 4, 5, 6, 7, 31, 1, 2, 3, 4, 5, 6, 7, fL],
+  "1 mile"  : [ 0, 1, 2, 3, 4, 5 ,6, 7,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, fL]]
+
 
 let rDiff        = (0 ..<   8).map { (i: Int) in 1.22*i.toDouble() }
 let arcAngle     = [1.358696, 1.358696, 0.424201, 0.0, 1.358696, 1.358696, 0.424201, 0.0]
@@ -57,14 +97,14 @@ func distanceFor(_ runDist: String, _ runLane: Int) -> Double {
   switch(runDist) {
   case "1500m":
     // Special case, 1500m is 3.75 laps
-    return distanceMap[runDist]! * runMultiplier1500[runLaneIndex]
+    return runDistances[runDist]! * runMultiplier1500[runLaneIndex]
 
   case "1 mile":
     // Special case, 1 mile is 4 laps + 9.34m
-    return distanceMap[runDist]! * runMultiplierMile[runLaneIndex]
+    return runDistances[runDist]! * runMultiplierMile[runLaneIndex]
 
   default:
-    return distanceMap[runDist]! * runMultiplier[runLaneIndex]
+    return runDistances[runDist]! * runMultiplier[runLaneIndex]
   }
 }
 
@@ -82,4 +122,17 @@ func timeFor(_ runDist: String, _ runLane: Int, _ runTime:Double) -> Double {
   default:
     return runTime * runMultiplier[runLaneIndex]
   }
+}
+
+private func waypointsKeyFromArgs(_ runDist: String, _ alternateStart: Bool) -> String {
+  var waypointsKey = runDist
+  if(alternateStart && hasAlternateStart(runDist)) {
+    waypointsKey += "_a"
+  }
+
+  return waypointsKey
+}
+
+func waypointsFor(_ runDist: String, _ alternateStart: Bool) -> [Int] {
+  return waypointsMap[waypointsKeyFromArgs(runDist, alternateStart)]!
 }

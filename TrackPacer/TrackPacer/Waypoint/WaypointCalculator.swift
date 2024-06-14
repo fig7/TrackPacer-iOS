@@ -8,7 +8,7 @@
 import Foundation
 
 class WaypointCalculator {
-  private var waypointList: [Double]!
+  private var waypointDist: [Double]!
   private var waypointArcAngle: [Double]!
   private var currentWaypoint = -1
   private var currentExtra    = -1.0
@@ -24,7 +24,7 @@ class WaypointCalculator {
   }
 
   private func waypointDistance() -> Double {
-    return waypointList[currentWaypoint] + currentExtra
+    return waypointDist[currentWaypoint] + currentExtra
   }
 
   func waypointTime() -> Double {
@@ -33,23 +33,23 @@ class WaypointCalculator {
 
   private func initRunParams(_ runDist: String, _ runLane: Int, _ runTime: Double) {
     runLaneIndex = runLane - 1
-    waypointList = waypointMap[runDist]!
+    waypointDist = waypointDistances[runDist]!
 
     switch(runDist) {
     case "1500m":
       // Special case, 1500m is 3.75 laps
-      totalDist = distanceMap[runDist]! * runMultiplier1500[runLaneIndex]
+      totalDist = runDistances[runDist]! * runMultiplier1500[runLaneIndex]
       totalTime = runTime * runMultiplier1500[runLaneIndex]
       waypointArcAngle = arcAngle1500
 
     case "1 mile":
       // Special case, 1 mile is 4 laps + 9.34m
-      totalDist = distanceMap[runDist]! * runMultiplierMile[runLaneIndex]
+      totalDist = runDistances[runDist]! * runMultiplierMile[runLaneIndex]
       totalTime = runTime * runMultiplierMile[runLaneIndex]
       waypointArcAngle = arcAngle
 
     default:
-      totalDist = distanceMap[runDist]! * runMultiplier[runLaneIndex]
+      totalDist = runDistances[runDist]! * runMultiplier[runLaneIndex]
       totalTime = runTime * runMultiplier[runLaneIndex]
       waypointArcAngle = arcAngle
     }
@@ -70,7 +70,7 @@ class WaypointCalculator {
     initRunParams(runDist, runLane, runTime)
 
     var prevTime = 0.0
-    for i in waypointList.indices {
+    for i in waypointDist.indices {
       currentWaypoint = i
       currentExtra += arcExtra()
 
@@ -90,7 +90,7 @@ class WaypointCalculator {
   }
 
   func waypointsRemaining() -> Bool {
-    return (currentWaypoint < (waypointList.size - 1))
+    return (currentWaypoint < (waypointDist.size - 1))
   }
 
   func nextWaypoint() -> Double {

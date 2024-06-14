@@ -22,6 +22,7 @@ struct ContentView: View {
             .environmentObject(viewModel.runViewModel.timeSelection)
             .environmentObject(viewModel.runViewModel.profileSelection)
             .environmentObject(viewModel.runViewModel.trackSelection)
+            .onAppear { viewModel.runViewModel.updateTrackOverlay() }
 
           HistoryView().tabItem { Label("History", image: "baseline_history_24") }
             .environmentObject(viewModel.historyViewModel)
