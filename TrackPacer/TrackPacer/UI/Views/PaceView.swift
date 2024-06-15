@@ -61,8 +61,9 @@ struct PaceView: View {
       Spacer()
 
       HStack {
-        let goText       = (!pacingSettings.quickStart || pacingSettings.powerStart) ? " SET " : " GO! "
-        let pacingStatus = pacingStatus.status
+        let goText         = (!pacingSettings.quickStart || pacingSettings.powerStart) ? " SET " : " GO! "
+        let pacingOver     = (pacingProgress.waypointName == "Finish")
+        let pacingStatus   = pacingStatus.status
 
         switch(pacingStatus) {
         case .NotPacing:
@@ -104,8 +105,8 @@ struct PaceView: View {
         case .PacingPaused:
           Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }
             .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
-          Button(action: { viewModel.resumePacing() }) { Text(" ").overlay { Image("resume") } }
-            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
+          Button(action: { viewModel.resumePacing() }) { Text(" ").overlay { Image(pacingOver ? "resume2" : "resume") } }
+            .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(pacingOver)
 
         case .ServiceResume:
           Button(action: { viewModel.stopPacing(silent: false) }) { Text(" ").overlay { Image("stop") } }

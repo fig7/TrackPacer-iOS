@@ -18,7 +18,7 @@ class WaypointCalculator {
   private var runLaneIndex  = -1
 
   private func arcExtra() -> Double {
-    let arcIndex = currentWaypoint % 8
+    let arcIndex = (currentWaypoint-1) % 8
     let arcAngle = waypointArcAngle[arcIndex]
     return arcAngle * rDiff[runLaneIndex]
   }
@@ -58,7 +58,7 @@ class WaypointCalculator {
   func initRun(_ runDist: String, _ runLane: Int, _ runTime: Double) {
     initRunParams(runDist, runLane, runTime)
 
-    currentWaypoint = 0
+    currentWaypoint = 1
     currentExtra    = arcExtra()
     // Log.d("TP", totalDistance.toString())
     // Log.d("TP", totalTime.toString())
@@ -71,6 +71,8 @@ class WaypointCalculator {
 
     var prevTime = 0.0
     for i in waypointDist.indices {
+      if(i == 0) { continue }
+
       currentWaypoint = i
       currentExtra += arcExtra()
 
