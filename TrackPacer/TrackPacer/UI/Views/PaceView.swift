@@ -62,7 +62,7 @@ struct PaceView: View {
 
       HStack {
         let goText         = (!pacingSettings.quickStart || pacingSettings.powerStart) ? " SET " : " GO! "
-        let pacingOver     = (pacingProgress.waypointName == "Finish")
+        let pacingOver     = ((pacingProgress.timeRemaining ?? -1) < 0)
         let pacingStatus   = pacingStatus.status
 
         switch(pacingStatus) {
