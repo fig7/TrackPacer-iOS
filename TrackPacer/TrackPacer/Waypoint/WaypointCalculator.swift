@@ -7,8 +7,9 @@
 
 import Foundation
 
-class WaypointCalculator {
+struct WaypointCalculator {
   private var waypointDist: [Double]!
+  private var waypointTimes: [Double]!
   private var waypointArcAngle: [Double]!
   private var currentWaypoint = -1
   private var currentExtra    = -1.0
@@ -28,12 +29,12 @@ class WaypointCalculator {
   }
 
   func waypointTime() -> Double {
-    return (waypointDistance() * totalTime) / totalDist
+    return waypointTimes[currentWaypoint]
   }
 
-  private func initRunParams(_ runDist: String, _ runLane: Int, _ runTime: Double) {
+  private mutating func initRunParams(_ runDist: String, _ runLane: Int, _ runTime: Double) {
+    waypointDist  = waypointDistances[runDist]!
     runLaneIndex = runLane - 1
-    waypointDist = waypointDistances[runDist]!
 
     switch(runDist) {
     case "1500m":
@@ -55,8 +56,37 @@ class WaypointCalculator {
     }
   }
 
-  func initRun(_ runDist: String, _ runLane: Int, _ runTime: Double) {
+  mutating func initRun(_ runDist: String, _ runLane: Int, _ runTime: Double, _ waypoints: [WaypointData]) {
     initRunParams(runDist, runLane, runTime)
+
+    var prevDistance = 0.0
+    var prevTime     = 0.0
+    let speed = totalDist / totalTime
+
+    currentExtra = 0.0
+    waypointTimes = Array(repeating: 0.0, count: waypointDist.count)
+    for i in waypointTimes.indices {
+      if(i == 0) { continue }
+
+      currentWaypoint = i
+      currentExtra += arcExtra()
+
+      let distance = waypointDistance()
+      let thisDistance = distance - prevDistance
+      waypointTimes[i] = prevTime + (thisDistance / (speed*waypoints[i].scaleFactor))
+
+      prevDistance = distance
+      prevTime = waypointTimes[i]
+    }
+
+    // The profiles are based on a lane 1 run.
+    // If we are not in lane 1, there could be more time spent on the curves, so the times
+    // won't add together to give us the required overall pace. A quick fix is to adjust all
+    // the times so that the total time matches the time the user has set.
+    let normaliseFactor = totalTime / waypointTimes[waypointDist.count-1]
+    for i in waypointTimes.indices {
+      waypointTimes[i] *= normaliseFactor
+    }
 
     currentWaypoint = 1
     currentExtra    = arcExtra()
@@ -66,7 +96,7 @@ class WaypointCalculator {
     // Log.d("TP", waypointTime().toString())
   }
 
-  func initResume(_ runDist: String, _ runLane: Int, _ runTime: Double, _ resumeTime: Double) -> Double {
+  mutating func initResume(_ runDist: String, _ runLane: Int, _ runTime: Double, _ resumeTime: Double) -> Double {
     initRunParams(runDist, runLane, runTime)
 
     var prevTime = 0.0
@@ -95,7 +125,7 @@ class WaypointCalculator {
     return (currentWaypoint < (waypointDist.size - 1))
   }
 
-  func nextWaypoint() -> Double {
+  mutating func nextWaypoint() -> Double {
     // val waypoint1 = waypointTime()
     currentWaypoint += 1
     currentExtra += arcExtra()

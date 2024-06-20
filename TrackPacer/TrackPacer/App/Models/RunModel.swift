@@ -8,18 +8,13 @@
 import Foundation
 
 class RunModel {
-  private let distanceModel: DistanceModel
+  let distanceModel: DistanceModel
   let runModelOK: Bool
 
   init() {
     self.distanceModel = DistanceModel()
 
     runModelOK = distanceModel.distanceDataOK
-  }
-
-  func distanceArray() -> [String] {
-    let distanceManager = distanceModel.distanceManager
-    return distanceManager.distanceArray
   }
 
   func timesFor(_ distance: String) throws -> [String] {

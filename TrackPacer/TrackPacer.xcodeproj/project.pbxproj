@@ -118,6 +118,7 @@
 		12BB67F72C19F251000E34E8 /* WaypointEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67F62C19F251000E34E8 /* WaypointEdit.swift */; };
 		12BB67FB2C1A363E000E34E8 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67FA2C1A363E000E34E8 /* View.swift */; };
 		12BB67FD2C1BB261000E34E8 /* StringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67FC2C1BB261000E34E8 /* StringProtocol.swift */; };
+		12BB67FF2C1F92CB000E34E8 /* WaypointData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB67FE2C1F92CB000E34E8 /* WaypointData.swift */; };
 		12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C8734F2C036B4100FA5C5E /* TrackSelection.swift */; };
 		12C873532C03740500FA5C5E /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C873522C03740500FA5C5E /* R.swift */; };
 		12C873552C0376F100FA5C5E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 12C873542C0376F100FA5C5E /* Localizable.xcstrings */; };
@@ -246,6 +247,7 @@
 		12BB67F62C19F251000E34E8 /* WaypointEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointEdit.swift; sourceTree = "<group>"; };
 		12BB67FA2C1A363E000E34E8 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		12BB67FC2C1BB261000E34E8 /* StringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringProtocol.swift; sourceTree = "<group>"; };
+		12BB67FE2C1F92CB000E34E8 /* WaypointData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointData.swift; sourceTree = "<group>"; };
 		12C8734F2C036B4100FA5C5E /* TrackSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSelection.swift; sourceTree = "<group>"; };
 		12C873522C03740500FA5C5E /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = R.swift; sourceTree = "<group>"; };
 		12C873542C0376F100FA5C5E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 			children = (
 				122F8C9E2C0BCAE100352AE0 /* RunData.swift */,
 				122F8CB02C0E363F00352AE0 /* SettingsData.swift */,
+				12BB67FE2C1F92CB000E34E8 /* WaypointData.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -732,6 +735,7 @@
 			files = (
 				12C873532C03740500FA5C5E /* R.swift in Sources */,
 				129359752BFE683F0042F99E /* Runnable.swift in Sources */,
+				12BB67FF2C1F92CB000E34E8 /* WaypointData.swift in Sources */,
 				127122A52BEE68D100106069 /* SettingsView.swift in Sources */,
 				12B5A3FD2C04A4C400455303 /* Clock.swift in Sources */,
 				1271229F2BEE5AC600106069 /* RunView.swift in Sources */,

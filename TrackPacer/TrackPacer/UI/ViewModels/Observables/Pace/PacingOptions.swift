@@ -38,10 +38,10 @@ import Foundation
       totalPaceStr = timeToString(timeInMS: totalPace.toLong())
     }
   }
-  
+
   var totalDist: Double = 0.0 {
     didSet {
-      totalDistStr = formatDistance(totalDist)
+      totalDistStr = formatDist(runDist, runLane, totalDist)
     }
   }
 
@@ -58,12 +58,4 @@ import Foundation
   @Published var totalPaceStr = ""
 
   @Published var runProf = "Fixed pace"
-
-  private func formatDistance(_ totalDist: Double) -> String {
-    if(runDist == "1 mile") {
-      if(runLane == 1) { return runDist } else { return String(format: "%.2f miles", totalDist/1609.34) }
-    } else {
-      if(runLane == 1) { return String(format: "%dm", totalDist.toInt()) } else { return String(format: "%.2fm", totalDist) }
-    }
-  }
 }

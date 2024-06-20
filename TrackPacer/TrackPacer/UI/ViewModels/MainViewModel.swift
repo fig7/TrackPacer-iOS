@@ -139,10 +139,13 @@ import UIKit
   }
 
   func initRunView() {
-    let distanceArray = runModel.distanceArray()
+    let distanceManager = runModel.distanceModel.distanceManager
+    let distanceArray   = distanceManager.distanceArray!
+    let profileMap      = distanceManager.profileMap
 
     do {
-      try runViewModel.initDistances(distanceArray)
+      let profileArray = profileMap[distanceArray[0]]!.map { $0.0 }
+      try runViewModel.initDistances(distanceArray, profileArray)
     } catch {
       showErrorDialog(title: "Loading error",
         message:
@@ -244,12 +247,18 @@ import UIKit
   }
 
   func editProfile(_ runDist: String, _ runProfile: String) {
-    let settingsManager = settingsModel.settingsManager
-    let alternateStart  = (settingsManager.alternateStart && hasAlternateStart(runDist))
-    let refPace         = settingsManager.refPace
+    do {
+      let settingsManager = settingsModel.settingsManager
+      let alternateStart  = (settingsManager.alternateStart && hasAlternateStart(runDist))
+      let refPace         = settingsManager.refPace
 
-    profileViewModel.setProfileOptions(runDist, alternateStart, runProfile, refPace)
-    mainViewStack.pushProfileView()
+      let distanceManager = runModel.distanceModel.distanceManager
+      let waypoints       = try distanceManager.waypointsFor(runDist, runProfile)
+
+      // TODO: Profiles need AS versions too.
+      profileViewModel.setProfileOptions(runDist, runProfile, waypoints, alternateStart, refPace)
+      mainViewStack.pushProfileView()
+    } catch { }
   }
 
   private func showFMRDialog(width: Int, height: Int) {
@@ -286,8 +295,8 @@ import UIKit
     return radioAccessTechnology.isEmpty
   }
 
-  func onYourMarks(_ runDist: String, _ runLane: Int, _ runTime: Double) {
-    paceViewModel.setPacingOptions(runDist, runLane, runTime)
+  func onYourMarks(_ runDist: String, _ runLane: Int, _ runTime: Double, _ runProf: String) {
+    paceViewModel.setPacingOptions(runDist, runLane, runTime, runProf)
 
     let settingsManager    = settingsModel.settingsManager
     let flightModeReminder = settingsManager.flightMode
@@ -397,11 +406,25 @@ import UIKit
     mainViewStack.popCompletionView()
   }
 
-  func saveProfile() {
+  func saveProfile(_ profileDist: String, _ profileName: String, _ waypointData: [WaypointData]) {
+    do {
+      let distanceManager = runModel.distanceModel.distanceManager
+      let profileArray = try distanceManager.saveProfile(profileDist, profileName, waypointData)
+      runViewModel.updateProfiles(profileArray)
+    } catch { }
 
+    mainViewStack.popProfileView()
   }
 
-  func finishProfile() {
+  func deleteProfile(_ profileDist: String, _ profileName: String) {
+    do {
+      let distanceManager = runModel.distanceModel.distanceManager
+      let profileArray = try distanceManager.deleteProfile(profileDist, profileName)
+      guard let profileArray else { throw Exception.IOException }
+
+      runViewModel.updateProfiles(profileArray)
+    } catch { }
+
     mainViewStack.popProfileView()
   }
 

@@ -43,6 +43,10 @@ import Foundation
         try initTimes(newSelected)
       } catch { }
 
+      // How to grant access properly?
+      profileSelection.list     = runModel.distanceModel.distanceManager.profileMap[newSelected]!.map { $0.0 }
+      profileSelection.selected = profileSelection.list[0]
+
       updateTrackOverlay()
     }
 
@@ -52,7 +56,7 @@ import Foundation
     }
   }
 
-  func initDistances(_ distanceArray: [String]) throws {
+  func initDistances(_ distanceArray: [String], _ profileArray: [String]) throws {
     // To workaround a picker bug, the picker selection is padded with spaces
     distanceSelection.list           = distanceArray.map { (pickerBugWorkaround: String) in " " + pickerBugWorkaround + " "}
     distanceSelection.selectedPadded = distanceSelection.list[0]
@@ -60,7 +64,7 @@ import Foundation
     laneSelection.list     = ["1", "2", "3", "4", "5", "6", "7", "8"]
     laneSelection.selected = laneSelection.list[0]
 
-    profileSelection.list     = ["Fixed pace"]
+    profileSelection.list     = profileArray
     profileSelection.selected = profileSelection.list[0]
 
     try initTimes()
@@ -77,6 +81,11 @@ import Foundation
 
     timeSelection.list     = timeArray
     timeSelection.selected = timeSelection.list[selected]
+  }
+
+  func updateProfiles(_ profileArray: [String]) {
+    profileSelection.list     = profileArray
+    profileSelection.selected = profileSelection.list[profileArray.count - 1]
   }
 
   func updateTrackOverlay() {
@@ -177,7 +186,10 @@ import Foundation
       let timeSelected = timeSelection.selected
       let runTime = try runTimeFor(timeSelected)
 
-      mainViewModel.onYourMarks(runDist, runLane, runTime)
+      let profileSelected = profileSelection.selected
+      let runProfile = profileSelected
+
+      mainViewModel.onYourMarks(runDist, runLane, runTime, runProfile)
     } catch { }
   }
 }

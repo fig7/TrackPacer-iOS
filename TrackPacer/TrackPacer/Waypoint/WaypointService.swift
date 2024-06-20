@@ -56,7 +56,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   }
 }
 
-@MainActor class WaypointService /* : OnAudioFocusChangeListener */ {
+@MainActor class WaypointService {
   private let handler = Handler()
 
   private var startRealtime: ContinuousClock.Instant!
@@ -87,7 +87,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   private var finishDelegate: AVAudioPlayerDelegate!
   private var finalDelegate: AVAudioPlayerDelegate!
 
-  private let waypointCalculator = WaypointCalculator()
+  private var waypointCalculator = WaypointCalculator()
   private var waypointIndexList: [Int]!
 
   private unowned let serviceConnection: ServiceConnection
@@ -101,11 +101,11 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     }
   }
 
-  func beginPacing(_ runDist: String, _ runLane: Int, _ runTime: Double, _ alternateStart: Bool) {
-    waypointIndexList  = waypointsFor(runDist, alternateStart)
+  func beginPacing(_ pacingOptions: PacingOptions, _ alternateStart: Bool, _ waypoints: [WaypointData]) {
+    waypointIndexList  = waypointsFor(pacingOptions.runDist, alternateStart)
     prevTime           = 0.0
 
-    waypointCalculator.initRun(runDist, runLane, runTime)
+    waypointCalculator.initRun(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, waypoints)
   }
 
   func delayStart(startDelayMS: Int64, quickStart: Bool) -> Bool {
@@ -136,10 +136,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return true
   }
 
-  func resumePacing(_ runDist: String, _ runLane: Int, _ runTime: Double, _ alternateStart: Bool, _ resumeTime: Int64) -> Bool {
-    waypointIndexList = waypointsFor(runDist, alternateStart)
-    prevTime          = waypointCalculator.initResume(runDist, runLane, runTime, resumeTime.toDouble())
+  func resumePacing(_ pacingOptions: PacingOptions, _ alternateStart: Bool, _ resumeTime: Int64) -> Bool {
+    waypointIndexList = waypointsFor(pacingOptions.runDist, alternateStart)
 
+    prevTime      = waypointCalculator.initResume(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, resumeTime.toDouble())
     startRealtime = SystemClock.elapsedRealtime() - .milliseconds(resumeTime)
     handler.post(resumeRunnable)
     return true

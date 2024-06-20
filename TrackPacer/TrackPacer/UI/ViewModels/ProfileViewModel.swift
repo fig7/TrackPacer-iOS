@@ -94,6 +94,7 @@ struct ProfileWaypoint {
   @Published var waypointTimeMinStr = ""
   @Published var waypointTimeMaxStr = ""
 
+  var profileDist = ""
   @Published var profileDesc = ""
   @Published var profileName = ""
 
@@ -151,16 +152,35 @@ struct ProfileWaypoint {
   }
 
   func saveProfile() {
-    mainViewModel.saveProfile()
+    if(profileValidity != .OK) {
+      mainViewModel.showInfoDialog(title: "Profile time invalid",
+        message:
+        "You must adjust the times between the waypoints so that the total time for the profile remains the same. " +
+        "So, if you want to run one section faster, you must run another one slower.",
+        width: 342, height: 240)
+
+      return
+    } else if(profileName == "Fixed pace") {
+      mainViewModel.showInfoDialog(title: "Profile name invalid",
+        message:
+        "You must set the name of the profile to something else. The built-in Fixed pace profile cannot be replaced.",
+        width: 342, height: 240)
+
+      return
+    }
+
+    let waypoints = waypointList.map { profileWaypoint in return WaypointData(scaleFactor: profileWaypoint.scaleFactor, waitTime: profileWaypoint.waitTime) }
+    mainViewModel.saveProfile(profileDist, profileName, waypoints)
   }
 
-  func finishProfile() {
-    mainViewModel.finishProfile()
+  func deleteProfile() {
+    mainViewModel.deleteProfile(profileDist, profileName)
   }
 
-  func setProfileOptions(_ runDist: String, _ alternateStart: Bool, _ runProfile: String, _ refPaceStr: String) {
+  func setProfileOptions(_ runDist: String, _ runProfile: String, _ waypointData: [WaypointData], _ alternateStart: Bool, _ refPaceStr: String) {
     waypointList.clear()
 
+    profileDist = runDist
     profileDesc = runDist + " profile" + (alternateStart ? " (AS)" : "")
     profileName = runProfile
 
@@ -184,10 +204,10 @@ struct ProfileWaypoint {
       }
 
       let dist = waypointDist[i] - waypointDist[i-1]
-      let time = (dist*refPace) / 1000.0
+      let time = (dist*refPace) / (1000.0*waypointData[i].scaleFactor)
 
       let offset = offsetForTime(time, forDist: dist)
-      waypointList.append(ProfileWaypoint(name: waypointNames[waypointIndex], dist: dist, waitTime: 0, refPace: refPace, offset: offset, prevOffset: prevOffset, roundTime: false))
+      waypointList.append(ProfileWaypoint(name: waypointNames[waypointIndex], dist: dist, waitTime: waypointData[i].waitTime, refPace: refPace, offset: offset, prevOffset: prevOffset, roundTime: false))
       prevOffset = offset
     }
 

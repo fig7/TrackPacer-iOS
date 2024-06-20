@@ -66,8 +66,8 @@ func timeToMinuteString(timeInMS: Int64) -> String {
   timeLeft -= mins * 60000
 
   var secs = timeLeft / 1000
-  timeLeft -= secs * 1000
 
+  // Round up
   secs += 1
   if(secs == 60) {
     secs = 0

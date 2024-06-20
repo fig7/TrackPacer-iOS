@@ -15,6 +15,7 @@ class DistanceManager {
 
   var distanceArray: [String]!
   var timeMap: [String : [String]] = [:]
+  var profileMap: [String : [(String, [WaypointData])]] = [:]
 
   private var currentVersion: String!
 
@@ -55,6 +56,10 @@ class DistanceManager {
     distanceArray = (0 ..< defaultDistances.size).map { (i: Int) in String(defaultDistances[i].split(separator: "+")[0]) }
     for (i, runDistance) in distanceArray.enumerated() {
       timeMap[runDistance] = String(defaultDistances[i].split(separator: "+")[1]).trim().split(separator: ",").map(String.init)
+
+      var profileWaypoints: [WaypointData] = []
+      for _ in 0..<waypointDistances[runDistance]!.count { profileWaypoints.append(WaypointData()) }
+      profileMap[runDistance] = [("Fixed pace", profileWaypoints)]
     }
 
     try writeData()
@@ -62,14 +67,12 @@ class DistanceManager {
   }
 
   private func readData() throws {
-    let folderList = try distanceDir.list()
-    let distanceFilter = { (distance: String) in distance.starts(with: "Distance") }
+    var folderList = try distanceDir.list()
+    var distanceList = folderList.filter { (distance: String) in distance.starts(with: "Distance") }
+    distanceList.sort()
 
-    var folderArray = folderList.filter(distanceFilter)
-    folderArray.sort()
-    distanceArray = [String](repeating: "", count: folderArray.size)
-
-    for (i, distance) in folderArray.enumerated() {
+    distanceArray = [String](repeating: "", count: distanceList.size)
+    for (i, distance) in distanceList.enumerated() {
       let runDistance  = distance.substring(13)
       distanceArray[i] = runDistance
 
@@ -77,6 +80,36 @@ class DistanceManager {
       let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
       let timesStr  = try timesFile.readText()
       timeMap[runDistance] = timesStr.split(separator: ",").map(String.init)
+
+      let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
+      folderList = try profilesDir.list()
+
+      var profileDates: [String : Date] = [:]
+      for fileName in folderList {
+        let profileFile = File(file: profilesDir, child: fileName, directoryHint: .notDirectory)
+        let fileAttrib  = try profileFile.fileAttributes()
+
+        let creationDate = fileAttrib[FileAttributeKey.creationDate] as? Date
+        guard let creationDate else { throw FileError.FileDataError }
+
+        profileDates[fileName] = creationDate
+      }
+      folderList.sort { return (profileDates[$0]! < profileDates[$1]!) }
+
+      var profiles: [(String, [WaypointData])] = []
+      for fileName in folderList {
+        let profileName = String(fileName.dropLast(4))
+
+        let profileFile = File(file: profilesDir, child: fileName, directoryHint: .notDirectory)
+        let jsonData    = try profileFile.readData()
+
+        let jsonDecoder   = JSONDecoder()
+        let waypointData  = try jsonDecoder.decode([WaypointData].self, from: jsonData)
+
+        profiles.append((profileName, waypointData))
+      }
+
+      profileMap[runDistance] = profiles
     }
   }
 
@@ -91,9 +124,25 @@ class DistanceManager {
       if(!success) { throw Exception.IOException }
     }
 
+    let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
+    if(!profilesDir.exists()) {
+      let success = try profilesDir.mkdir()
+      if(!success) { throw Exception.IOException }
+    }
+
     let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
     let timeStr = timeMap[distance]!.joined(separator: ",")
     try timesFile.writeText(timeStr)
+
+    let profiles = profileMap[distance]!
+    for profile in profiles {
+      let profileName = profile.0
+      let profileFile = File(file: profilesDir, child: "\(profileName).dat", directoryHint: .notDirectory)
+
+      let jsonEncoder = JSONEncoder()
+      let jsonData    = try jsonEncoder.encode(profile.1)
+      try profileFile.writeData(jsonData)
+    }
   }
 
   private func writeData() throws {
@@ -105,9 +154,25 @@ class DistanceManager {
         if(!success) { throw FileError.FolderCreationError }
       }
 
+      let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
+      if(!profilesDir.exists()) {
+        let success = try profilesDir.mkdir()
+        if(!success) { throw Exception.IOException }
+      }
+
       let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
       let timeStr = timeMap[distance]!.joined(separator: ",")
       try timesFile.writeText(timeStr)
+
+      let profiles = profileMap[distance]!
+      for profile in profiles {
+        let profileName = profile.0
+        let profileFile = File(file: profilesDir, child: "\(profileName).dat", directoryHint: .notDirectory)
+
+        let jsonEncoder = JSONEncoder()
+        let jsonData    = try jsonEncoder.encode(profile.1)
+        try profileFile.writeData(jsonData)
+      }
     }
   }
 
@@ -127,7 +192,6 @@ class DistanceManager {
     let time2Dbl = 1000.0*(time2Split0.toDouble()*60.0 + time2Split1)
     return (time1Dbl > time2Dbl)
   }
-
 
   func deleteTime(_ runDistance: String, _ runTime: String?) throws -> Int {
     guard let runTime else { throw Exception.IllegalArgumentException }
@@ -230,5 +294,49 @@ class DistanceManager {
     try writeData(runDistance)
 
     return newIndex
+  }
+
+  func saveProfile(_ runDistance: String, _ profileName: String, _ waypointData: [WaypointData]) throws -> [String] {
+    let profiles = profileMap[runDistance]
+    guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
+
+    updatedProfiles = updatedProfiles.filter { $0.0 != profileName }
+    updatedProfiles.append((profileName, waypointData))
+    profileMap[runDistance]! = updatedProfiles
+
+    try writeData(runDistance)
+    return profileMap[runDistance]!.map { $0.0 }
+  }
+
+  // TODO: Maybe make a profile manager?
+  func deleteProfile(_ runDistance: String, _ profileName: String) throws -> [String]? {
+    let profiles = profileMap[runDistance]
+    guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
+
+    let i = distanceArray.firstIndex(of: runDistance)
+    guard let i else { throw Exception.IllegalArgumentException }
+
+    let prefix = String(format: "Distance_%03d_", i)
+    let distanceDir = File(file: distanceDir, child: prefix + runDistance, directoryHint: .isDirectory)
+    let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
+    let profileFile = File(file: profilesDir, child: "\(profileName).dat", directoryHint: .notDirectory)
+    if(profileFile.delete()) {
+      updatedProfiles = updatedProfiles.filter { $0.0 != profileName }
+      profileMap[runDistance]! = updatedProfiles
+
+      return updatedProfiles.map { $0.0 }
+    }
+
+    return nil
+  }
+
+  func waypointsFor(_ runDistance: String, _ profileName: String) throws -> [WaypointData] {
+    let profiles = profileMap[runDistance]
+    guard let profiles else { throw Exception.IllegalArgumentException }
+
+    let matches = profiles.filter { $0.0 == profileName }
+    if(matches.count != 1) { throw Exception.IllegalArgumentException }
+
+    return matches[0].1
   }
 }

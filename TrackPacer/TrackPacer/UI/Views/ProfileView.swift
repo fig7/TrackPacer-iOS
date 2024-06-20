@@ -191,15 +191,15 @@ struct ProfileView: View {
       Spacer()
 
       HStack {
-        Button(action: { viewModel.finishProfile() }) { Text(" ").overlay { Image("baseline_delete_forever_48") } }
+        Button(action: { viewModel.deleteProfile() }) { Text(" ").overlay { Image("baseline_delete_forever_48") } }
           .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
-        Button(action: { }) { Text(" SAVE ") }
+        Button(action: { viewModel.saveProfile() }) { Text(" SAVE ") }
           .buttonStyle(ActionButtonStyleMax(disabledCol: false)).disabled(false)
       }.padding(.bottom, 5)
     }.toolbar() {
       ToolbarItem(placement: .navigationBarTrailing) {
         StatusView()
       }
-    }.navigationBarBackButtonHidden(true).padding(.horizontal, 20)
+    }.navigationBarBackButtonHidden(false).padding(.horizontal, 20)
   }
 }

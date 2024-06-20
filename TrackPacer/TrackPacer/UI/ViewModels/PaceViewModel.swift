@@ -113,17 +113,20 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     self.pacingSettings = statusViewModel.pacingSettings
   }
 
-  func setPacingOptions(_ runDist: String, _ runLane: Int, _ runTime: Double) {
+  func setPacingOptions(_ runDist: String, _ runLane: Int, _ runTime: Double, _ runProf: String) {
     pacingOptions.runDist = runDist
     pacingOptions.runLane = runLane
     pacingOptions.runTime = runTime
+    pacingOptions.runProf = runProf
     pacingProgress.resetProgress()
   }
 
   func onServiceConnected() {
     let pacingStatus = pacingStatus.status
     if(pacingStatus == .ServiceStart) {
-      waypointService.beginPacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, pacingSettings.alternateStart)
+      let distanceManager = mainViewModel.runModel.distanceModel.distanceManager
+      let waypoints = try! distanceManager.waypointsFor(pacingOptions.runDist, pacingOptions.runProf)
+      waypointService.beginPacing(pacingOptions, pacingSettings.alternateStart, waypoints)
 
       if(pacingSettings.powerStart) {
         setPacingStatus(.PacingWait)
@@ -145,7 +148,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
       setPacingStatus(.PacingResume)
       if(pacingSettings.powerStart) { mainViewModel.startScreenReceiver() }
 
-      if(waypointService.resumePacing(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, false, pacingProgress.elapsedTime)) {
+      if(waypointService.resumePacing(pacingOptions, pacingSettings.alternateStart, pacingProgress.elapsedTime)) {
         handler.postDelayed(pacingRunnable, delayMS: 113)
       } else {
         stopPacing(silent: true)
