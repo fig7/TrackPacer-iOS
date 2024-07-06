@@ -30,12 +30,15 @@ struct RunData: Codable {
 struct RunDataExtra {
   var resultUUID: UUID?
 
+  var shortRunDist: String = ""
   var shortRunDate: String = ""
   var fullRunDate: String  = ""
 
   init() { }
 
-  init(_ runDate: Date) {
+  init(_ runDist: String, _ runDate: Date) {
+    shortRunDist = runDist.hasSuffix(" (AS)") ? String(runDist.dropLast(5)) : runDist
+
     let formatter = DateFormatter()
     formatter.dateFormat = "d MMM, yyyy 'at' HH:mm"
     fullRunDate  = formatter.string(from: runDate)
@@ -45,8 +48,8 @@ struct RunDataExtra {
     shortRunDate = formatter.string(from: runDate)
   }
 
-  init(_ resultUUID: UUID, _ runDate: Date) {
-    self.init(runDate)
+  init(_ resultUUID: UUID, _ runDist: String, _ runDate: Date) {
+    self.init(runDist, runDate)
     self.resultUUID = resultUUID
   }
 }

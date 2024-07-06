@@ -119,9 +119,6 @@
     "Actual time" : {
 
     },
-    "Alternate start" : {
-
-    },
     "Audio" : {
 
     },
@@ -420,9 +417,6 @@
     "Minutes" : {
 
     },
-    "Next up: %@" : {
-
-    },
     "No history yet" : {
 
     },
@@ -483,6 +477,12 @@
     "Run" : {
 
     },
+    "Run clockwise" : {
+
+    },
+    "Run in the opposite direction" : {
+
+    },
     "Seconds" : {
 
     },
@@ -502,9 +502,6 @@
 
     },
     "Start to Finish (%@):" : {
-
-    },
-    "Swap start and finish for 1, 3, and 5km" : {
 
     },
     "Target time" : {

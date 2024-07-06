@@ -46,7 +46,7 @@ class HistoryManager {
       let jsonDecoder = JSONDecoder()
       let runData  = try jsonDecoder.decode(RunData.self, from: jsonData)
 
-      let runDataExtra = RunDataExtra(resultUUID, runData.runDate)
+      let runDataExtra = RunDataExtra(resultUUID, runData.runDist, runData.runDate)
       let resultData   = ResultData(runData, runDataExtra)
       historyList.add(resultData)
     }

@@ -30,7 +30,7 @@ struct HistoryView: View {
                   let runData      = resultData.runData
                   let computedData = resultData.computedData
 
-                  Text(runData.runDist).weighted(0.24, proxy)
+                  Text(computedData.shortRunDist).weighted(0.24, proxy)
                   Text(computedData.shortRunDate).weighted(0.30, proxy)
                   Text(runData.actualTimeStr).weighted(0.24, proxy)
                   Text(runData.actualPaceStr + "/km").weighted(0.22, proxy)

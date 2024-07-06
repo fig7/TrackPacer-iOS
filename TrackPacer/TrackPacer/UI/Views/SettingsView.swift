@@ -92,8 +92,8 @@ struct SettingsView: View {
           VStack(alignment: .leading, spacing: 0) {
             HStack {
               VStack(alignment: .leading, spacing: 5) {
-                Text("Alternate start").fontWeight(.bold)
-                Text("Swap start and finish for 1, 3, and 5km").font(.caption)
+                Text("Run clockwise").fontWeight(.bold)
+                Text("Run in the opposite direction").font(.caption)
               }
 
               Spacer()

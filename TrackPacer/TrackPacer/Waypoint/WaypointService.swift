@@ -8,7 +8,7 @@
 import Foundation
 import AVKit
 
-private class MPStartDelegate : NSObject, AVAudioPlayerDelegate {
+private class MPWaitStartDelegate : NSObject, AVAudioPlayerDelegate {
   weak var service: WaypointService?
 
   init(service: WaypointService) {
@@ -16,11 +16,11 @@ private class MPStartDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    service?.beginRun()
+    service?.waitStart()
   }
 }
 
-private class MPWaypointDelegate : NSObject, AVAudioPlayerDelegate {
+private class MPWait30Delegate : NSObject, AVAudioPlayerDelegate {
   weak var service: WaypointService?
 
   init(service: WaypointService) {
@@ -28,7 +28,31 @@ private class MPWaypointDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    service?.nextWaypoint()
+    service?.wait30()
+  }
+}
+
+private class MPWait10Delegate : NSObject, AVAudioPlayerDelegate {
+  weak var service: WaypointService?
+
+  init(service: WaypointService) {
+    self.service = service
+  }
+
+  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    service?.wait10()
+  }
+}
+
+private class MPWaitGoDelegate : NSObject, AVAudioPlayerDelegate {
+  weak var service: WaypointService?
+
+  init(service: WaypointService) {
+    self.service = service
+  }
+
+  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    service?.waitGo()
   }
 }
 
@@ -59,11 +83,16 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 @MainActor class WaypointService {
   private let handler = Handler()
 
+  private var quickStart = false
   private var startRealtime: ContinuousClock.Instant!
   private var prevTime = -1.0
 
   private func waypointRunnable(delayMS: Int64) {
     handleWaypoint(delayMS)
+  }
+
+  private func waitRunnable(delayMS: Int64) {
+    handleWait(delayMS)
   }
 
   private func startRunnable(delayMS: Int64) {
@@ -81,11 +110,22 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   private var mpFinal: AVAudioPlayer!
   private var mpWaypoint: [AVAudioPlayer]!
 
-  private var startDelegate: AVAudioPlayerDelegate!
-  private var waypointDelegate: AVAudioPlayerDelegate!
+  private var waypointTime = 0.0
+  private var waypointWait = 0.0
+  private var mpWaitStart: AVAudioPlayer!
+  private var mpWait30: AVAudioPlayer!
+  private var mpWait10: AVAudioPlayer!
+  private var mpWaitGo: AVAudioPlayer!
+  private var mpWaitGo1: AVAudioPlayer!
+  private var mpWaitGo3: AVAudioPlayer!
 
   private var finishDelegate: AVAudioPlayerDelegate!
   private var finalDelegate: AVAudioPlayerDelegate!
+
+  private var waitStartDelegate: AVAudioPlayerDelegate!
+  private var wait30Delegate: AVAudioPlayerDelegate!
+  private var wait10Delegate: AVAudioPlayerDelegate!
+  private var waitGoDelegate: AVAudioPlayerDelegate!
 
   private var waypointCalculator = WaypointCalculator()
   private var waypointIndexList: [Int]!
@@ -101,28 +141,29 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     }
   }
 
-  func beginPacing(_ pacingOptions: PacingOptions, _ alternateStart: Bool, _ waypoints: [WaypointData]) {
-    waypointIndexList  = waypointsFor(pacingOptions.runDist, alternateStart)
-    prevTime           = 0.0
-
+  func beginPacing(_ pacingOptions: PacingOptions, _ waypoints: [WaypointData]) {
+    waypointIndexList = waypointsFor(pacingOptions.runDist)
     waypointCalculator.initRun(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, waypoints)
   }
 
   func delayStart(startDelayMS: Int64, quickStart: Bool) -> Bool {
-    mpStart = if(quickStart) { mpStart2 } else { mpStart1 }
+    self.quickStart = quickStart
+    mpStart  = if(quickStart) { mpStart2 } else { mpStart1 }
+    mpWaitGo = if(quickStart) { mpWaitGo1 } else { mpWaitGo3 }
 
     if(quickStart) {
       startRealtime = SystemClock.elapsedRealtime() + .milliseconds(Go1ClipDuration)
       handler.post(startRunnable)
     } else {
       startRealtime = SystemClock.elapsedRealtime() + .milliseconds(startDelayMS)
-      handler.postDelayed(startRunnable, delayMS: startDelayMS - Go4ClipDuration)
+      handler.postDelayed(startRunnable, delayMS: startDelayMS - Go3ClipDuration)
     }
 
     return true
   }
 
   func powerStart(quickStart: Bool) -> Bool {
+    self.quickStart = quickStart
     mpStart = if(quickStart) { mpStart2 } else { mpStart1 }
 
     if(quickStart) {
@@ -136,8 +177,8 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return true
   }
 
-  func resumePacing(_ pacingOptions: PacingOptions, _ alternateStart: Bool, _ resumeTime: Int64) -> Bool {
-    waypointIndexList = waypointsFor(pacingOptions.runDist, alternateStart)
+  func resumePacing(_ pacingOptions: PacingOptions, _ resumeTime: Int64) -> Bool {
+    waypointIndexList = waypointsFor(pacingOptions.runDist)
 
     prevTime      = waypointCalculator.initResume(pacingOptions.runDist, pacingOptions.runLane, pacingOptions.runTime, resumeTime.toDouble())
     startRealtime = SystemClock.elapsedRealtime() - .milliseconds(resumeTime)
@@ -145,10 +186,13 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return true
   }
 
-  fileprivate func beginRun() {
-    let nextTime   = waypointCalculator.waypointTime()
-    let updateTime = (nextTime - elapsedTime().toDouble()).toLong()
-    if(updateTime >= 0) {handler.postDelayed(waypointRunnable, delayMS: updateTime) }
+  func beginRun() {
+    prevTime = 0.0
+    (waypointTime, waypointWait) = waypointCalculator.nextWaypoint()
+
+    let runnable = (waypointWait > 0.0) ? waitRunnable : waypointRunnable
+    let delay    = waypointTime.toLong() - elapsedTime()
+    handler.postDelayed(runnable, delayMS: delay)
   }
 
   func elapsedTime() -> Int64 {
@@ -158,6 +202,13 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
   func timeRemaining(_ elapsedTime: Int64) -> Int64 {
     return waypointCalculator.runTime() - elapsedTime
+  }
+
+  func waitRemaining(_ elapsedTime: Int64) -> Int64 {
+    let waitLeft = (waypointTime + waypointWait).toLong() - elapsedTime
+    if(waitLeft > waypointWait.toLong()) { return 0 }
+
+    return max(0, waitLeft)
   }
 
   func distOnPace(_ elapsedTime: Int64) -> Double {
@@ -209,31 +260,34 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
         return try AVAudioPlayer(contentsOf: url)
       }
 
+      let urlStop = Bundle.main.url(forResource: "stop", withExtension: ".m4a")!
+      mpWaitStart = try AVAudioPlayer(contentsOf: urlStop)
+
+      let url30 = Bundle.main.url(forResource: "30",   withExtension: ".m4a")!
+      let url10 = Bundle.main.url(forResource: "10",   withExtension: ".m4a")!
+      mpWait30  = try AVAudioPlayer(contentsOf: url30)
+      mpWait10  = try AVAudioPlayer(contentsOf: url10)
+      mpWaitGo1 = try AVAudioPlayer(contentsOf: urlGo)
+      mpWaitGo3 = try AVAudioPlayer(contentsOf: url321)
+
       let urlComplete = Bundle.main.url(forResource: "complete", withExtension: ".m4a")!
       mpFinal = try AVAudioPlayer(contentsOf: urlComplete)
 
-      /* audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-       focusRequest = AudioFocusRequest.Builder(AUDIOFOCUS_GAIN).run {
-       setAudioAttributes(AudioAttributes.Builder().run {
-          setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
-          setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-          setFocusGain(AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
-          build()
-       })
-       setOnAudioFocusChangeListener(this@WaypointService, handler)
-       build()
-     } */
-
-      startDelegate = MPStartDelegate(service: self)
-      mpStart1.delegate = startDelegate
-      mpStart2.delegate = startDelegate
-      mpResume.delegate = startDelegate
-
-      waypointDelegate = MPWaypointDelegate(service: self)
-      for i in 0..<fL { mpWaypoint[i].delegate = waypointDelegate }
-
       finishDelegate = MPFinishDelegate(service: self)
       mpWaypoint[fL].delegate = finishDelegate
+
+      waitStartDelegate = MPWaitStartDelegate(service: self)
+      mpWaitStart.delegate = waitStartDelegate
+
+      wait30Delegate = MPWait30Delegate(service: self)
+      mpWait30.delegate = wait30Delegate
+
+      wait10Delegate = MPWait10Delegate(service: self)
+      mpWait10.delegate = wait10Delegate
+
+      waitGoDelegate = MPWaitGoDelegate(service: self)
+      mpWaitGo1.delegate = waitGoDelegate
+      mpWaitGo3.delegate = waitGoDelegate
 
       finalDelegate = MPFinalDelegate(service: self)
       mpFinal.delegate = finalDelegate
@@ -248,6 +302,12 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     mpStart2.stop()
     mpResume.stop()
     for mp in mpWaypoint { mp.stop() }
+
+    mpWaitStart.stop()
+    mpWait30.stop()
+    mpWait10.stop()
+    mpWaitGo1.stop()
+    mpWaitGo3.stop()
 
     /* audioManager.abandonAudioFocusRequest(focusRequest)
     mNM.cancel(1) */
@@ -273,12 +333,19 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     // }
   }
 
-  fileprivate func nextWaypoint() {
-    if(waypointCalculator.waypointsRemaining()) {
-     prevTime = waypointCalculator.waypointTime()
+  private func handleWait(_ delayMS: Int64) {
+    mpResume.stop()
+    mpWaitStart.play(atTime: mpWaitStart.deviceCurrentTime + delayMS.toDouble()/1000.0)
+  }
 
-     let waypointTime = waypointCalculator.nextWaypoint()
-     handler.postDelayed(waypointRunnable, delayMS: waypointTime.toLong()-elapsedTime())
+  func nextWaypoint() {
+    if(waypointCalculator.waypointsRemaining()) {
+      prevTime = waypointTime + waypointWait
+      (waypointTime, waypointWait) = waypointCalculator.nextWaypoint()
+
+      let delay    = waypointTime.toLong() - elapsedTime()
+      let runnable = (waypointWait > 0)  ? waitRunnable : waypointRunnable
+      handler.postDelayed(runnable, delayMS: delay)
     }
   }
 
@@ -289,5 +356,39 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
   fileprivate func terminate() {
     serviceConnection.onServiceDisconnected()
+  }
+
+  fileprivate func waitStart() {
+    let delay = (waypointTime + waypointWait).toLong() - elapsedTime()
+    if(delay > 30000) {
+      mpWait30.play(atTime: mpWait30.deviceCurrentTime + (delay - 30000).toDouble()/1000.0)
+    } else if(delay > 10000) {
+      mpWait10.play(atTime: mpWait10.deviceCurrentTime + (delay - 10000).toDouble()/1000.0)
+    } else {
+      mpWaitGo.play(atTime: mpWaitGo.deviceCurrentTime + (delay - (quickStart ? Go1ClipDuration : Go3ClipDuration)).toDouble()/1000.0)
+    }
+  }
+
+  fileprivate func wait30() {
+    let delay = (waypointTime + waypointWait).toLong() - elapsedTime()
+    if(delay > 10000) {
+      mpWait10.play(atTime: mpWait10.deviceCurrentTime + (delay - 10000).toDouble()/1000.0)
+    } else {
+      mpWaitGo.play(atTime: mpWaitGo.deviceCurrentTime + (delay - (quickStart ? Go1ClipDuration : Go3ClipDuration)).toDouble()/1000.0)
+    }
+  }
+
+  fileprivate func wait10() {
+    let delay = (waypointTime + waypointWait).toLong() - elapsedTime()
+    mpWaitGo.play(atTime: mpWaitGo.deviceCurrentTime + (delay - (quickStart ? Go1ClipDuration : Go3ClipDuration)).toDouble()/1000.0)
+  }
+
+  fileprivate func waitGo() {
+    prevTime = waypointTime + waypointWait
+    (waypointTime, waypointWait) = waypointCalculator.nextWaypoint()
+
+    let delay    = waypointTime.toLong() - elapsedTime()
+    let runnable = (waypointWait > 0.0)  ? waitRunnable : waypointRunnable
+    handler.postDelayed(runnable, delayMS: delay)
   }
 }

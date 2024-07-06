@@ -296,6 +296,9 @@ class DistanceManager {
     return newIndex
   }
 
+  func profileExists(_ runDistance: String, _ profileName: String) -> Bool
+  { return profileMap[runDistance]!.contains { (name, _) in return (name == profileName) } }
+
   func saveProfile(_ runDistance: String, _ profileName: String, _ waypointData: [WaypointData]) throws -> [String] {
     let profiles = profileMap[runDistance]
     guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
@@ -309,7 +312,7 @@ class DistanceManager {
   }
 
   // TODO: Maybe make a profile manager?
-  func deleteProfile(_ runDistance: String, _ profileName: String) throws -> [String]? {
+  func deleteProfile(_ runDistance: String, _ profileName: String) throws -> [String] {
     let profiles = profileMap[runDistance]
     guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
 
@@ -327,7 +330,7 @@ class DistanceManager {
       return updatedProfiles.map { $0.0 }
     }
 
-    return nil
+    throw Exception.IOException
   }
 
   func waypointsFor(_ runDistance: String, _ profileName: String) throws -> [WaypointData] {

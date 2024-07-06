@@ -19,6 +19,9 @@ import Foundation
       timeToProgress = (timeRemaining == nil) ? 0.0 : min(1.0, (1.0 - (Double(timeRemaining!) / Double(timeRemaining! + elapsedTime))))
     }
   }
+
+  @Published var waitRemaining: Int64 = 0
+
   @Published var timeToProgress: Double
 
   init() {
@@ -47,15 +50,19 @@ import Foundation
     self.distRun = distRun
   }
 
-  func setWaypointProgress(_ waypointName: String, _ waypointProgress: Double, _ timeRemaining: Int64) {
+  func setWaypointProgress(_ waypointName: String, _ waypointProgress: Double, _ timeRemaining: Int64, _ waitRemaining: Int64) {
     self.waypointName     = waypointName
     self.waypointProgress = waypointProgress
+
     self.timeRemaining    = timeRemaining
+    self.waitRemaining    = waitRemaining
   }
 
   func resetWaypointProgress() {
     self.waypointName     = ""
     self.waypointProgress = 0.0
-    self.timeRemaining    = nil
+
+    self.timeRemaining = nil
+    self.waitRemaining = 0
   }
 }

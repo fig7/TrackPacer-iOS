@@ -144,6 +144,7 @@ import UIKit
     let profileMap      = distanceManager.profileMap
 
     do {
+      // Initialise with 400m
       let profileArray = profileMap[distanceArray[0]]!.map { $0.0 }
       try runViewModel.initDistances(distanceArray, profileArray)
     } catch {
@@ -248,15 +249,13 @@ import UIKit
 
   func editProfile(_ runDist: String, _ runProfile: String) {
     do {
-      let settingsManager = settingsModel.settingsManager
-      let alternateStart  = (settingsManager.alternateStart && hasAlternateStart(runDist))
-      let refPace         = settingsManager.refPace
-
       let distanceManager = runModel.distanceModel.distanceManager
       let waypoints       = try distanceManager.waypointsFor(runDist, runProfile)
 
-      // TODO: Profiles need AS versions too.
-      profileViewModel.setProfileOptions(runDist, runProfile, waypoints, alternateStart, refPace)
+      let settingsManager = settingsModel.settingsManager
+      let refPace = settingsManager.refPace
+
+      profileViewModel.setProfileOptions(runDist, runProfile, waypoints, refPace)
       mainViewStack.pushProfileView()
     } catch { }
   }
@@ -406,23 +405,65 @@ import UIKit
     mainViewStack.popCompletionView()
   }
 
+  private func completeSaveProfile(_ profileDist: String, _ profileName: String, _ waypointData: [WaypointData]) throws {
+    // TODO: Handle errors
+    let distanceManager = runModel.distanceModel.distanceManager
+    let profileArray    = try distanceManager.saveProfile(profileDist, profileName, waypointData)
+    runViewModel.updateProfiles(profileArray)
+  }
+
   func saveProfile(_ profileDist: String, _ profileName: String, _ waypointData: [WaypointData]) {
     do {
+      var profileName = profileName
+
+      let settingsManager = settingsModel.settingsManager
+      let alternateStart  = settingsManager.alternateStart && hasAlternateStart(profileDist)
+      if(alternateStart) { profileName = profileName + "__AS__" }
+
       let distanceManager = runModel.distanceModel.distanceManager
-      let profileArray = try distanceManager.saveProfile(profileDist, profileName, waypointData)
-      runViewModel.updateProfiles(profileArray)
+      if(distanceManager.profileExists(profileDist, profileName)) {
+        showQuestionDialog(title: "Replace existing profile",
+          message: "Are you sure you want to make changes to an existing profile?", action: "REPLACE", width: 342, height: 240,
+          completion: { [weak self] in
+            guard let self else { return }
+
+            try! completeSaveProfile(profileDist, profileName, waypointData)
+            mainViewStack.popProfileView()
+          })
+
+        return
+      }
+
+      try completeSaveProfile(profileDist, profileName, waypointData)
     } catch { }
 
     mainViewStack.popProfileView()
   }
 
+  func completeDeleteProfile(_ profileDist: String, _ profileName: String) throws {
+    // TODO: Handle errors
+    let distanceManager = runModel.distanceModel.distanceManager
+    let profileArray    = try distanceManager.deleteProfile(profileDist, profileName)
+    runViewModel.updateProfiles(profileArray)
+  }
+
   func deleteProfile(_ profileDist: String, _ profileName: String) {
     do {
       let distanceManager = runModel.distanceModel.distanceManager
-      let profileArray = try distanceManager.deleteProfile(profileDist, profileName)
-      guard let profileArray else { throw Exception.IOException }
+      if(distanceManager.profileExists(profileDist, profileName)) {
+        showQuestionDialog(title: "Delete existing profile",
+          message: "Are you sure you want to delete this profile? This operation cannot be undone.", action: "DELETE", width: 342, height: 240,
+          completion: { [weak self] in
+            guard let self else { return }
 
-      runViewModel.updateProfiles(profileArray)
+            try! completeDeleteProfile(profileDist, profileName)
+            mainViewStack.popProfileView()
+          })
+
+        return
+      }
+
+      try completeDeleteProfile(profileDist, profileName)
     } catch { }
 
     mainViewStack.popProfileView()

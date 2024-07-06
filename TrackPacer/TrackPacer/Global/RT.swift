@@ -35,14 +35,14 @@ let rtMap = [
   "rt_1000m_l7"  : [R.string.laps_1000, R.string.fl_200m, R.string.ll_3, R.drawable.rt_1000_l7],
   "rt_1000m_l8"  : [R.string.laps_1000, R.string.fl_200m, R.string.ll_3, R.drawable.rt_1000_l8],
 
-  "rt_1000m_l1_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l1_a],
-  "rt_1000m_l2_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l2_a],
-  "rt_1000m_l3_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l3_a],
-  "rt_1000m_l4_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l4_a],
-  "rt_1000m_l5_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l5_a],
-  "rt_1000m_l6_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l6_a],
-  "rt_1000m_l7_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l7_a],
-  "rt_1000m_l8_a"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l8_a],
+  "rt_1000m (AS)_l1"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l1_a],
+  "rt_1000m (AS)_l2"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l2_a],
+  "rt_1000m (AS)_l3"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l3_a],
+  "rt_1000m (AS)_l4"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l4_a],
+  "rt_1000m (AS)_l5"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l5_a],
+  "rt_1000m (AS)_l6"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l6_a],
+  "rt_1000m (AS)_l7"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l7_a],
+  "rt_1000m (AS)_l8"  : [R.string.laps_1000, R.string.ll_200m, R.string.ll_3, R.drawable.rt_1000_l8_a],
 
   "rt_1200m_l1"  : [R.string.laps_1200, R.string.ll_3, R.string.empty, R.drawable.rt_400_l1],
   "rt_1200m_l2"  : [R.string.laps_1200, R.string.ll_3, R.string.empty, R.drawable.rt_400_l2],
@@ -80,14 +80,14 @@ let rtMap = [
   "rt_3000m_l7"  : [R.string.laps_3000, R.string.fl_200m, R.string.ll_8, R.drawable.rt_1000_l7],
   "rt_3000m_l8"  : [R.string.laps_3000, R.string.fl_200m, R.string.ll_8, R.drawable.rt_1000_l8],
 
-  "rt_3000m_l1_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l1_a],
-  "rt_3000m_l2_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l2_a],
-  "rt_3000m_l3_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l3_a],
-  "rt_3000m_l4_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l4_a],
-  "rt_3000m_l5_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l5_a],
-  "rt_3000m_l6_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l6_a],
-  "rt_3000m_l7_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l7_a],
-  "rt_3000m_l8_a"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l8_a],
+  "rt_3000m (AS)_l1"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l1_a],
+  "rt_3000m (AS)_l2"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l2_a],
+  "rt_3000m (AS)_l3"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l3_a],
+  "rt_3000m (AS)_l4"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l4_a],
+  "rt_3000m (AS)_l5"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l5_a],
+  "rt_3000m (AS)_l6"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l6_a],
+  "rt_3000m (AS)_l7"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l7_a],
+  "rt_3000m (AS)_l8"  : [R.string.laps_3000, R.string.ll_200m, R.string.ll_8, R.drawable.rt_1000_l8_a],
 
   "rt_4000m_l1"  : [R.string.laps_4000, R.string.ll_10, R.string.empty, R.drawable.rt_400_l1],
   "rt_4000m_l2"  : [R.string.laps_4000, R.string.ll_10, R.string.empty, R.drawable.rt_400_l2],
@@ -107,14 +107,14 @@ let rtMap = [
   "rt_5000m_l7"  : [R.string.laps_5000, R.string.fl_200m, R.string.ll_13, R.drawable.rt_1000_l7],
   "rt_5000m_l8"  : [R.string.laps_5000, R.string.fl_200m, R.string.ll_13, R.drawable.rt_1000_l8],
 
-  "rt_5000m_l1_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l1_a],
-  "rt_5000m_l2_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l2_a],
-  "rt_5000m_l3_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l3_a],
-  "rt_5000m_l4_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l4_a],
-  "rt_5000m_l5_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l5_a],
-  "rt_5000m_l6_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l6_a],
-  "rt_5000m_l7_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l7_a],
-  "rt_5000m_l8_a"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l8_a],
+  "rt_5000m (AS)_l1"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l1_a],
+  "rt_5000m (AS)_l2"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l2_a],
+  "rt_5000m (AS)_l3"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l3_a],
+  "rt_5000m (AS)_l4"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l4_a],
+  "rt_5000m (AS)_l5"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l5_a],
+  "rt_5000m (AS)_l6"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l6_a],
+  "rt_5000m (AS)_l7"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l7_a],
+  "rt_5000m (AS)_l8"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l8_a],
 
   "rt_10000m_l1" : [R.string.laps_10000, R.string.ll_25, R.string.empty, R.drawable.rt_400_l1],
   "rt_10000m_l2" : [R.string.laps_10000, R.string.ll_25, R.string.empty, R.drawable.rt_400_l2],
@@ -135,9 +135,7 @@ let rtMap = [
   "rt_1 mile_l8" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l8]]
 
 func rtKeyFromArgs(_ runDist: String, _ runLane: Int, _ alternateStart: Bool = false) -> String {
-  var rtKey = "rt_" + runDist + "_l" + runLane.toString()
-  if(alternateStart && (["1000m", "3000m", "5000m"].contains(runDist))) { rtKey += "_a" }
-
+  let rtKey = "rt_" + runDist + "_l" + runLane.toString()
   return rtKey
 }
 

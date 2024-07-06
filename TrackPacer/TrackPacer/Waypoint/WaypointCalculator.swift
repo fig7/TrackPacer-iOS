@@ -10,6 +10,7 @@ import Foundation
 struct WaypointCalculator {
   private var waypointDist: [Double]!
   private var waypointTimes: [Double]!
+  private var waypointWaits: [Int64]!
   private var waypointArcAngle: [Double]!
   private var currentWaypoint = -1
   private var currentExtra    = -1.0
@@ -30,6 +31,10 @@ struct WaypointCalculator {
 
   func waypointTime() -> Double {
     return waypointTimes[currentWaypoint]
+  }
+
+  func waypointWait() -> Double {
+    return waypointWaits[currentWaypoint].toDouble()
   }
 
   private mutating func initRunParams(_ runDist: String, _ runLane: Int, _ runTime: Double) {
@@ -88,12 +93,19 @@ struct WaypointCalculator {
       waypointTimes[i] *= normaliseFactor
     }
 
-    currentWaypoint = 1
-    currentExtra    = arcExtra()
-    // Log.d("TP", totalDistance.toString())
-    // Log.d("TP", totalTime.toString())
+    // Add the wait times
+    var waitTotal = 0.0
+    waypointWaits = waypoints.map { $0.waitTime }
+    for i in waypointTimes.indices {
+      if(i == 0) { continue }
 
-    // Log.d("TP", waypointTime().toString())
+      waypointTimes[i] = waypointTimes[i] + waitTotal
+      waitTotal += waypointWaits[i].toDouble()
+    }
+
+    currentWaypoint = 0
+    currentExtra    = 0.0
+    totalTime += waitTotal
   }
 
   mutating func initResume(_ runDist: String, _ runLane: Int, _ runTime: Double, _ resumeTime: Double) -> Double {
@@ -125,13 +137,11 @@ struct WaypointCalculator {
     return (currentWaypoint < (waypointDist.size - 1))
   }
 
-  mutating func nextWaypoint() -> Double {
-    // val waypoint1 = waypointTime()
+  mutating func nextWaypoint() -> (Double, Double) {
     currentWaypoint += 1
     currentExtra += arcExtra()
 
-    // Log.d("TP", (waypointTime()-waypoint1).toString())
-    return waypointTime()
+    return (waypointTime(), waypointWait())
   }
 
   func runTime() -> Int64 {

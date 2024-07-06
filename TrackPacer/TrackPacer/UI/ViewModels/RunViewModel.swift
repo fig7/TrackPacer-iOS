@@ -44,7 +44,9 @@ import Foundation
       } catch { }
 
       // How to grant access properly?
-      profileSelection.list     = runModel.distanceModel.distanceManager.profileMap[newSelected]!.map { $0.0 }
+      let profileArray = runModel.distanceModel.distanceManager.profileMap[newSelected]!.map { $0.0 }
+
+      profileSelection.list     = profileArray
       profileSelection.selected = profileSelection.list[0]
 
       updateTrackOverlay()

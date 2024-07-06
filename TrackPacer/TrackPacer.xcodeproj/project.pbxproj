@@ -91,6 +91,9 @@
 		129359792BFEAC180042F99E /* Int64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359782BFEAC180042F99E /* Int64.swift */; };
 		1293597B2BFEAD1D0042F99E /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597A2BFEAD1D0042F99E /* Double.swift */; };
 		1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597C2BFEADF50042F99E /* ContinousClock.swift */; };
+		12A0CD782C345F5100308607 /* 30.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD752C345F5100308607 /* 30.m4a */; };
+		12A0CD792C345F5100308607 /* 10.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD762C345F5100308607 /* 10.m4a */; };
+		12A0CD7A2C345F5100308607 /* stop.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD772C345F5100308607 /* stop.m4a */; };
 		12A2B92B2C0741F300EA4155 /* MainViewStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92A2C0741F300EA4155 /* MainViewStack.swift */; };
 		12A2B92D2C0743BF00EA4155 /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92C2C0743BF00EA4155 /* CompletionView.swift */; };
 		12A2B92F2C074C2800EA4155 /* CompletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */; };
@@ -219,6 +222,9 @@
 		129359782BFEAC180042F99E /* Int64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int64.swift; sourceTree = "<group>"; };
 		1293597A2BFEAD1D0042F99E /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		1293597C2BFEADF50042F99E /* ContinousClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinousClock.swift; sourceTree = "<group>"; };
+		12A0CD752C345F5100308607 /* 30.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 30.m4a; sourceTree = "<group>"; };
+		12A0CD762C345F5100308607 /* 10.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 10.m4a; sourceTree = "<group>"; };
+		12A0CD772C345F5100308607 /* stop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = stop.m4a; sourceTree = "<group>"; };
 		12A2B92A2C0741F300EA4155 /* MainViewStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewStack.swift; sourceTree = "<group>"; };
 		12A2B92C2C0743BF00EA4155 /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
 		12A2B92E2C074C2800EA4155 /* CompletionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionViewModel.swift; sourceTree = "<group>"; };
@@ -477,6 +483,9 @@
 		12B144B82BF3CCFC00FCD2A7 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				12A0CD762C345F5100308607 /* 10.m4a */,
+				12A0CD752C345F5100308607 /* 30.m4a */,
+				12A0CD772C345F5100308607 /* stop.m4a */,
 				1228356B2C10AC4F003FCE65 /* oym.m4a */,
 				1228356A2C10AC4F003FCE65 /* set.m4a */,
 				129359392BFE4D8C0042F99E /* cancelled.m4a */,
@@ -679,6 +688,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12A0CD782C345F5100308607 /* 30.m4a in Resources */,
 				1228356D2C10AC4F003FCE65 /* oym.m4a in Resources */,
 				1228356C2C10AC4F003FCE65 /* set.m4a in Resources */,
 				12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */,
@@ -715,8 +725,10 @@
 				129359642BFE4D8D0042F99E /* twohundredandfifty.m4a in Resources */,
 				1293596B2BFE4D8D0042F99E /* twohundred.m4a in Resources */,
 				1293595C2BFE4D8D0042F99E /* complete.m4a in Resources */,
+				12A0CD792C345F5100308607 /* 10.m4a in Resources */,
 				1293594F2BFE4D8D0042F99E /* lap4.m4a in Resources */,
 				129359522BFE4D8D0042F99E /* threehundredandfifty.m4a in Resources */,
+				12A0CD7A2C345F5100308607 /* stop.m4a in Resources */,
 				129359602BFE4D8D0042F99E /* lap6.m4a in Resources */,
 				129359582BFE4D8D0042F99E /* lap24.m4a in Resources */,
 				1293594D2BFE4D8D0042F99E /* lap7.m4a in Resources */,

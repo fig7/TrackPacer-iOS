@@ -43,18 +43,19 @@ struct PaceView: View {
 
       VStack(alignment: .leading, spacing: 2) {
         let hidePacing = (pacingProgress.timeRemaining == nil)
+        let running    = (pacingProgress.waitRemaining == 0)
 
         Text("Distance run (on pace):")
         Text(hidePacing ? " " : String(format: "%.2fm", pacingProgress.distRun)).font(.system(size: 30, weight: .regular, design: .default)).monospacedDigit()
 
         Spacer().frame(height: 10)
 
-        Text("Next up: \(pacingProgress.waypointName)")
+        Text("\(running ? "Next up: " + pacingProgress.waypointName : "Waiting: " + timeToString(timeInMS: pacingProgress.waitRemaining))").monospacedDigit()
         ProgressView(value: pacingProgress.waypointProgress).progressViewStyle(PacingProgressStyle())
 
         Spacer().frame(height: 10)
 
-        Text("Time to target: \(hidePacing ? "" : timeToString(timeInMS: pacingProgress.timeRemaining!))")
+        Text("Time to target: \(hidePacing ? "" : timeToString(timeInMS: pacingProgress.timeRemaining!))").monospacedDigit()
         ProgressView(value: pacingProgress.timeToProgress).progressViewStyle(PacingProgressStyle())
       }
 

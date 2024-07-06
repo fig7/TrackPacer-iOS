@@ -11,7 +11,7 @@ private let settingsArray: [Any] = [
   "5.00",  // Start delay
   false,   // Power start
   false,   // Quick start
-  false,   // Alternate start
+  false,   // Run clockwise
   true,    // Flight mode
   "5:00"   // Ref pace
 ]

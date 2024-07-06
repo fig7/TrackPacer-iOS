@@ -126,7 +126,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     if(pacingStatus == .ServiceStart) {
       let distanceManager = mainViewModel.runModel.distanceModel.distanceManager
       let waypoints = try! distanceManager.waypointsFor(pacingOptions.runDist, pacingOptions.runProf)
-      waypointService.beginPacing(pacingOptions, pacingSettings.alternateStart, waypoints)
+      waypointService.beginPacing(pacingOptions, waypoints)
 
       if(pacingSettings.powerStart) {
         setPacingStatus(.PacingWait)
@@ -148,7 +148,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
       setPacingStatus(.PacingResume)
       if(pacingSettings.powerStart) { mainViewModel.startScreenReceiver() }
 
-      if(waypointService.resumePacing(pacingOptions, pacingSettings.alternateStart, pacingProgress.elapsedTime)) {
+      if(waypointService.resumePacing(pacingOptions, pacingProgress.elapsedTime)) {
         handler.postDelayed(pacingRunnable, delayMS: 113)
       } else {
         stopPacing(silent: true)
@@ -185,7 +185,9 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     if(elapsedTime >= 0) {
       let pacingStatus = pacingStatus.status
       if((pacingStatus == .PacingStart) || (pacingStatus == .PacingResume)) {
+        waypointService.beginRun()
         setPacingStatus(.Pacing)
+
         if(pacingStatus == .PacingStart) { mainViewModel.initPacingResult() }
       } else {
         let distRun = waypointService.distOnPace(elapsedTime)
@@ -193,8 +195,11 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
 
         let name          = waypointService.waypointName()
         let progress      = waypointService.waypointProgress(elapsedTime)
-        let remainingTime = waypointService.timeRemaining(elapsedTime)
-        pacingProgress.setWaypointProgress(name, progress, remainingTime)
+        let timeRemaining = waypointService.timeRemaining(elapsedTime)
+        let waitRemaining = waypointService.waitRemaining(elapsedTime)
+        pacingProgress.setWaypointProgress(name, progress, timeRemaining, waitRemaining)
+
+        if((progress == 1.0) && (waitRemaining == 0)) { waypointService.nextWaypoint() }
       }
     }
 
@@ -240,8 +245,9 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
 
     let name          = waypointService.waypointName()
     let progress      = waypointService.waypointProgress(elapsedTime)
-    let remainingTime = waypointService.timeRemaining(elapsedTime)
-    pacingProgress.setWaypointProgress(name, progress, remainingTime)
+    let timeRemaining = waypointService.timeRemaining(elapsedTime)
+    let waitRemaining = waypointService.waitRemaining(elapsedTime)
+    pacingProgress.setWaypointProgress(name, progress, timeRemaining, waitRemaining)
 
     // Stop the service
     stopService()

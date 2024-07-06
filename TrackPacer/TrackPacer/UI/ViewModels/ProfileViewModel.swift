@@ -174,14 +174,23 @@ struct ProfileWaypoint {
   }
 
   func deleteProfile() {
+    if(profileName == "Fixed pace") {
+      mainViewModel.showInfoDialog(title: "Profile cannot be deleted",
+        message:
+        "The built-in Fixed pace profile cannot be deleted. Only user created profiles can be deleted.",
+        width: 342, height: 240)
+
+      return
+    }
+
     mainViewModel.deleteProfile(profileDist, profileName)
   }
 
-  func setProfileOptions(_ runDist: String, _ runProfile: String, _ waypointData: [WaypointData], _ alternateStart: Bool, _ refPaceStr: String) {
+  func setProfileOptions(_ runDist: String, _ runProfile: String, _ waypointData: [WaypointData], _ refPaceStr: String) {
     waypointList.clear()
 
     profileDist = runDist
-    profileDesc = runDist + " profile" + (alternateStart ? " (AS)" : "")
+    profileDesc = runDist + " profile"
     profileName = runProfile
 
     let refPaceSplit = refPaceStr.split(separator: ":")
@@ -193,7 +202,7 @@ struct ProfileWaypoint {
     refTime = (refDist*refPace) / 1000.0
     refTimeStr = timeToAlmostFullString(timeInMS: ((refTime*10.0).toLongRounded()*100))
 
-    let waypointIndexList = waypointsFor(runDist, alternateStart)
+    let waypointIndexList = waypointsFor(runDist)
     let waypointDist      = waypointDistances[runDist]!
 
     var prevOffset = sectionHeight
