@@ -51,6 +51,8 @@ import Foundation
     }
   }
 
+  var waitingTime: Int64 = 0
+
   @Published var runLaps = ""
   @Published var runDistStr = ""
 

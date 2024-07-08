@@ -333,8 +333,8 @@ class DistanceManager {
     throw Exception.IOException
   }
 
-  func waypointsFor(_ runDistance: String, _ profileName: String) throws -> [WaypointData] {
-    let profiles = profileMap[runDistance]
+  func waypointsFor(_ baseDist: String, _ profileName: String) throws -> [WaypointData] {
+    let profiles = profileMap[baseDist]
     guard let profiles else { throw Exception.IllegalArgumentException }
 
     let matches = profiles.filter { $0.0 == profileName }

@@ -18,10 +18,12 @@ struct WaypointCalculator {
 
   private var runDist = -1.0
   private var runTime = -1.0
-  private var totalTime = -1.0
 
-  private var runLaneIndex  = -1
-  private var prevWaypoint  = (-1.0, -1.0)
+  private var waitingTime: Int64 = 0
+  private var totalTime          = -1.0
+
+  private var runLaneIndex = -1
+  private var prevWaypoint = (-1.0, -1.0)
 
   private func arcExtra() -> Double {
     let arcIndex = (currentIndex-1) % 8
@@ -41,35 +43,35 @@ struct WaypointCalculator {
     return waypointWaits[currentIndex].toDouble()
   }
 
-  private mutating func initRunParams(_ runDist: String, _ runLane: Int, _ runTime: Double) {
-    waypointDist  = waypointDistances[runDist]!
+  private mutating func initRunParams(_ baseDist: String, _ runLane: Int, _ baseTime: Double) {
+    waypointDist  = waypointDistances[baseDist]!
     runLaneIndex = runLane - 1
 
-    switch(runDist) {
+    switch(baseDist) {
     case "1500m":
       // Special case, 1500m is 3.75 laps
-      self.runDist = runDistances[runDist]! * runMultiplier1500[runLaneIndex]
-      self.runTime = runTime * runMultiplier1500[runLaneIndex]
+      runDist = runDistances[baseDist]! * runMultiplier1500[runLaneIndex]
+      runTime = baseTime * runMultiplier1500[runLaneIndex]
       waypointArcAngle = arcAngle1500
 
     case "1 mile":
       // Special case, 1 mile is 4 laps + 9.34m
-      self.runDist = runDistances[runDist]! * runMultiplierMile[runLaneIndex]
-      self.runTime = runTime * runMultiplierMile[runLaneIndex]
+      runDist = runDistances[baseDist]! * runMultiplierMile[runLaneIndex]
+      runTime = baseTime * runMultiplierMile[runLaneIndex]
       waypointArcAngle = arcAngle
 
     default:
-      self.runDist = runDistances[runDist]! * runMultiplier[runLaneIndex]
-      self.runTime = runTime * runMultiplier[runLaneIndex]
+      runDist = runDistances[baseDist]! * runMultiplier[runLaneIndex]
+      runTime = baseTime * runMultiplier[runLaneIndex]
       waypointArcAngle = arcAngle
     }
   }
 
-  mutating func initRun(_ runDist: String, _ runLane: Int, _ runTime: Double, _ waypoints: [WaypointData]) {
-    initRunParams(runDist, runLane, runTime)
+  mutating func initRun(_ baseDist: String, _ runLane: Int, _ baseTime: Double, _ waypoints: [WaypointData]) {
+    initRunParams(baseDist, runLane, baseTime)
 
     currentExtra = 0.0
-    let runningPace  = self.runTime / self.runDist
+    let runningPace  = runTime / runDist
 
     let waypointCount = waypoints.count
     waypointTimes     = Array(repeating: 0.0, count: waypointCount)
@@ -100,19 +102,19 @@ struct WaypointCalculator {
     }
 
     // Add the wait times
-    var waitingTime = 0.0
+    waitingTime = 0
     waypointWaits = waypoints.map { $0.waitTime }
-    for i in waypointTimes.indices {
+    for i in 0..<waypointCount {
       if(i == 0) { continue }
 
-      waypointTimes[i] = waypointTimes[i] + waitingTime
-      waitingTime += waypointWaits[i].toDouble()
+      waypointTimes[i] = waypointTimes[i] + waitingTime.toDouble()
+      waitingTime += waypointWaits[i]
     }
 
     currentIndex = 0
     currentExtra    = 0.0
     prevWaypoint    = (0.0, 0.0)
-    totalTime       = runTime + waitingTime
+    totalTime       = runTime + waitingTime.toDouble()
   }
 
   mutating func initResume(_ runDist: String, _ runLane: Int, _ runTime: Double, _ resumeTime: Double) -> Double {
@@ -155,6 +157,10 @@ struct WaypointCalculator {
 
   func runTotalTime() -> Int64 {
     return totalTime.toLong()
+  }
+
+  func runWaitingTime() -> Int64 {
+    return waitingTime
   }
 
   func distOnPace() -> Double {

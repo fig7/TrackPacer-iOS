@@ -113,9 +113,9 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     self.pacingSettings = statusViewModel.pacingSettings
   }
 
-  func setPacingOptions(_ runDist: String, _ runLane: Int, _ runTime: Double, _ runProf: String) {
-    pacingOptions.baseDist = runDist
-    pacingOptions.baseTime = runTime
+  func setPacingOptions(_ baseDist: String, _ runLane: Int, _ baseTime: Double, _ runProf: String) {
+    pacingOptions.baseDist = baseDist
+    pacingOptions.baseTime = baseTime
 
     pacingOptions.runLane = runLane
     pacingOptions.runProf = runProf
@@ -127,14 +127,13 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     let pacingStatus = pacingStatus.status
     if(pacingStatus == .ServiceStart) {
       let distanceManager = mainViewModel.runModel.distanceModel.distanceManager
-      let waypoints = try! distanceManager.waypointsFor(pacingOptions.baseDist, pacingOptions.runProf)
+      let waypoints       = try! distanceManager.waypointsFor(pacingOptions.baseDist, pacingOptions.runProf)
+
       waypointService.beginPacing(pacingOptions, waypoints)
+      pacingOptions.waitingTime = waypointService.waitingTime()
 
       if(pacingSettings.powerStart) {
         setPacingStatus(.PacingWait)
-
-        // TODO: Ideally, notify the controller that the service is up and then start the screen receiver
-        mainViewModel.startScreenReceiver()
       } else {
         // Delay start
         setPacingStatus(.PacingStart)
@@ -148,7 +147,6 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
       }
     } else if(pacingStatus == .ServiceResume) {
       setPacingStatus(.PacingResume)
-      if(pacingSettings.powerStart) { mainViewModel.startScreenReceiver() }
 
       if(waypointService.resumePacing(pacingOptions, pacingProgress.elapsedTime)) {
         handler.postDelayed(pacingRunnable, delayMS: 113)
@@ -156,6 +154,8 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
         stopPacing(silent: true)
       }
     }
+
+    mainViewModel.onServiceStarted()
   }
 
   func onServiceDisconnected() {
@@ -214,13 +214,11 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func stopService() {
-    let powerStart = pacingSettings.powerStart
-    if(powerStart) { mainViewModel.stopScreenReceiver() }
-
     timer?.invalidate()
     timer = nil
 
     waypointService = nil
+    mainViewModel.onServiceStopped()
   }
 
   func beginPacing() {

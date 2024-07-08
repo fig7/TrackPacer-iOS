@@ -343,27 +343,27 @@ import UIKit
     resultModel.setRunNotes("")
 
     let pacingOptions = paceViewModel.pacingOptions
-    resultModel.setRunDist(pacingOptions.baseDist)
+    resultModel.setBaseDist(pacingOptions.baseDist)
     resultModel.setRunLane(pacingOptions.runLane)
     resultModel.setRunProf(pacingOptions.runProf)
 
-    resultModel.setTotalDist(pacingOptions.runDistStr)
-    resultModel.setTotalTime(pacingOptions.runTimeStr)
-    resultModel.setTotalPace(pacingOptions.runPaceStr)
+    resultModel.setRunDist(pacingOptions.runDistStr)
+    resultModel.setRunTime(pacingOptions.runTimeStr)
+    resultModel.setRunPace(pacingOptions.runPaceStr)
   }
 
   func setPacingResult() {
     let pacingOptions  = paceViewModel.pacingOptions
     let pacingProgress = paceViewModel.pacingProgress
 
-    let actualTime = pacingProgress.elapsedTime
-    resultModel.setActualTime(timeToAlmostFullString(timeInMS: actualTime))
+    let actualRunTime = pacingProgress.elapsedTime - pacingOptions.waitingTime
+    resultModel.setActualTime(timeToAlmostFullString(timeInMS: actualRunTime))
 
-    let actualPace = (1000.0 * actualTime.toDouble()) / pacingOptions.runDist
+    let actualPace = (1000.0 * actualRunTime.toDouble()) / pacingOptions.runDist
     resultModel.setActualPace(timeToMinuteString(timeInMS: actualPace.toLong()))
 
-    let totalTime = pacingOptions.runTime
-    var timeDiff  = actualTime - totalTime.toLong()
+    let runTime = pacingOptions.runTime
+    var timeDiff  = actualRunTime - runTime.toLong()
     if(timeDiff <= -1000) {
       timeDiff = -timeDiff
 
@@ -577,13 +577,26 @@ import UIKit
     }
   }
 
-  func startScreenReceiver() {
+  private func startScreenReceiver() {
     screenReceiverActive      = true
     uiApp.isIdleTimerDisabled = true
   }
 
-  func stopScreenReceiver() {
+  private func stopScreenReceiver() {
+    if(!screenReceiverActive) { return }
+
     screenReceiverActive      = false
     uiApp.isIdleTimerDisabled = false
+  }
+
+  func onServiceStarted() {
+    let pacingSettings = statusViewModel.pacingSettings
+    if(!pacingSettings.powerStart) { return }
+
+    startScreenReceiver()
+  }
+
+  func onServiceStopped() {
+    stopScreenReceiver()
   }
 }

@@ -24,7 +24,7 @@ import Foundation
   }
 
   func setRunData(_ runData: RunData) {
-    resultData = ResultData(runData, RunDataExtra(runData.runDist, runData.runDate))
+    resultData = ResultData(runData, RunDataExtra(runData.baseDist, runData.runDate))
   }
 
   func runNotes() -> String

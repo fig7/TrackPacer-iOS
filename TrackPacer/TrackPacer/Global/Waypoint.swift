@@ -79,7 +79,7 @@ let waypointsMap = [
   "1 mile"     : [ 0, 1, 2, 3, 4, 5 ,6, 7,  8, 1, 2, 3, 4, 5, 6, 7,  9, 1, 2, 3, 4, 5, 6, 7, 10, 1, 2, 3, 4, 5, 6, 7, fL]]
 
 
-let rDiff        = (0 ..<   8).map { (i: Int) in 1.22*i.toDouble() }
+let rDiff        = (0..<8).map { (i: Int) in 1.22*i.toDouble() }
 let arcAngle     = [1.358696, 1.358696, 0.424201, 0.0, 1.358696, 1.358696, 0.424201, 0.0]
 let arcAngle1500 = [0.424201, 0.0, 1.358696, 1.358696, 0.424201, 0.0, 1.358696, 1.358696]
 
@@ -88,12 +88,12 @@ let runMultiplier = (0 ..< 8).map { (i: Int) in
   return (2.0*Double.pi*r + 168.78)/400.0
 }
 
-let runMultiplier1500 = (0 ..< 8).map { (i: Int) in
+let runMultiplier1500 = (0..<8).map { (i: Int) in
   let r = 36.8 + rDiff[i]
   return ((Double.pi + 0.424201)*r + 168.78 + (6.0*Double.pi*r) + 506.34)/1500.0
 }
 
-let runMultiplierMile = (0 ..< 8).map { (i: Int) in
+let runMultiplierMile = (0..<8).map { (i: Int) in
   let r = 36.8 + rDiff[i]
   return (8.0*Double.pi*r + 675.12 + 9.34)/1609.34
 }

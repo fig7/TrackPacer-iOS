@@ -25,12 +25,12 @@ struct PastView: View {
         Spacer().frame(height: 10)
 
         Text("Distance run (at \"\(runData.runProf)\")")
-        Text("\(runData.totalDistStr) (\(runData.runDist) in L\(runData.runLane))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
+        Text("\(runData.runDistStr) (\(runData.baseDist) in L\(runData.runLane))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
 
         Spacer().frame(height: 10)
 
         Text("Target time")
-        Text("\(runData.totalTimeStr) (\(runData.totalPaceStr)/km)").font(.system(size: 30, weight: .regular, design: .default))
+        Text("\(runData.runTimeStr) (\(runData.runPaceStr)/km)").font(.system(size: 30, weight: .regular, design: .default))
 
         Spacer().frame(height: 10)
 

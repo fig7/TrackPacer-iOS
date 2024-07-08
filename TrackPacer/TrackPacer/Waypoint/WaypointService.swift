@@ -161,6 +161,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return diff.seconds*1000 + diff.attoseconds/1000000000000000
   }
 
+  func waitingTime() -> Int64 {
+    return waypointCalculator.runWaitingTime()
+  }
+
   func timeRemaining(_ elapsedTime: Int64) -> Int64 {
     return waypointCalculator.runTotalTime() - elapsedTime
   }
