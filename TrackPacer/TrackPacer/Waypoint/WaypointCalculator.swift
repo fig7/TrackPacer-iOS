@@ -12,29 +12,33 @@ struct WaypointCalculator {
   private var waypointTimes: [Double]!
   private var waypointWaits: [Int64]!
   private var waypointArcAngle: [Double]!
-  private var currentWaypoint = -1
-  private var currentExtra    = -1.0
 
-  private var totalDist     = -1.0
-  private var totalTime     = -1.0
+  private var currentIndex = -1
+  private var currentExtra = -1.0
+
+  private var runDist = -1.0
+  private var runTime = -1.0
+  private var totalTime = -1.0
+
   private var runLaneIndex  = -1
+  private var prevWaypoint  = (-1.0, -1.0)
 
   private func arcExtra() -> Double {
-    let arcIndex = (currentWaypoint-1) % 8
+    let arcIndex = (currentIndex-1) % 8
     let arcAngle = waypointArcAngle[arcIndex]
     return arcAngle * rDiff[runLaneIndex]
   }
 
   private func waypointDistance() -> Double {
-    return waypointDist[currentWaypoint] + currentExtra
+    return waypointDist[currentIndex] + currentExtra
   }
 
   func waypointTime() -> Double {
-    return waypointTimes[currentWaypoint]
+    return waypointTimes[currentIndex]
   }
 
   func waypointWait() -> Double {
-    return waypointWaits[currentWaypoint].toDouble()
+    return waypointWaits[currentIndex].toDouble()
   }
 
   private mutating func initRunParams(_ runDist: String, _ runLane: Int, _ runTime: Double) {
@@ -44,19 +48,19 @@ struct WaypointCalculator {
     switch(runDist) {
     case "1500m":
       // Special case, 1500m is 3.75 laps
-      totalDist = runDistances[runDist]! * runMultiplier1500[runLaneIndex]
-      totalTime = runTime * runMultiplier1500[runLaneIndex]
+      self.runDist = runDistances[runDist]! * runMultiplier1500[runLaneIndex]
+      self.runTime = runTime * runMultiplier1500[runLaneIndex]
       waypointArcAngle = arcAngle1500
 
     case "1 mile":
       // Special case, 1 mile is 4 laps + 9.34m
-      totalDist = runDistances[runDist]! * runMultiplierMile[runLaneIndex]
-      totalTime = runTime * runMultiplierMile[runLaneIndex]
+      self.runDist = runDistances[runDist]! * runMultiplierMile[runLaneIndex]
+      self.runTime = runTime * runMultiplierMile[runLaneIndex]
       waypointArcAngle = arcAngle
 
     default:
-      totalDist = runDistances[runDist]! * runMultiplier[runLaneIndex]
-      totalTime = runTime * runMultiplier[runLaneIndex]
+      self.runDist = runDistances[runDist]! * runMultiplier[runLaneIndex]
+      self.runTime = runTime * runMultiplier[runLaneIndex]
       waypointArcAngle = arcAngle
     }
   }
@@ -64,21 +68,23 @@ struct WaypointCalculator {
   mutating func initRun(_ runDist: String, _ runLane: Int, _ runTime: Double, _ waypoints: [WaypointData]) {
     initRunParams(runDist, runLane, runTime)
 
+    currentExtra = 0.0
+    let runningPace  = self.runTime / self.runDist
+
+    let waypointCount = waypoints.count
+    waypointTimes     = Array(repeating: 0.0, count: waypointCount)
+
     var prevDistance = 0.0
     var prevTime     = 0.0
-    let speed = totalDist / totalTime
-
-    currentExtra = 0.0
-    waypointTimes = Array(repeating: 0.0, count: waypointDist.count)
-    for i in waypointTimes.indices {
+    for i in 0..<waypointCount {
       if(i == 0) { continue }
 
-      currentWaypoint = i
+      currentIndex = i
       currentExtra += arcExtra()
 
       let distance = waypointDistance()
       let thisDistance = distance - prevDistance
-      waypointTimes[i] = prevTime + (thisDistance / (speed*waypoints[i].scaleFactor))
+      waypointTimes[i] = prevTime + (thisDistance*runningPace) / waypoints[i].scaleFactor
 
       prevDistance = distance
       prevTime = waypointTimes[i]
@@ -88,24 +94,25 @@ struct WaypointCalculator {
     // If we are not in lane 1, there could be more time spent on the curves, so the times
     // won't add together to give us the required overall pace. A quick fix is to adjust all
     // the times so that the total time matches the time the user has set.
-    let normaliseFactor = totalTime / waypointTimes[waypointDist.count-1]
+    let normaliseFactor = self.runTime / waypointTimes[waypointCount-1]
     for i in waypointTimes.indices {
       waypointTimes[i] *= normaliseFactor
     }
 
     // Add the wait times
-    var waitTotal = 0.0
+    var waitingTime = 0.0
     waypointWaits = waypoints.map { $0.waitTime }
     for i in waypointTimes.indices {
       if(i == 0) { continue }
 
-      waypointTimes[i] = waypointTimes[i] + waitTotal
-      waitTotal += waypointWaits[i].toDouble()
+      waypointTimes[i] = waypointTimes[i] + waitingTime
+      waitingTime += waypointWaits[i].toDouble()
     }
 
-    currentWaypoint = 0
+    currentIndex = 0
     currentExtra    = 0.0
-    totalTime += waitTotal
+    prevWaypoint    = (0.0, 0.0)
+    totalTime       = runTime + waitingTime
   }
 
   mutating func initResume(_ runDist: String, _ runLane: Int, _ runTime: Double, _ resumeTime: Double) -> Double {
@@ -115,7 +122,7 @@ struct WaypointCalculator {
     for i in waypointDist.indices {
       if(i == 0) { continue }
 
-      currentWaypoint = i
+      currentIndex = i
       currentExtra += arcExtra()
 
       let waypointTime = waypointTime()
@@ -130,25 +137,38 @@ struct WaypointCalculator {
   }
 
   func waypointNum() -> Int {
-    return currentWaypoint
+    return currentIndex
   }
 
   func waypointsRemaining() -> Bool {
-    return (currentWaypoint < (waypointDist.size - 1))
+    return (currentIndex < (waypointDist.size - 1))
   }
 
   mutating func nextWaypoint() -> (Double, Double) {
-    currentWaypoint += 1
+    prevWaypoint = (waypointTime() + waypointWait(), waypointDistance())
+
+    currentIndex += 1
     currentExtra += arcExtra()
 
     return (waypointTime(), waypointWait())
   }
 
-  func runTime() -> Int64 {
+  func runTotalTime() -> Int64 {
     return totalTime.toLong()
   }
 
+  func distOnPace() -> Double {
+    return waypointDistance()
+  }
+
   func distOnPace(_ elapsedTime: Double) -> Double {
-    if(elapsedTime > totalTime) { return totalDist } else { return (elapsedTime*totalDist)/totalTime }
+    if(elapsedTime > totalTime) { return runDist }
+
+    let legTime = waypointTime()     - prevWaypoint.0
+    let legDist = waypointDistance() - prevWaypoint.1
+    let legPace = legTime / legDist
+
+    let legElapsed = elapsedTime - prevWaypoint.0
+    return prevWaypoint.1 + (legElapsed/legPace)
   }
 }

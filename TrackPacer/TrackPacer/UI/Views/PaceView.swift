@@ -27,12 +27,12 @@ struct PaceView: View {
       Spacer().frame(height: 10)
 
       Text("Distance in lane \(pacingOptions.runLane)")
-      Text("\(pacingOptions.totalDistStr) (\(pacingOptions.runLaps))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
+      Text("\(pacingOptions.runDistStr) (\(pacingOptions.runLaps))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
 
       Spacer().frame(height: 10)
 
       Text("Target time")
-      Text("\(pacingOptions.totalTimeStr) (\(pacingOptions.totalPaceStr)/km)").font(.system(size: 30, weight: .regular, design: .default))
+      Text("\(pacingOptions.runTimeStr) (\(pacingOptions.runPaceStr)/km)").font(.system(size: 30, weight: .regular, design: .default))
 
       Spacer().frame(height: 10)
 

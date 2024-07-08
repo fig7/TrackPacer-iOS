@@ -114,10 +114,12 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func setPacingOptions(_ runDist: String, _ runLane: Int, _ runTime: Double, _ runProf: String) {
-    pacingOptions.runDist = runDist
+    pacingOptions.baseDist = runDist
+    pacingOptions.baseTime = runTime
+
     pacingOptions.runLane = runLane
-    pacingOptions.runTime = runTime
     pacingOptions.runProf = runProf
+
     pacingProgress.resetProgress()
   }
 
@@ -125,7 +127,7 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     let pacingStatus = pacingStatus.status
     if(pacingStatus == .ServiceStart) {
       let distanceManager = mainViewModel.runModel.distanceModel.distanceManager
-      let waypoints = try! distanceManager.waypointsFor(pacingOptions.runDist, pacingOptions.runProf)
+      let waypoints = try! distanceManager.waypointsFor(pacingOptions.baseDist, pacingOptions.runProf)
       waypointService.beginPacing(pacingOptions, waypoints)
 
       if(pacingSettings.powerStart) {
@@ -190,16 +192,21 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
 
         if(pacingStatus == .PacingStart) { mainViewModel.initPacingResult() }
       } else {
-        let distRun = waypointService.distOnPace(elapsedTime)
-        pacingProgress.setDistRun(distRun)
-
         let name          = waypointService.waypointName()
         let progress      = waypointService.waypointProgress(elapsedTime)
         let timeRemaining = waypointService.timeRemaining(elapsedTime)
         let waitRemaining = waypointService.waitRemaining(elapsedTime)
         pacingProgress.setWaypointProgress(name, progress, timeRemaining, waitRemaining)
 
-        if((progress == 1.0) && (waitRemaining == 0)) { waypointService.nextWaypoint() }
+        if(waitRemaining == 0) {
+          if(progress == 1.0) { waypointService.nextWaypoint() }
+
+          let distRun = waypointService.distOnPace(elapsedTime)
+          pacingProgress.setDistRun(distRun)
+        } else {
+          let distRun = waypointService.distOnPace()
+          pacingProgress.setDistRun(distRun)
+        }
       }
     }
 

@@ -8,54 +8,54 @@
 import Foundation
 
 @MainActor class PacingOptions : ObservableObject {
-  var runDist = "" {
+  var baseDist = "" {
     didSet {
-      totalDist = distanceFor(runDist, runLane)
-      totalTime = timeFor(runDist, runLane, runTime)
-      runLaps   = rtLaps(runDist, runLane)
+      runDist = distanceFor(baseDist, runLane)
+      runTime = timeFor(baseDist, runLane, baseTime)
+      runLaps   = rtLaps(baseDist, runLane)
 
-      let totalPace = (1000.0 * totalTime) / totalDist
-      totalPaceStr = timeToString(timeInMS: totalPace.toLong())
+      let totalPace = (1000.0 * runTime) / runDist
+      runPaceStr = timeToString(timeInMS: totalPace.toLong())
     }
   }
 
   var runLane = 1 {
     didSet {
-      totalDist = distanceFor(runDist, runLane)
-      totalTime = timeFor(runDist, runLane, runTime)
-      runLaps   = rtLaps(runDist, runLane)
+      runDist = distanceFor(baseDist, runLane)
+      runTime = timeFor(baseDist, runLane, baseTime)
+      runLaps   = rtLaps(baseDist, runLane)
 
-      let totalPace = (1000.0 * totalTime) / totalDist
-      totalPaceStr = timeToString(timeInMS: totalPace.toLong())
+      let totalPace = (1000.0 * runTime) / runDist
+      runPaceStr = timeToString(timeInMS: totalPace.toLong())
     }
   }
 
-  var runTime = 0.0 {
+  var baseTime = 0.0 {
     didSet {
-      totalTime = timeFor(runDist, runLane, runTime)
+      runTime = timeFor(baseDist, runLane, baseTime)
 
-      let totalPace = (1000.0 * totalTime) / totalDist
-      totalPaceStr = timeToString(timeInMS: totalPace.toLong())
+      let totalPace = (1000.0 * runTime) / runDist
+      runPaceStr = timeToString(timeInMS: totalPace.toLong())
     }
   }
 
-  var totalDist: Double = 0.0 {
+  var runDist: Double = 0.0 {
     didSet {
-      totalDistStr = formatDist(runDist, runLane, totalDist)
+      runDistStr = formatDist(baseDist, runLane, runDist)
     }
   }
 
-  var totalTime: Double = 0.0 {
+  var runTime: Double = 0.0 {
     didSet {
-      totalTimeStr = timeToAlmostFullString(timeInMS: totalTime.toLong())
+      runTimeStr = timeToAlmostFullString(timeInMS: runTime.toLong())
     }
   }
 
   @Published var runLaps = ""
-  @Published var totalDistStr = ""
+  @Published var runDistStr = ""
 
-  @Published var totalTimeStr = ""
-  @Published var totalPaceStr = ""
+  @Published var runTimeStr = ""
+  @Published var runPaceStr = ""
 
   @Published var runProf = "Fixed pace"
 }

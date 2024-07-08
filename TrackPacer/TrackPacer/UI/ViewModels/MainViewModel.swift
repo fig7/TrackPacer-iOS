@@ -343,13 +343,13 @@ import UIKit
     resultModel.setRunNotes("")
 
     let pacingOptions = paceViewModel.pacingOptions
-    resultModel.setRunDist(pacingOptions.runDist)
+    resultModel.setRunDist(pacingOptions.baseDist)
     resultModel.setRunLane(pacingOptions.runLane)
     resultModel.setRunProf(pacingOptions.runProf)
 
-    resultModel.setTotalDist(pacingOptions.totalDistStr)
-    resultModel.setTotalTime(pacingOptions.totalTimeStr)
-    resultModel.setTotalPace(pacingOptions.totalPaceStr)
+    resultModel.setTotalDist(pacingOptions.runDistStr)
+    resultModel.setTotalTime(pacingOptions.runTimeStr)
+    resultModel.setTotalPace(pacingOptions.runPaceStr)
   }
 
   func setPacingResult() {
@@ -359,10 +359,10 @@ import UIKit
     let actualTime = pacingProgress.elapsedTime
     resultModel.setActualTime(timeToAlmostFullString(timeInMS: actualTime))
 
-    let actualPace = (1000.0 * actualTime.toDouble()) / pacingOptions.totalDist
+    let actualPace = (1000.0 * actualTime.toDouble()) / pacingOptions.runDist
     resultModel.setActualPace(timeToMinuteString(timeInMS: actualPace.toLong()))
 
-    let totalTime = pacingOptions.totalTime
+    let totalTime = pacingOptions.runTime
     var timeDiff  = actualTime - totalTime.toLong()
     if(timeDiff <= -1000) {
       timeDiff = -timeDiff
