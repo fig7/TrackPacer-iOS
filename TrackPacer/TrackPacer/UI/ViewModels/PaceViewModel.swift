@@ -124,15 +124,16 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func onServiceConnected() {
+    let distanceManager = mainViewModel.runModel.distanceModel.distanceManager
+    let waypoints       = try! distanceManager.waypointsFor(pacingOptions.baseDist, pacingOptions.runProf)
+
     let pacingStatus = pacingStatus.status
     if(pacingStatus == .ServiceStart) {
-      let distanceManager = mainViewModel.runModel.distanceModel.distanceManager
-      let waypoints       = try! distanceManager.waypointsFor(pacingOptions.baseDist, pacingOptions.runProf)
-
       waypointService.beginPacing(pacingOptions, waypoints)
       pacingOptions.waitingTime = waypointService.waitingTime()
 
       if(pacingSettings.powerStart) {
+        // Power start (wait for power press)
         setPacingStatus(.PacingWait)
       } else {
         // Delay start
@@ -146,9 +147,11 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
         }
       }
     } else if(pacingStatus == .ServiceResume) {
-      setPacingStatus(.PacingResume)
+      waypointService.resumePacing(pacingOptions, waypoints, pacingProgress.elapsedTime)
 
-      if(waypointService.resumePacing(pacingOptions, pacingProgress.elapsedTime)) {
+      // Resume start
+      setPacingStatus(.PacingResume)
+      if(waypointService.resumeStart(quickStart: pacingSettings.quickStart)) {
         handler.postDelayed(pacingRunnable, delayMS: 113)
       } else {
         stopPacing(silent: true)
@@ -184,10 +187,11 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
   func handleTimeUpdate() {
     guard let waypointService else { return }
     let elapsedTime = waypointService.elapsedTime()
-    if(elapsedTime >= 0) {
+    let resumeTime  = waypointService.resumeTime()
+    if(elapsedTime >= resumeTime) {
       let pacingStatus = pacingStatus.status
       if((pacingStatus == .PacingStart) || (pacingStatus == .PacingResume)) {
-        waypointService.beginRun()
+        waypointService.processWaypoints()
         setPacingStatus(.Pacing)
 
         if(pacingStatus == .PacingStart) { mainViewModel.initPacingResult() }
@@ -208,9 +212,14 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
           pacingProgress.setDistRun(distRun)
         }
       }
+
+      pacingProgress.setElapsedTime(elapsedTime)
     }
 
-    pacingProgress.setElapsedTime(elapsedTime)
+    // Special case for run start (update the elapsed time during set)
+    if(elapsedTime < 0) {
+      pacingProgress.setElapsedTime(elapsedTime)
+    }
   }
 
   func stopService() {
@@ -242,17 +251,22 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     guard let waypointService else { return }
 
     // Record the pacing progress
-    let elapsedTime = waypointService.elapsedTime()
-    pacingProgress.setElapsedTime(elapsedTime)
-
-    let distRun = waypointService.distOnPace(elapsedTime)
-    pacingProgress.setDistRun(distRun)
-
+    let elapsedTime   = waypointService.elapsedTime()
     let name          = waypointService.waypointName()
     let progress      = waypointService.waypointProgress(elapsedTime)
     let timeRemaining = waypointService.timeRemaining(elapsedTime)
     let waitRemaining = waypointService.waitRemaining(elapsedTime)
     pacingProgress.setWaypointProgress(name, progress, timeRemaining, waitRemaining)
+
+    if(waitRemaining == 0) {
+      let distRun = waypointService.distOnPace(elapsedTime)
+      pacingProgress.setDistRun(distRun)
+    } else {
+      let distRun = waypointService.distOnPace()
+      pacingProgress.setDistRun(distRun)
+    }
+
+    pacingProgress.setElapsedTime(elapsedTime)
 
     // Stop the service
     stopService()

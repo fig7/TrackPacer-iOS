@@ -49,7 +49,9 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
   private var quickStart = false
   private var startRealtime: ContinuousClock.Instant!
-  private var prevTime = -1.0
+
+  private var goTime:Int64 = -1
+  private var prevTime     = -1.0
 
   private func waypointRunnable(delayMS: Int64) {
     handleWaypoint(delayMS)
@@ -104,6 +106,9 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
   func beginPacing(_ pacingOptions: PacingOptions, _ waypoints: [WaypointData]) {
     waypointIndexList = waypointsFor(pacingOptions.baseDist)
+
+    goTime = 0
+    prevTime    = 0.0
     waypointCalculator.initRun(pacingOptions.baseDist, pacingOptions.runLane, pacingOptions.baseTime, waypoints)
   }
 
@@ -138,17 +143,23 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return true
   }
 
-  func resumePacing(_ pacingOptions: PacingOptions, _ resumeTime: Int64) -> Bool {
+  func resumePacing(_ pacingOptions: PacingOptions, _ waypoints: [WaypointData], _ resumeTime: Int64) {
     waypointIndexList = waypointsFor(pacingOptions.baseDist)
 
-    prevTime      = waypointCalculator.initResume(pacingOptions.baseDist, pacingOptions.runLane, pacingOptions.baseTime, resumeTime.toDouble())
-    startRealtime = SystemClock.elapsedRealtime() - .milliseconds(resumeTime)
+    goTime   = resumeTime
+    prevTime = waypointCalculator.initResume(pacingOptions.baseDist, pacingOptions.runLane, pacingOptions.baseTime, waypoints, resumeTime.toDouble())
+  }
+
+  func resumeStart(quickStart: Bool) -> Bool {
+    self.quickStart = quickStart
+    mpWaitGo = if(quickStart) { mpWaitGo1 } else { mpWaitGo3 }
+
+    startRealtime = SystemClock.elapsedRealtime() - .milliseconds(goTime-ResumeClipOffset)
     handler.post(resumeRunnable)
     return true
   }
 
-  func beginRun() {
-    prevTime = 0.0
+  func processWaypoints() {
     (waypointTime, waypointWait) = waypointCalculator.nextWaypoint()
 
     let runnable = (waypointWait > 0.0) ? waitRunnable : waypointRunnable
@@ -159,6 +170,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   func elapsedTime() -> Int64 {
     let diff = (SystemClock.elapsedRealtime() - startRealtime).components
     return diff.seconds*1000 + diff.attoseconds/1000000000000000
+  }
+
+  func resumeTime() -> Int64 {
+    return goTime
   }
 
   func waitingTime() -> Int64 {
@@ -289,13 +304,11 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     let i = waypointIndexList[waypointCalculator.waypointNum()]
     // let res = audioManager.requestAudioFocus(focusRequest)
     // if(res == AUDIOFOCUS_REQUEST_GRANTED) {
-      mpResume.stop()
       mpWaypoint[i].play(atTime: mpWaypoint[i].deviceCurrentTime + delayMS.toDouble()/1000.0)
     // }
   }
 
   private func handleWait(_ delayMS: Int64) {
-    mpResume.stop()
     mpWaitStart.play(atTime: mpWaitStart.deviceCurrentTime + delayMS.toDouble()/1000.0)
   }
 

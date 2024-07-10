@@ -46,4 +46,6 @@ let clipList = [
 let Go1ClipDuration: Int64  = 400
 let Go3ClipDuration: Int64  = 3000
 let PowerStartOffset: Int64 = 4000
+
 let PowerClipOffset: Int64  = 1000
+let ResumeClipOffset: Int64 = 1000

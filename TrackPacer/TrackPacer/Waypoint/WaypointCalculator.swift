@@ -117,22 +117,24 @@ struct WaypointCalculator {
     totalTime       = runTime + waitingTime.toDouble()
   }
 
-  mutating func initResume(_ runDist: String, _ runLane: Int, _ runTime: Double, _ resumeTime: Double) -> Double {
-    initRunParams(runDist, runLane, runTime)
+  mutating func initResume(_ baseDist: String, _ runLane: Int, _ baseTime: Double, _ waypoints: [WaypointData], _ resumeTime: Double) -> Double {
+    initRun(baseDist, runLane, baseTime, waypoints)
 
-    var prevTime = 0.0
-    for i in waypointDist.indices {
+    var prevTime      = 0.0
+    let waypointCount = waypoints.count
+    for i in 0..<waypointCount {
       if(i == 0) { continue }
 
       currentIndex = i
-      currentExtra += arcExtra()
-
       let waypointTime = waypointTime()
-      if(waypointTime > resumeTime) {
+      let waypointWait = waypointWait()
+      if((waypointTime + waypointWait) > resumeTime) {
+        currentIndex = i-1
         break
       }
 
-      prevTime = waypointTime
+      currentExtra += arcExtra()
+      prevTime = waypointTime + waypointWait
     }
 
     return prevTime
