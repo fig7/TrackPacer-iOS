@@ -8,7 +8,7 @@
 import Foundation
 
 @MainActor class TrackSelection: ObservableObject {
-  @Published var totalDist = "400m"
+  @Published var runDist = "400m"
 
   @Published var lapCounter    = "1 lap"
   @Published var lapDesc1      = ""

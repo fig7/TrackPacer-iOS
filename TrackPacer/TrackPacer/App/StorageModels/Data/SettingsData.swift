@@ -8,10 +8,10 @@
 import Foundation
 
 struct SettingsData: Codable {
-  var startDelay     = "5.00"
-  var powerStart     = false
-  var quickStart     = false
-  var alternateStart = false
-  var flightMode     = true
-  var refPace        = "5:00"
+  var startDelay   = "5.00"
+  var powerStart   = false
+  var quickStart   = false
+  var runClockwise = false
+  var flightMode   = true
+  var refPace      = "5:00"
 }

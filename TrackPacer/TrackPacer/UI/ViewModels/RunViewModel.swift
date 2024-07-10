@@ -92,21 +92,21 @@ import Foundation
 
   func updateTrackOverlay() {
     do {
-      let runDist = distanceSelection.selected
+      let baseDist = distanceSelection.selected
       let runLane = try laneSelection.selected.toInt()
+
+      let runDist = distanceFor(baseDist, runLane)
+      trackSelection.runDist = formatDist(baseDist, runLane, runDist)
+
+      trackSelection.lapCounter = rtLaps(baseDist, runLane)
+      trackSelection.lapDesc1   = rtDesc1(baseDist, runLane)
+      trackSelection.lapDesc2   = rtDesc2(baseDist, runLane)
 
       let settingsModel   = mainViewModel.settingsModel
       let settingsManager = settingsModel.settingsManager
-      let alternateStart  = settingsManager.alternateStart
+      let runClockwise    = settingsManager.runClockwise
 
-      let totalDist = distanceFor(runDist, runLane)
-      trackSelection.totalDist  = formatDist(runDist, runLane, totalDist)
-
-      trackSelection.lapCounter = rtLaps(runDist, runLane)
-      trackSelection.lapDesc1   = rtDesc1(runDist, runLane, alternateStart)
-      trackSelection.lapDesc2   = rtDesc2(runDist, runLane, alternateStart)
-
-      trackSelection.trackOverlay = rtOverlay(runDist, runLane, alternateStart)
+      trackSelection.trackOverlay = rtOverlay(baseDist, runLane, runClockwise)
     } catch { }
   }
 

@@ -98,7 +98,7 @@ struct SettingsView: View {
 
               Spacer()
 
-              Toggle("", isOn: $viewModel.alternateStart).labelsHidden().padding(2)
+              Toggle("", isOn: $viewModel.runClockwise).labelsHidden().padding(2)
             }.padding(.horizontal, 1).padding(.vertical, 16)
 
             Divider()
@@ -145,14 +145,14 @@ struct SettingsView: View {
             .textFieldSelectAll()
         }
       }
-      .onChange(of: viewModel.startDelaySS)   { viewModel.startDelayChanged() }
-      .onChange(of: viewModel.startDelayHH)   { viewModel.startDelayChanged() }
-      .onChange(of: viewModel.powerStart)     { viewModel.powerStartChanged() }
-      .onChange(of: viewModel.quickStart)     { viewModel.quickStartChanged() }
-      .onChange(of: viewModel.alternateStart) { viewModel.alternateStartChanged() }
-      .onChange(of: viewModel.flightMode)     { viewModel.flightModeChanged() }
-      .onChange(of: viewModel.refPaceMM)      { viewModel.refPaceChanged() }
-      .onChange(of: viewModel.refPaceSS)      { viewModel.refPaceChanged() }
+      .onChange(of: viewModel.startDelaySS) { viewModel.startDelayChanged() }
+      .onChange(of: viewModel.startDelayHH) { viewModel.startDelayChanged() }
+      .onChange(of: viewModel.powerStart)   { viewModel.powerStartChanged() }
+      .onChange(of: viewModel.quickStart)   { viewModel.quickStartChanged() }
+      .onChange(of: viewModel.runClockwise) { viewModel.runClockwiseChanged() }
+      .onChange(of: viewModel.flightMode)   { viewModel.flightModeChanged() }
+      .onChange(of: viewModel.refPaceMM)    { viewModel.refPaceChanged() }
+      .onChange(of: viewModel.refPaceSS)    { viewModel.refPaceChanged() }
     }.padding(.horizontal, 20).scrollDismissesKeyboard(.interactively)
   }
 }

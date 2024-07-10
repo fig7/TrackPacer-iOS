@@ -20,12 +20,12 @@ class SettingsManager {
     self.settingsDir = File(file: filesDir, child: "Settings", directoryHint: .isDirectory)
   }
 
-  var startDelay: String   { get { return settingsData.startDelay } }
-  var powerStart: Bool     { get { return settingsData.powerStart } }
-  var quickStart: Bool     { get { return settingsData.quickStart } }
-  var alternateStart: Bool { get { return settingsData.alternateStart } }
-  var flightMode: Bool     { get { return settingsData.flightMode } }
-  var refPace: String      { get { return settingsData.refPace } }
+  var startDelay: String { get { return settingsData.startDelay } }
+  var powerStart: Bool   { get { return settingsData.powerStart } }
+  var quickStart: Bool   { get { return settingsData.quickStart } }
+  var runClockwise: Bool { get { return settingsData.runClockwise } }
+  var flightMode: Bool   { get { return settingsData.flightMode } }
+  var refPace: String    { get { return settingsData.refPace } }
 
   func initSettings(defaultSettings: [Any]) throws {
     settingsFromDefaults(defaultSettings)
@@ -87,18 +87,18 @@ class SettingsManager {
     return true
   }
 
-  func setAlternateStart(_ alternateStart: Bool) -> Bool {
+  func setRunClockwise(_ runClockwise: Bool) -> Bool {
     var newSettingsData = settingsData!
-    if(newSettingsData.alternateStart == alternateStart) { return true }
+    if(newSettingsData.runClockwise == runClockwise) { return true }
 
     do {
-      newSettingsData.alternateStart = alternateStart
+      newSettingsData.runClockwise = runClockwise
       try writeData(newSettingsData)
     } catch {
       return false
     }
 
-    settingsData.alternateStart = alternateStart
+    settingsData.runClockwise = runClockwise
     return true
   }
 
@@ -140,7 +140,7 @@ class SettingsManager {
     settingsData.startDelay     = defaultSettings[0] as! String
     settingsData.powerStart     = defaultSettings[1] as! Bool
     settingsData.quickStart     = defaultSettings[2] as! Bool
-    settingsData.alternateStart = defaultSettings[3] as! Bool
+    settingsData.runClockwise   = defaultSettings[3] as! Bool
     settingsData.flightMode     = defaultSettings[4] as! Bool
     settingsData.refPace        = defaultSettings[5] as! String
   }

@@ -16,7 +16,7 @@ import Foundation
 
   @Published var powerStart     = false
   @Published var quickStart     = false
-  @Published var alternateStart = false
+  @Published var runClockwise = false
   @Published var flightMode     = false
 
   @Published var refPaceMM = ""
@@ -39,10 +39,10 @@ import Foundation
     refPaceSS = String(refPaceSplit[1])
     refPaceValid = true
 
-    powerStart     = settingsManager.powerStart
-    quickStart     = settingsManager.quickStart
-    alternateStart = settingsManager.alternateStart
-    flightMode     = settingsManager.flightMode
+    powerStart   = settingsManager.powerStart
+    quickStart   = settingsManager.quickStart
+    runClockwise = settingsManager.runClockwise
+    flightMode   = settingsManager.flightMode
   }
 
   func startDelayChanged() {
@@ -61,8 +61,8 @@ import Foundation
     mainViewModel.setQuickStart(quickStart)
   }
 
-  func alternateStartChanged() {
-    mainViewModel.setAlternateStart(alternateStart)
+  func runClockwiseChanged() {
+    mainViewModel.setRunClockwise(runClockwise)
   }
 
   func flightModeChanged() {

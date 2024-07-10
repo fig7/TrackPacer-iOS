@@ -12,5 +12,4 @@ import Foundation
 
   @Published var powerStart     = true
   @Published var quickStart     = false
-  @Published var alternateStart = false
 }

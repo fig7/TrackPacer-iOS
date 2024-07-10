@@ -414,12 +414,6 @@ import UIKit
 
   func saveProfile(_ profileDist: String, _ profileName: String, _ waypointData: [WaypointData]) {
     do {
-      var profileName = profileName
-
-      let settingsManager = settingsModel.settingsManager
-      let alternateStart  = settingsManager.alternateStart && hasAlternateStart(profileDist)
-      if(alternateStart) { profileName = profileName + "__AS__" }
-
       let distanceManager = runModel.distanceModel.distanceManager
       if(distanceManager.profileExists(profileDist, profileName)) {
         showQuestionDialog(title: "Replace existing profile",
@@ -545,16 +539,14 @@ import UIKit
     statusViewModel.pacingSettings.quickStart = settingsManager.quickStart
   }
 
-  func setAlternateStart(_ newAlternateStart: Bool) {
+  func setRunClockwise(_ newRunClockwise: Bool) {
     if(handlingSettingsError) { handlingSettingsError = false; return }
 
     let settingsManager = settingsModel.settingsManager
-    if(!settingsManager.setAlternateStart(newAlternateStart)) {
+    if(!settingsManager.setRunClockwise(newRunClockwise)) {
       handleSettingsError()
       return
     }
-
-    statusViewModel.pacingSettings.alternateStart = settingsManager.alternateStart
   }
 
   func setFlightMode(_ newFlightMode: Bool) {

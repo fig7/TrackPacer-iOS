@@ -86,7 +86,7 @@ struct RunView: View {
 
       VStack {
         HStack {
-          Text("Start to Finish (\(trackSelection.totalDist)):")
+          Text("Start to Finish (\(trackSelection.runDist)):")
 
           Spacer()
         }.padding(.horizontal, 20)

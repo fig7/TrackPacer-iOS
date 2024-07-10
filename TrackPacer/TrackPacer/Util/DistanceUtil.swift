@@ -7,14 +7,10 @@
 
 import Foundation
 
-func formatDist(_ runDist: String, _ runLane: Int, _ totalDist: Double) -> String {
-  if(runDist == "1 mile") {
-    if(runLane == 1) { return runDist } else { return String(format: "%.2f miles", totalDist/1609.34) }
+func formatDist(_ baseDist: String, _ runLane: Int, _ runDist: Double) -> String {
+  if(baseDist == "1 mile") {
+    if(runLane == 1) { return baseDist } else { return String(format: "%.2f miles", runDist/1609.34) }
   } else {
-    if(runLane == 1) { return String(format: "%dm", totalDist.toInt()) } else { return String(format: "%.2fm", totalDist) }
+    if(runLane == 1) { return String(format: "%dm", runDist.toInt()) } else { return String(format: "%.2fm", runDist) }
   }
-}
-
-func hasAlternateStart(_ runDist: String) -> Bool {
-  return ["1000m", "3000m", "5000m"].contains(runDist)
 }

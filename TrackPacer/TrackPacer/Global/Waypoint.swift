@@ -98,38 +98,38 @@ let runMultiplierMile = (0..<8).map { (i: Int) in
   return (8.0*Double.pi*r + 675.12 + 9.34)/1609.34
 }
 
-func distanceFor(_ runDist: String, _ runLane: Int) -> Double {
+func distanceFor(_ baseDist: String, _ runLane: Int) -> Double {
   let runLaneIndex = runLane - 1
-  switch(runDist) {
+  switch(baseDist) {
   case "1500m":
     // Special case, 1500m is 3.75 laps
-    return runDistances[runDist]! * runMultiplier1500[runLaneIndex]
+    return runDistances[baseDist]! * runMultiplier1500[runLaneIndex]
 
   case "1 mile":
     // Special case, 1 mile is 4 laps + 9.34m
-    return runDistances[runDist]! * runMultiplierMile[runLaneIndex]
+    return runDistances[baseDist]! * runMultiplierMile[runLaneIndex]
 
   default:
-    return runDistances[runDist]! * runMultiplier[runLaneIndex]
+    return runDistances[baseDist]! * runMultiplier[runLaneIndex]
   }
 }
 
-func timeFor(_ runDist: String, _ runLane: Int, _ runTime:Double) -> Double {
+func timeFor(_ baseDist: String, _ runLane: Int, _ baseTime:Double) -> Double {
   let runLaneIndex = runLane - 1
-  switch(runDist) {
+  switch(baseDist) {
   case"1500m":
     // Special case, 1500m is 3.75 laps
-    return runTime * runMultiplier1500[runLaneIndex]
+    return baseTime * runMultiplier1500[runLaneIndex]
 
   case "1 mile":
       // Special case, 1 mile is 4 laps + 9.34m
-      return runTime * runMultiplierMile[runLaneIndex]
+      return baseTime * runMultiplierMile[runLaneIndex]
 
   default:
-    return runTime * runMultiplier[runLaneIndex]
+    return baseTime * runMultiplier[runLaneIndex]
   }
 }
 
-func waypointsFor(_ runDist: String) -> [Int] {
-  return waypointsMap[runDist]!
+func waypointsFor(_ baseDist: String) -> [Int] {
+  return waypointsMap[baseDist]!
 }
