@@ -15,8 +15,10 @@ private class MPPausingDelegate : NSObject, AVAudioPlayerDelegate {
     self.viewModel = viewModel
   }
 
-  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    viewModel.setPacingStatus(.PacingPaused)
+  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    Task { @MainActor in
+      viewModel.setPacingStatus(.PacingPaused)
+    }
   }
 }
 
@@ -27,8 +29,10 @@ private class MPCancelledDelegate : NSObject, AVAudioPlayerDelegate {
     self.viewModel = viewModel
   }
 
-  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    viewModel.setPacingStatus(.NotPacing)
+  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    Task { @MainActor in
+      viewModel.setPacingStatus(.NotPacing)
+    }
   }
 }
 
@@ -39,9 +43,11 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     self.viewModel = viewModel
   }
 
-  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    viewModel.setPacingStatus(.NotPacing)
-    viewModel.pacingComplete()
+  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    Task { @MainActor in
+      viewModel.setPacingStatus(.NotPacing)
+      viewModel.pacingComplete()
+    }
   }
 }
 

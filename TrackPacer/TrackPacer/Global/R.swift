@@ -7,36 +7,6 @@
 
 import Foundation
 
-struct Strings {
-  let empty = ""
-
-  let laps_400   = NSLocalizedString("laps_400",   comment: "")
-  let laps_800   = NSLocalizedString("laps_800",   comment: "")
-  let laps_1000  = NSLocalizedString("laps_1000",  comment: "")
-  let laps_1200  = NSLocalizedString("laps_1200",  comment: "")
-  let laps_1500  = NSLocalizedString("laps_1500",  comment: "")
-  let laps_2000  = NSLocalizedString("laps_2000",  comment: "")
-  let laps_3000  = NSLocalizedString("laps_3000",  comment: "")
-  let laps_4000  = NSLocalizedString("laps_4000",  comment: "")
-  let laps_5000  = NSLocalizedString("laps_5000",  comment: "")
-  let laps_10000 = NSLocalizedString("laps_10000", comment: "")
-  let laps_mile  = NSLocalizedString("laps_mile",  comment: "")
-
-  let fl_200m = NSLocalizedString("fl_200m", comment: "")
-  let fl_300m = NSLocalizedString("fl_300m", comment: "")
-  let fl_mile = NSLocalizedString("fl_mile", comment: "")
-  let ll_200m = NSLocalizedString("ll_200m", comment: "")
-
-  let ll_2  = NSLocalizedString("ll_2",  comment: "")
-  let ll_3  = NSLocalizedString("ll_3",  comment: "")
-  let ll_4  = NSLocalizedString("ll_4",  comment: "")
-  let ll_5  = NSLocalizedString("ll_5",  comment: "")
-  let ll_8  = NSLocalizedString("ll_8",  comment: "")
-  let ll_10 = NSLocalizedString("ll_10", comment: "")
-  let ll_13 = NSLocalizedString("ll_13", comment: "")
-  let ll_25 = NSLocalizedString("ll_25", comment: "")
-}
-
 struct Drawables {
   let rt_400_l1 = "rt_400_l1"
   let rt_400_l2 = "rt_400_l2"
@@ -129,9 +99,94 @@ struct Drawables {
   let rt_mile_l8_ck = "rt_mile_l8_ck"
 }
 
+struct Raw {
+  let oym = "oym"
+  let set = "set"
+
+  let threetwoone = "threetwoone"
+  let go          = "go"
+  let silent      = "silent"
+
+  let fifty                = "fifty"
+  let onehundred           = "onehundred"
+  let onehundredandfifty   = "onehundredandfifty"
+  let twohundred           = "twohundred"
+  let twohundredandfifty   = "twohundredandfifty"
+  let threehundred         = "threehundred"
+  let threehundredandfifty = "threehundredandfifty"
+
+  let lap2  = "lap2"
+  let lap3  = "lap3"
+  let lap4  = "lap4"
+  let lap5  = "lap5"
+  let lap6  = "lap6"
+  let lap7  = "lap7"
+  let lap8  = "lap8"
+  let lap9  = "lap9"
+  let lap10 = "lap10"
+  let lap11 = "lap11"
+  let lap12 = "lap12"
+  let lap13 = "lap13"
+  let lap14 = "lap14"
+  let lap15 = "lap15"
+  let lap16 = "lap16"
+  let lap17 = "lap17"
+  let lap18 = "lap18"
+  let lap19 = "lap19"
+  let lap20 = "lap20"
+  let lap21 = "lap21"
+  let lap22 = "lap22"
+  let lap23 = "lap23"
+  let lap24 = "lap24"
+  let lap25 = "lap25"
+
+  let stop    = "stop"
+  let thirty  = "thirty"
+  let ten     = "ten"
+  let up      = "up"
+  let down    = "down"
+
+  let finish = "finish"
+
+  let paused    = "paused"
+  let cancelled = "cancelled"
+  let complete  = "complete"
+}
+
+struct Strings {
+  let empty = ""
+
+  let laps_400   = NSLocalizedString("laps_400",   comment: "")
+  let laps_800   = NSLocalizedString("laps_800",   comment: "")
+  let laps_1000  = NSLocalizedString("laps_1000",  comment: "")
+  let laps_1200  = NSLocalizedString("laps_1200",  comment: "")
+  let laps_1500  = NSLocalizedString("laps_1500",  comment: "")
+  let laps_2000  = NSLocalizedString("laps_2000",  comment: "")
+  let laps_3000  = NSLocalizedString("laps_3000",  comment: "")
+  let laps_4000  = NSLocalizedString("laps_4000",  comment: "")
+  let laps_5000  = NSLocalizedString("laps_5000",  comment: "")
+  let laps_10000 = NSLocalizedString("laps_10000", comment: "")
+  let laps_mile  = NSLocalizedString("laps_mile",  comment: "")
+
+  let fl_200m = NSLocalizedString("fl_200m", comment: "")
+  let fl_300m = NSLocalizedString("fl_300m", comment: "")
+  let fl_mile = NSLocalizedString("fl_mile", comment: "")
+  let ll_200m = NSLocalizedString("ll_200m", comment: "")
+
+  let ll_2  = NSLocalizedString("ll_2",  comment: "")
+  let ll_3  = NSLocalizedString("ll_3",  comment: "")
+  let ll_4  = NSLocalizedString("ll_4",  comment: "")
+  let ll_5  = NSLocalizedString("ll_5",  comment: "")
+  let ll_8  = NSLocalizedString("ll_8",  comment: "")
+  let ll_10 = NSLocalizedString("ll_10", comment: "")
+  let ll_13 = NSLocalizedString("ll_13", comment: "")
+  let ll_25 = NSLocalizedString("ll_25", comment: "")
+}
+
 struct Resources {
-  let string   = Strings()
   let drawable = Drawables()
+  let raw      = Raw()
+  let string   = Strings()
 }
 
 let R = Resources()

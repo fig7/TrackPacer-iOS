@@ -41,7 +41,8 @@ let clipList = [
   "lap23",
   "lap24",
   "lap25",
-  "finish"]
+  "finish",
+  "silent"]
 
 let Go1ClipDuration: Int64  = 400
 let Go3ClipDuration: Int64  = 3000

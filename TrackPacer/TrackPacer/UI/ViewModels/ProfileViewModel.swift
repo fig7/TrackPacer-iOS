@@ -95,8 +95,9 @@ struct ProfileWaypoint {
   @Published var waypointTimeMaxStr = ""
 
   var profileDist = ""
-  @Published var profileDesc = ""
   @Published var profileName = ""
+  @Published var profileDesc = ""
+  @Published var profileItvl = ""
 
   @Published var profileTime = ""
   @Published var profilePace = ""
@@ -186,12 +187,13 @@ struct ProfileWaypoint {
     mainViewModel.deleteProfile(profileDist, profileName)
   }
 
-  func setProfileOptions(_ runDist: String, _ runProfile: String, _ waypointData: [WaypointData], _ refPaceStr: String) {
+  func setProfileOptions(_ runDist: String, _ runProfile: String, _ runInterval: String, _ waypointData: [WaypointData], _ refPaceStr: String) {
     waypointList.clear()
 
-    profileDist = runDist
-    profileDesc = runDist + " profile"
     profileName = runProfile
+    profileDist = runDist
+
+    profileDesc = runDist + " profile"
 
     let refPaceSplit = refPaceStr.split(separator: ":")
     let mins = try! refPaceSplit[0].toInt()
@@ -304,9 +306,10 @@ struct ProfileWaypoint {
   }
 
   func saveWaypoint() {
+    let iMax = waypointList.size
     let i = waypointEdit.waypointIndex
     let oldWaypoint1 = waypointList[i]
-    let oldWaypoint2 = waypointList[i+1]
+    let oldWaypoint2 = ((i+1) < iMax) ? waypointList[i+1] : waypointList[0]
 
     let secs = try! waypointEdit.waypointTimeSS.toInt()
     let hths = try! waypointEdit.waypointTimeHH.toInt()
@@ -318,7 +321,8 @@ struct ProfileWaypoint {
     let waitTime = (waitMins*60 + waitSecs)*1000
 
     waypointList[i]   = ProfileWaypoint(other: oldWaypoint1, waitTime: waitTime, offset: offset, roundTime: false)
-    waypointList[i+1] = ProfileWaypoint(other: oldWaypoint2, prevOffset: offset)
+    if((i+1) < iMax) { waypointList[i+1] = ProfileWaypoint(other: oldWaypoint2, prevOffset: offset) }
+
     updateTimes()
   }
 }

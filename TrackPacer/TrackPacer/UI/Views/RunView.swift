@@ -12,8 +12,11 @@ struct RunView: View {
   
   @EnvironmentObject var distanceSelection: DistanceSelection
   @EnvironmentObject var laneSelection: LaneSelection
+
   @EnvironmentObject var timeSelection: TimeSelection
+
   @EnvironmentObject var profileSelection: ProfileSelection
+  @EnvironmentObject var intervalSelection: IntervalSelection
 
   @EnvironmentObject var trackSelection: TrackSelection
 
@@ -21,11 +24,9 @@ struct RunView: View {
     VStack(spacing: 5) {
       HStack {
         Text("Distance:").frame(width: 180, alignment: .leading)
-
         Spacer().frame(width: 15)
 
         Text("Lane:")
-
         Spacer()
       }.padding(.horizontal, 20)
 
@@ -60,14 +61,18 @@ struct RunView: View {
       Spacer().frame(height: 5)
 
       HStack {
-        Text("Profile:")
+        Text("Profile:").frame(width: 140, alignment: .leading)
+        Spacer().frame(width: 15)
 
+        Text("Interval:")
         Spacer()
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $profileSelection.selected, list: profileSelection.list).frame(width: 200, height: 42, alignment: .center)
-        Spacer().frame(width: 15)
+        TPPicker(selected: $profileSelection.selected, list: profileSelection.list).frame(width: 170, height: 42, alignment: .center)
+        Spacer().frame(width: 10)
+
+        TPPicker(selected: $intervalSelection.selected, list: intervalSelection.list).frame(width: 110, height: 42, alignment: .center)
 
         if(profileSelection.profilesEnabled) {
           TPButton(iconName: "baseline_edit_42") {

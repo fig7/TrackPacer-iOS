@@ -32,6 +32,11 @@ struct File {
     return try fm.contentsOfDirectory(atPath: url.path(percentEncoded: false))
   }
 
+  func listFiles() throws -> [File] {
+    let fileNames = try fm.contentsOfDirectory(atPath: url.path(percentEncoded: false))
+    return fileNames.map { fileName in File(url: url, child: fileName, directoryHint: .inferFromPath) }
+  }
+
   func fileAttributes() throws -> [FileAttributeKey : Any] {
     return try fm.attributesOfItem(atPath: url.path(percentEncoded: false))
   }

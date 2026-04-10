@@ -7,7 +7,7 @@
 
 import Foundation
 
-private let distanceArray = [
+private let defaultDistArray = [
   "400m+         1:30.00,2:00.00",
   "800m+         3:00.00,4:00.00",
   "1000m+        3:45.00,5:00.00",
@@ -29,7 +29,7 @@ class DistanceModel {
 
   init() {
     do {
-      try distanceManager.initDistances(defaultDistances: distanceArray)
+      try distanceManager.initDistances(defaultDistances: defaultDistArray)
     } catch {
       distanceDataOK = false
       print("Failed to initialize distances. Error: \(error.localizedDescription)")

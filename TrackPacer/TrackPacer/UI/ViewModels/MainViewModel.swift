@@ -16,6 +16,7 @@ import UIKit
   unowned let resultModel: ResultModel
 
   unowned let historyModel: HistoryModel
+  unowned let clipsModel: ClipsModel
   unowned let settingsModel: SettingsModel
 
   var mainViewStack: MainViewStack
@@ -29,6 +30,7 @@ import UIKit
   var historyViewModel: HistoryViewModel
   var pastViewModel: PastViewModel
 
+  var clipsViewModel: ClipsViewModel
   var settingsViewModel: SettingsViewModel
 
   let dialogVisibility: DialogVisibility
@@ -45,12 +47,13 @@ import UIKit
   let uiApp = UIApplication.shared
   var appPlayer: AVAudioPlayer!
 
-  init(_ runModel: RunModel, _ pacingModel: PacingModel, _ resultModel: ResultModel, _ historyModel: HistoryModel, _ settingsModel: SettingsModel) {
+  init(_ runModel: RunModel, _ pacingModel: PacingModel, _ resultModel: ResultModel, _ historyModel: HistoryModel, _ clipsModel: ClipsModel, _ settingsModel: SettingsModel) {
     self.runModel    = runModel
     self.pacingModel = pacingModel
     self.resultModel = resultModel
 
     self.historyModel   = historyModel
+    self.clipsModel     = clipsModel
     self.settingsModel  = settingsModel
     let settingsManager = settingsModel.settingsManager
 
@@ -67,6 +70,7 @@ import UIKit
     historyViewModel = HistoryViewModel(historyModel)
     pastViewModel    = PastViewModel()
 
+    clipsViewModel = ClipsViewModel()
     settingsViewModel = SettingsViewModel()
     settingsViewModel.setFromSettings(settingsManager)
 
@@ -80,6 +84,7 @@ import UIKit
     profileViewModel.setMain(mainViewModel: self)
     completionViewModel.setMain(mainViewModel: self)
     historyViewModel.setMain(mainViewModel: self)
+    clipsViewModel.setMain(mainViewModel: self)
     settingsViewModel.setMain(mainViewModel: self)
 
     if(!runModel.runModelOK) {
@@ -98,6 +103,18 @@ import UIKit
       showErrorDialog(title: "Initialization error",
         message:
         "An error occurred while accessing pacing history.\n\n" +
+
+        "Please try re-starting the app.\n" +
+        "If that doesn't work, re-install it.",
+        width: 342, height: 200)
+
+      return
+    }
+
+    if(!clipsModel.clipsDataOK) {
+      showErrorDialog(title: "Initialization error",
+        message:
+        "An error occurred while accessing audio clips.\n\n" +
 
         "Please try re-starting the app.\n" +
         "If that doesn't work, re-install it.",
@@ -247,7 +264,7 @@ import UIKit
     }
   }
 
-  func editProfile(_ runDist: String, _ runProfile: String) {
+  func editProfile(_ runDist: String, _ runProfile: String, _ runInterval: String) {
     do {
       let distanceManager = runModel.distanceModel.distanceManager
       let waypoints       = try distanceManager.waypointsFor(runDist, runProfile)
@@ -255,7 +272,7 @@ import UIKit
       let settingsManager = settingsModel.settingsManager
       let refPace = settingsManager.refPace
 
-      profileViewModel.setProfileOptions(runDist, runProfile, waypoints, refPace)
+      profileViewModel.setProfileOptions(runDist, runProfile, runInterval, waypoints, refPace)
       mainViewStack.pushProfileView()
     } catch { }
   }

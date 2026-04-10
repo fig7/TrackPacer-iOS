@@ -21,6 +21,7 @@ struct ContentView: View {
             .environmentObject(viewModel.runViewModel.laneSelection)
             .environmentObject(viewModel.runViewModel.timeSelection)
             .environmentObject(viewModel.runViewModel.profileSelection)
+            .environmentObject(viewModel.runViewModel.intervalSelection)
             .environmentObject(viewModel.runViewModel.trackSelection)
             .onAppear { viewModel.runViewModel.updateTrackOverlay() }
 
@@ -28,6 +29,8 @@ struct ContentView: View {
             .environmentObject(viewModel.historyViewModel)
 
           AudioView().tabItem { Label("Audio", image: "baseline_audio_24") }
+            .environmentObject(viewModel.clipsViewModel)
+            .environmentObject(viewModel.clipsViewModel.clipSelection)
 
           SettingsView().tabItem { Label("Settings", image: "baseline_settings_24") }
             .environmentObject(viewModel.settingsViewModel)

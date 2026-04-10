@@ -12,9 +12,8 @@ class RunModel {
   let runModelOK: Bool
 
   init() {
-    self.distanceModel = DistanceModel()
-
-    runModelOK = distanceModel.distanceDataOK
+    distanceModel = DistanceModel()
+    runModelOK    = distanceModel.distanceDataOK
   }
 
   func timesFor(_ distance: String) throws -> [String] {

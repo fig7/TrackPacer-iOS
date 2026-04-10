@@ -15,8 +15,10 @@ private class MPWaitDelegate : NSObject, AVAudioPlayerDelegate {
     self.service = service
   }
 
-  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    service?.playNextWaitClip()
+ func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+   Task { @MainActor in
+     service?.playNextWaitClip()
+   }
   }
 }
 
@@ -27,8 +29,10 @@ private class MPFinishDelegate : NSObject, AVAudioPlayerDelegate {
     self.service = service
   }
 
-  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    service?.playFinalClip()
+  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    Task { @MainActor in
+      service?.playFinalClip()
+    }
   }
 }
 
@@ -39,8 +43,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     self.service = service
   }
 
-  @MainActor func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-    service?.terminate()
+  func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    Task { @MainActor in
+      service?.terminate()
+    }
   }
 }
 
@@ -72,6 +78,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   private var mpStart: AVAudioPlayer!
   private var mpStart1: AVAudioPlayer!
   private var mpStart2: AVAudioPlayer!
+  private var mpSilent: AVAudioPlayer!
   private var mpResume: AVAudioPlayer!
   private var mpFinal: AVAudioPlayer!
   private var mpWaypoint: [AVAudioPlayer]!
@@ -105,10 +112,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   }
 
   func beginPacing(_ pacingOptions: PacingOptions, _ waypoints: [WaypointData]) {
-    waypointIndexList = waypointsFor(pacingOptions.baseDist)
+    waypointIndexList = waypointsFor(pacingOptions.baseDist, pacingOptions.interval)
 
-    goTime = 0
-    prevTime    = 0.0
+    goTime   = 0
+    prevTime = 0.0
     waypointCalculator.initRun(pacingOptions.baseDist, pacingOptions.runLane, pacingOptions.baseTime, waypoints)
   }
 
@@ -230,14 +237,17 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
     startForeground(1, notification) */
 
-      let url321 = Bundle.main.url(forResource: "threetwoone", withExtension: ".m4a")!
-      mpStart1    = try AVAudioPlayer(contentsOf: url321)
+      let url321 = Bundle.main.url(forResource: R.raw.threetwoone, withExtension: ".m4a")!
+      mpStart1   = try AVAudioPlayer(contentsOf: url321)
 
-      let urlGo = Bundle.main.url(forResource: "go", withExtension: ".m4a")!
-      mpStart2   = try AVAudioPlayer(contentsOf: urlGo)
+      let urlGo = Bundle.main.url(forResource: R.raw.go, withExtension: ".m4a")!
+      mpStart2  = try AVAudioPlayer(contentsOf: urlGo)
+
+      let urlSilent = Bundle.main.url(forResource: R.raw.silent, withExtension: ".mp3")!
+      mpSilent      = try AVAudioPlayer(contentsOf: urlSilent)
 
       let urlResumed = Bundle.main.url(forResource: "resumed", withExtension: ".m4a")!
-      mpResume        = try AVAudioPlayer(contentsOf: urlResumed)
+      mpResume       = try AVAudioPlayer(contentsOf: urlResumed)
 
       mpWaypoint = try (0 ..< clipList.size).map { (i: Int) in
         let url = Bundle.main.url(forResource: clipList[i], withExtension: ".m4a")!
@@ -247,8 +257,8 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
       let urlStop = Bundle.main.url(forResource: "stop", withExtension: ".m4a")!
       mpWaitStart = try AVAudioPlayer(contentsOf: urlStop)
 
-      let url30 = Bundle.main.url(forResource: "30",   withExtension: ".m4a")!
-      let url10 = Bundle.main.url(forResource: "10",   withExtension: ".m4a")!
+      let url30 = Bundle.main.url(forResource: "thirty", withExtension: ".m4a")!
+      let url10 = Bundle.main.url(forResource: "ten",    withExtension: ".m4a")!
       mpWait30  = try AVAudioPlayer(contentsOf: url30)
       mpWait10  = try AVAudioPlayer(contentsOf: url10)
       mpWaitGo1 = try AVAudioPlayer(contentsOf: urlGo)
@@ -276,6 +286,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
     mpStart1.stop()
     mpStart2.stop()
+    mpSilent.stop()
     mpResume.stop()
     for mp in mpWaypoint { mp.stop() }
 
@@ -304,8 +315,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     let i = waypointIndexList[waypointCalculator.waypointNum()]
     // let res = audioManager.requestAudioFocus(focusRequest)
     // if(res == AUDIOFOCUS_REQUEST_GRANTED) {
-      mpWaypoint[i].play(atTime: mpWaypoint[i].deviceCurrentTime + delayMS.toDouble()/1000.0)
-    // }
+    mpWaypoint[i].play(atTime: mpWaypoint[i].deviceCurrentTime + delayMS.toDouble()/1000.0)
   }
 
   private func handleWait(_ delayMS: Int64) {

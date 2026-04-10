@@ -19,7 +19,7 @@ let flatWidth: CGFloat = 150.0
 let sectionWidth = rampWidth + flatWidth
 let sectionWidth2 = sectionWidth / 2.0
 
-let sectionHeight: CGFloat = 340.0
+let sectionHeight: CGFloat = 320.0
 let sectionHeight2 = sectionHeight / 2.0
 
 func clamped(_ a: CGFloat, _ b: ClosedRange<CGFloat>) -> CGFloat { min(max(a, b.lowerBound), b.upperBound) }
@@ -116,9 +116,15 @@ func colorForProfileValidity(_ validity: ProfileValidity) -> Color {
 struct ProfileView: View {
   @EnvironmentObject var viewModel: ProfileViewModel
 
+  @EnvironmentObject var intervalSelection: IntervalSelection
+
   var body: some View {
     VStack(alignment: .leading, spacing: 5) {
-      Spacer().frame(height: 5)
+      HStack {
+        Text("\(viewModel.profileDesc):")
+        Spacer().frame(width:18)
+        TextField("", text: $viewModel.profileName).textFieldStyle(.roundedBorder) // disabled, but still clickable? Or just do text with a border?
+      }
 
       ScrollView(.horizontal) {
         HStack(alignment: .top, spacing: 0) {
@@ -131,7 +137,7 @@ struct ProfileView: View {
           }.frame(height: sectionHeight + 20)
 
           VStack(alignment: .leading, spacing: 0) {
-            ZStack(alignment: .bottomLeading){
+            ZStack(alignment: .bottomLeading) {
               XAxis(waypointCount: viewModel.waypointList.count).padding(.leading, axisDef.width)
               YAxis().padding(.bottom, axisDef.width)
 
@@ -178,17 +184,12 @@ struct ProfileView: View {
         }
       }
 
-      Spacer().frame(height: 15)
-
-      HStack {
-        Text("\(viewModel.profileDesc):")
-        TextField("", text: $viewModel.profileName).textFieldStyle(.roundedBorder)
-      }
+      Spacer().frame(height: 10)
 
       Text("Ref. time: \(viewModel.profileTime) \(viewModel.profilePace)").foregroundColor(colorForProfileValidity(viewModel.profileValidity))
       Text("Rest time: \(viewModel.profileWait)")
 
-      Spacer()
+      Spacer().frame(height: 10)
 
       HStack {
         Button(action: { viewModel.deleteProfile() }) { Text(" ").overlay { Image("baseline_delete_forever_48") } }

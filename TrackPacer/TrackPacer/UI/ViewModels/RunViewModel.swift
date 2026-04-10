@@ -18,6 +18,8 @@ import Foundation
   let timeEdit: TimeEdit
 
   var profileSelection: ProfileSelection = ProfileSelection()
+  var intervalSelection: IntervalSelection = IntervalSelection()
+
   var trackSelection: TrackSelection     = TrackSelection()
 
   init(_ runModel: RunModel) {
@@ -69,6 +71,9 @@ import Foundation
     profileSelection.list     = profileArray
     profileSelection.selected = profileSelection.list[0]
 
+    intervalSelection.list = ["50m", "100m", "200m", "400m", "800m", "1000m"];
+    intervalSelection.selected = intervalSelection.list[0]
+
     try initTimes()
     initCallbacks()
   }
@@ -112,7 +117,7 @@ import Foundation
 
   func editProfile() {
     let runDist = distanceSelection.selected
-    mainViewModel.editProfile(runDist, profileSelection.selected)
+    mainViewModel.editProfile(runDist, profileSelection.selected, intervalSelection.selected)
   }
 
   func showProfileHelp() {

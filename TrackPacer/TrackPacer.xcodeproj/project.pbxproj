@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1215D4072BFEC38C00DB07C3 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1215D4062BFEC38C00DB07C3 /* Int.swift */; };
+		1227F6E92C46CA6C009CA3FF /* ClipsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1227F6E82C46CA6C009CA3FF /* ClipsModel.swift */; };
+		1227F6EB2C46CBCE009CA3FF /* ClipsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1227F6EA2C46CBCE009CA3FF /* ClipsManager.swift */; };
+		1227F6EE2C49D7DC009CA3FF /* ClipSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1227F6ED2C49D7DC009CA3FF /* ClipSelection.swift */; };
+		1227F6F02C4B0FC9009CA3FF /* ClipsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1227F6EF2C4B0FC9009CA3FF /* ClipsViewModel.swift */; };
 		1228356C2C10AC4F003FCE65 /* set.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1228356A2C10AC4F003FCE65 /* set.m4a */; };
 		1228356D2C10AC4F003FCE65 /* oym.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 1228356B2C10AC4F003FCE65 /* oym.m4a */; };
 		122F8C972C0B37BC00352AE0 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */; };
@@ -91,8 +95,9 @@
 		129359792BFEAC180042F99E /* Int64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359782BFEAC180042F99E /* Int64.swift */; };
 		1293597B2BFEAD1D0042F99E /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597A2BFEAD1D0042F99E /* Double.swift */; };
 		1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597C2BFEADF50042F99E /* ContinousClock.swift */; };
-		12A0CD782C345F5100308607 /* 30.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD752C345F5100308607 /* 30.m4a */; };
-		12A0CD792C345F5100308607 /* 10.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD762C345F5100308607 /* 10.m4a */; };
+		129D7AF72F0C745B0002B91D /* silent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 129D7AF62F0C745B0002B91D /* silent.mp3 */; };
+		12A0CD782C345F5100308607 /* thirty.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD752C345F5100308607 /* thirty.m4a */; };
+		12A0CD792C345F5100308607 /* ten.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD762C345F5100308607 /* ten.m4a */; };
 		12A0CD7A2C345F5100308607 /* stop.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD772C345F5100308607 /* stop.m4a */; };
 		12A2B92B2C0741F300EA4155 /* MainViewStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92A2C0741F300EA4155 /* MainViewStack.swift */; };
 		12A2B92D2C0743BF00EA4155 /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2B92C2C0743BF00EA4155 /* CompletionView.swift */; };
@@ -125,6 +130,7 @@
 		12C873502C036B4100FA5C5E /* TrackSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C8734F2C036B4100FA5C5E /* TrackSelection.swift */; };
 		12C873532C03740500FA5C5E /* R.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C873522C03740500FA5C5E /* R.swift */; };
 		12C873552C0376F100FA5C5E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 12C873542C0376F100FA5C5E /* Localizable.xcstrings */; };
+		12E36B642F2979C10015E724 /* IntervalSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E36B632F2979B30015E724 /* IntervalSelection.swift */; };
 		12E5204D2C00E98A002F54AE /* LaneSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E5204C2C00E98A002F54AE /* LaneSelection.swift */; };
 		12E520522C014046002F54AE /* DistanceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520512C014046002F54AE /* DistanceModel.swift */; };
 		12E520542C014345002F54AE /* DistanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E520532C014345002F54AE /* DistanceManager.swift */; };
@@ -138,6 +144,10 @@
 
 /* Begin PBXFileReference section */
 		1215D4062BFEC38C00DB07C3 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		1227F6E82C46CA6C009CA3FF /* ClipsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipsModel.swift; sourceTree = "<group>"; };
+		1227F6EA2C46CBCE009CA3FF /* ClipsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipsManager.swift; sourceTree = "<group>"; };
+		1227F6ED2C49D7DC009CA3FF /* ClipSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipSelection.swift; sourceTree = "<group>"; };
+		1227F6EF2C4B0FC9009CA3FF /* ClipsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipsViewModel.swift; sourceTree = "<group>"; };
 		1228356A2C10AC4F003FCE65 /* set.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = set.m4a; sourceTree = "<group>"; };
 		1228356B2C10AC4F003FCE65 /* oym.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = oym.m4a; sourceTree = "<group>"; };
 		122F8C962C0B37BC00352AE0 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
@@ -222,8 +232,9 @@
 		129359782BFEAC180042F99E /* Int64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int64.swift; sourceTree = "<group>"; };
 		1293597A2BFEAD1D0042F99E /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		1293597C2BFEADF50042F99E /* ContinousClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinousClock.swift; sourceTree = "<group>"; };
-		12A0CD752C345F5100308607 /* 30.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 30.m4a; sourceTree = "<group>"; };
-		12A0CD762C345F5100308607 /* 10.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 10.m4a; sourceTree = "<group>"; };
+		129D7AF62F0C745B0002B91D /* silent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silent.mp3; sourceTree = "<group>"; };
+		12A0CD752C345F5100308607 /* thirty.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = thirty.m4a; sourceTree = "<group>"; };
+		12A0CD762C345F5100308607 /* ten.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ten.m4a; sourceTree = "<group>"; };
 		12A0CD772C345F5100308607 /* stop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = stop.m4a; sourceTree = "<group>"; };
 		12A2B92A2C0741F300EA4155 /* MainViewStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewStack.swift; sourceTree = "<group>"; };
 		12A2B92C2C0743BF00EA4155 /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
@@ -257,6 +268,7 @@
 		12C8734F2C036B4100FA5C5E /* TrackSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSelection.swift; sourceTree = "<group>"; };
 		12C873522C03740500FA5C5E /* R.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = R.swift; sourceTree = "<group>"; };
 		12C873542C0376F100FA5C5E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		12E36B632F2979B30015E724 /* IntervalSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalSelection.swift; sourceTree = "<group>"; };
 		12E5204C2C00E98A002F54AE /* LaneSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaneSelection.swift; sourceTree = "<group>"; };
 		12E520512C014046002F54AE /* DistanceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceModel.swift; sourceTree = "<group>"; };
 		12E520532C014345002F54AE /* DistanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceManager.swift; sourceTree = "<group>"; };
@@ -279,6 +291,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1227F6EC2C49D7B2009CA3FF /* Clips */ = {
+			isa = PBXGroup;
+			children = (
+				1227F6ED2C49D7DC009CA3FF /* ClipSelection.swift */,
+			);
+			path = Clips;
+			sourceTree = "<group>";
+		};
 		122F8C9A2C0B422F00352AE0 /* History */ = {
 			isa = PBXGroup;
 			children = (
@@ -405,6 +425,7 @@
 				12E5204B2C00E968002F54AE /* Pace */,
 				12BB67F52C19F21A000E34E8 /* Profile */,
 				122F8C9A2C0B422F00352AE0 /* History */,
+				1227F6EC2C49D7B2009CA3FF /* Clips */,
 				12B5A4022C04AF3600455303 /* Dialog */,
 			);
 			path = Observables;
@@ -423,6 +444,7 @@
 				122F8CA42C0D2A7A00352AE0 /* PastViewModel.swift */,
 				122F8CA82C0E176300352AE0 /* SettingsViewModel.swift */,
 				123F12622C00AAB500F5E6E6 /* StatusViewModel.swift */,
+				1227F6EF2C4B0FC9009CA3FF /* ClipsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -483,8 +505,9 @@
 		12B144B82BF3CCFC00FCD2A7 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				12A0CD762C345F5100308607 /* 10.m4a */,
-				12A0CD752C345F5100308607 /* 30.m4a */,
+				129D7AF62F0C745B0002B91D /* silent.mp3 */,
+				12A0CD762C345F5100308607 /* ten.m4a */,
+				12A0CD752C345F5100308607 /* thirty.m4a */,
 				12A0CD772C345F5100308607 /* stop.m4a */,
 				1228356B2C10AC4F003FCE65 /* oym.m4a */,
 				1228356A2C10AC4F003FCE65 /* set.m4a */,
@@ -576,6 +599,7 @@
 		12E5204A2C00E961002F54AE /* Run */ = {
 			isa = PBXGroup;
 			children = (
+				12E36B632F2979B30015E724 /* IntervalSelection.swift */,
 				127122A72BEE7F1F00106069 /* DistanceSelection.swift */,
 				12E5204C2C00E98A002F54AE /* LaneSelection.swift */,
 				12AE78F92C0294A70057764D /* TimeSelection.swift */,
@@ -601,6 +625,7 @@
 			isa = PBXGroup;
 			children = (
 				122F8C9D2C0BCAC600352AE0 /* Data */,
+				1227F6E82C46CA6C009CA3FF /* ClipsModel.swift */,
 				12E520512C014046002F54AE /* DistanceModel.swift */,
 				12E530052C08C18E007EB53C /* HistoryModel.swift */,
 				12B5A3F12C04A08800455303 /* SettingsModel.swift */,
@@ -623,6 +648,7 @@
 		12E520502C014019002F54AE /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				1227F6EA2C46CBCE009CA3FF /* ClipsManager.swift */,
 				12E520532C014345002F54AE /* DistanceManager.swift */,
 				12E530072C08C202007EB53C /* HistoryManager.swift */,
 				122F8CAE2C0E358300352AE0 /* SettingsManager.swift */,
@@ -658,7 +684,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					127122892BEE41A000106069 = {
 						CreatedOnToolsVersion = 15.3;
@@ -688,7 +714,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12A0CD782C345F5100308607 /* 30.m4a in Resources */,
+				12A0CD782C345F5100308607 /* thirty.m4a in Resources */,
 				1228356D2C10AC4F003FCE65 /* oym.m4a in Resources */,
 				1228356C2C10AC4F003FCE65 /* set.m4a in Resources */,
 				12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */,
@@ -700,6 +726,7 @@
 				129359512BFE4D8D0042F99E /* lap9.m4a in Resources */,
 				129359682BFE4D8D0042F99E /* fourhundred.m4a in Resources */,
 				1293595B2BFE4D8D0042F99E /* go.m4a in Resources */,
+				129D7AF72F0C745B0002B91D /* silent.mp3 in Resources */,
 				129359542BFE4D8D0042F99E /* threehundred.m4a in Resources */,
 				1293596D2BFE4D8D0042F99E /* lap2.m4a in Resources */,
 				1293595F2BFE4D8D0042F99E /* cancelled.m4a in Resources */,
@@ -725,7 +752,7 @@
 				129359642BFE4D8D0042F99E /* twohundredandfifty.m4a in Resources */,
 				1293596B2BFE4D8D0042F99E /* twohundred.m4a in Resources */,
 				1293595C2BFE4D8D0042F99E /* complete.m4a in Resources */,
-				12A0CD792C345F5100308607 /* 10.m4a in Resources */,
+				12A0CD792C345F5100308607 /* ten.m4a in Resources */,
 				1293594F2BFE4D8D0042F99E /* lap4.m4a in Resources */,
 				129359522BFE4D8D0042F99E /* threehundredandfifty.m4a in Resources */,
 				12A0CD7A2C345F5100308607 /* stop.m4a in Resources */,
@@ -779,6 +806,7 @@
 				122F8C9C2C0B429200352AE0 /* ResultData.swift in Sources */,
 				12E530082C08C202007EB53C /* HistoryManager.swift in Sources */,
 				122F8C992C0B3BBD00352AE0 /* Weighted.swift in Sources */,
+				1227F6F02C4B0FC9009CA3FF /* ClipsViewModel.swift in Sources */,
 				122F8CA52C0D2A7A00352AE0 /* PastViewModel.swift in Sources */,
 				12AE78FA2C0294A70057764D /* TimeSelection.swift in Sources */,
 				12B5A3FB2C04A39900455303 /* Waypoint.swift in Sources */,
@@ -790,6 +818,7 @@
 				123F12652C00AE3100F5E6E6 /* PacingSettings.swift in Sources */,
 				124645E82BF169DF00CB6EAC /* TPPicker.swift in Sources */,
 				122F8CA92C0E176300352AE0 /* SettingsViewModel.swift in Sources */,
+				1227F6EE2C49D7DC009CA3FF /* ClipSelection.swift in Sources */,
 				12E520522C014046002F54AE /* DistanceModel.swift in Sources */,
 				124645F02BF16B5600CB6EAC /* PacingStatus.swift in Sources */,
 				12B144B42BF28F6E00FCD2A7 /* PacingOptions.swift in Sources */,
@@ -800,6 +829,7 @@
 				12E520542C014345002F54AE /* DistanceManager.swift in Sources */,
 				1255BF142C0797FE0059C7E0 /* Version.swift in Sources */,
 				12B5A3F92C04A29F00455303 /* DistanceUtil.swift in Sources */,
+				1227F6E92C46CA6C009CA3FF /* ClipsModel.swift in Sources */,
 				12B5A3F72C04A21E00455303 /* RT.swift in Sources */,
 				12E5205A2C015114002F54AE /* File.swift in Sources */,
 				123F12612BFFE39600F5E6E6 /* ServiceConnection.swift in Sources */,
@@ -811,6 +841,8 @@
 				12B5A3F22C04A08800455303 /* SettingsModel.swift in Sources */,
 				129359212BFE1BA20042F99E /* Array.swift in Sources */,
 				12E5204D2C00E98A002F54AE /* LaneSelection.swift in Sources */,
+				1227F6EB2C46CBCE009CA3FF /* ClipsManager.swift in Sources */,
+				12E36B642F2979C10015E724 /* IntervalSelection.swift in Sources */,
 				12BB67FB2C1A363E000E34E8 /* View.swift in Sources */,
 				12A2B92F2C074C2800EA4155 /* CompletionViewModel.swift in Sources */,
 				12BB67F72C19F251000E34E8 /* WaypointEdit.swift in Sources */,
@@ -866,6 +898,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -889,6 +922,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -929,6 +963,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -945,6 +980,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -958,7 +994,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"TrackPacer/Preview Content\"";
-				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrackPacer/Info.plist;
@@ -991,7 +1026,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"TrackPacer/Preview Content\"";
-				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrackPacer/Info.plist;

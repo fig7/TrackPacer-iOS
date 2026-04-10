@@ -60,16 +60,18 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   private let resultModel: ResultModel
 
   private let historyModel: HistoryModel
+  private let clipsModel: ClipsModel
   private let settingsModel: SettingsModel
 
   init() {
     runModel      = RunModel()
     historyModel  = HistoryModel()
+    clipsModel    = ClipsModel()
     settingsModel = SettingsModel()
 
     pacingModel   = PacingModel()
     resultModel   = ResultModel()
-    mainViewModel = MainViewModel(runModel, pacingModel, resultModel, historyModel, settingsModel)
+    mainViewModel = MainViewModel(runModel, pacingModel, resultModel, historyModel, clipsModel, settingsModel)
   }
 
   var body: some Scene {
