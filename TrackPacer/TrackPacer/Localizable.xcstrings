@@ -140,10 +140,13 @@
     "Distance run (on pace):" : {
 
     },
-    "Distance:" : {
+    "Do you want to run without it?" : {
 
     },
-    "Do you want to run without it?" : {
+    "Edit selected time" : {
+
+    },
+    "Error: Unknown unit" : {
 
     },
     "fl_200m" : {
@@ -193,6 +196,9 @@
     },
     "Interval:" : {
 
+    },
+    "Key" : {
+      "extractionState" : "manual"
     },
     "Lane:" : {
 
@@ -477,6 +483,39 @@
     "Rest time: %@" : {
 
     },
+    "road_5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Road race: 5km"
+          }
+        }
+      }
+    },
+    "road_10" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Road race: 10km"
+          }
+        }
+      }
+    },
+    "road_mks" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Look out for the km markers!"
+          }
+        }
+      }
+    },
     "Run" : {
 
     },
@@ -507,7 +546,16 @@
     "Start to Finish (%@):" : {
 
     },
+    "Start:" : {
+
+    },
     "Target time" : {
+
+    },
+    "Time (for %@):" : {
+
+    },
+    "Time (per km):" : {
 
     },
     "Time to target: %@" : {
@@ -516,7 +564,7 @@
     "Time to waypoint (s)" : {
 
     },
-    "Time:" : {
+    "Unit:" : {
 
     },
     "Wait time (mm:ss):" : {

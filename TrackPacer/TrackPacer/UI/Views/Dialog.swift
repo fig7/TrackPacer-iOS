@@ -81,11 +81,16 @@ struct EditTimeDialog: View {
   var body: some View {
     let gray1 = Color(red: 0.745, green: 0.773, blue: 0.831)
     let gray2 = Color(red: 0.918, green: 0.929, blue: 0.941)
-    
+    let timeEditQualifier = (timeEdit.unit) == "Pace" ? "(per km)" : (timeEdit.unit == "Goal" ? "(for \(timeEdit.dist))" : "(for run)")
+
     HStack(alignment: .top) {
-      Text("Edit " + timeSelection.selected).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
+      Text("Edit selected time").font(.title).frame(maxWidth: .infinity, alignment: .leading)
       CloseButton(closeAction: closeAction)
     }
+
+    Text(timeSelection.selected.trim() + " " + timeEditQualifier)
+      .font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
+
     Spacer().frame(height: 5)
 
     RoundedRectangle(cornerRadius: 8).fill(LinearGradient(colors:[gray1, gray2], startPoint: .top, endPoint: .bottom)).strokeBorder(.black, lineWidth: 1).overlay(

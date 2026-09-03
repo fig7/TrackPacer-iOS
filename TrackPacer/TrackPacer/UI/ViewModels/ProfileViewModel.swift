@@ -95,9 +95,9 @@ struct ProfileWaypoint {
   @Published var waypointTimeMaxStr = ""
 
   var profileDist = ""
-  @Published var profileName = ""
-  @Published var profileDesc = ""
-  @Published var profileItvl = ""
+  @Published var profileName  = ""
+  @Published var profileDesc  = ""
+  @Published var profileIntvl = ""
 
   @Published var profileTime = ""
   @Published var profilePace = ""
@@ -171,7 +171,7 @@ struct ProfileWaypoint {
     }
 
     let waypoints = waypointList.map { profileWaypoint in return WaypointData(scaleFactor: profileWaypoint.scaleFactor, waitTime: profileWaypoint.waitTime) }
-    mainViewModel.saveProfile(profileDist, profileName, waypoints)
+    mainViewModel.saveProfile(profileDist, Intvl(rawValue: profileIntvl)!, profileName, waypoints)
   }
 
   func deleteProfile() {
@@ -184,7 +184,7 @@ struct ProfileWaypoint {
       return
     }
 
-    mainViewModel.deleteProfile(profileDist, profileName)
+    mainViewModel.deleteProfile(profileDist, Intvl(rawValue: profileIntvl)!, profileName)
   }
 
   func setProfileOptions(_ runDist: String, _ runProfile: String, _ runInterval: String, _ waypointData: [WaypointData], _ refPaceStr: String) {
@@ -204,7 +204,8 @@ struct ProfileWaypoint {
     refTime = (refDist*refPace) / 1000.0
     refTimeStr = timeToAlmostFullString(timeInMS: ((refTime*10.0).toLongRounded()*100))
 
-    let waypointIndexList = waypointsFor(runDist)
+    // TODO: Fix convert strings to Intvls
+    let waypointIndexList = waypointsFor(runDist, Intvl.i50m)
     let waypointDist      = waypointDistances[runDist]!
 
     var prevOffset = sectionHeight

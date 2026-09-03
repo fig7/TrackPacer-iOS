@@ -11,9 +11,11 @@ struct RunView: View {
   @EnvironmentObject var viewModel: RunViewModel
   
   @EnvironmentObject var distanceSelection: DistanceSelection
+  @EnvironmentObject var startSelection: StartSelection
   @EnvironmentObject var laneSelection: LaneSelection
 
   @EnvironmentObject var timeSelection: TimeSelection
+  @EnvironmentObject var paceSelection: PaceSelection
 
   @EnvironmentObject var profileSelection: ProfileSelection
   @EnvironmentObject var intervalSelection: IntervalSelection
@@ -21,20 +23,28 @@ struct RunView: View {
   @EnvironmentObject var trackSelection: TrackSelection
 
   var body: some View {
+    let trackRun = (trackSelection.trackOverlay != "")
+
     VStack(spacing: 5) {
       HStack {
-        Text("Distance:").frame(width: 180, alignment: .leading)
-        Spacer().frame(width: 15)
+        let distanceString = (trackRun) ? "Distance (lane 1):" : "Distance:"
+        Text(distanceString).frame(width: 150, alignment: .leading)
+        Text("Start:").frame(width: 105, alignment: .leading)
+        if(trackRun) { Text("Lane:") }
 
-        Text("Lane:")
         Spacer()
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $distanceSelection.selectedPadded, list: distanceSelection.list).frame(width: 180, height: 42, alignment: .center)
-        Spacer().frame(width: 15)
+        TPPicker(selected: $distanceSelection.selectedPadded, list: distanceSelection.list)
+          .frame(width: 165, height: 42, alignment: .center)
+        TPPicker(selected: $startSelection.selected, list: startSelection.list)
+          .frame(width: 110, height: 42, alignment: .center)
 
-        TPPicker(selected: $laneSelection.selected, list: laneSelection.list).frame(width: 80, height: 42, alignment: .center)
+        if(trackRun) {
+          TPPicker(selected: $laneSelection.selected, list: laneSelection.list)
+            .frame(width: 80, height: 42, alignment: .center)
+        }
 
         Spacer()
       }.padding(.horizontal, 20)
@@ -42,14 +52,31 @@ struct RunView: View {
       Spacer().frame(height: 5)
 
       HStack {
-        Text("Time:")
+        Text("Unit:")
+        Spacer().frame(width: 80)
+
+        switch paceSelection.selected {
+        case "Pace":
+          Text("Time (per km):").frame(width: 160, alignment: .leading)
+
+        case "Goal":
+          Text("Time (for \(distanceSelection.selected)):").frame(width: 160, alignment: .leading)
+
+        case "Actual":
+          Text("Time (for \(distanceSelection.runDist)):").frame(width: 160, alignment: .leading)
+
+        default:
+          Text("Error: Unknown unit").frame(width: 160, alignment: .leading)
+        }
 
         Spacer()
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $timeSelection.selected, list: timeSelection.list).frame(width: 200, height: 42, alignment: .center)
-        Spacer().frame(width: 15)
+        TPPicker(selected: $paceSelection.selected, list: paceSelection.list).frame(width: 110, height: 42, alignment: .center)
+        Spacer().frame(width: 10)
+
+        TPPicker(selected: $timeSelection.selected, list: timeSelection.list).frame(width: 165, height: 42, alignment: .center)
 
         TPButton(iconName: "baseline_edit_42") {
           viewModel.editTime()
@@ -61,18 +88,18 @@ struct RunView: View {
       Spacer().frame(height: 5)
 
       HStack {
-        Text("Profile:").frame(width: 140, alignment: .leading)
-        Spacer().frame(width: 15)
-
         Text("Interval:")
+        Spacer().frame(width: 60)
+
+        Text("Profile:").frame(width: 160, alignment: .leading)
         Spacer()
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $profileSelection.selected, list: profileSelection.list).frame(width: 170, height: 42, alignment: .center)
+        TPPicker(selected: $intervalSelection.selected, list: intervalSelection.list).frame(width: 110, height: 42, alignment: .center)
         Spacer().frame(width: 10)
 
-        TPPicker(selected: $intervalSelection.selected, list: intervalSelection.list).frame(width: 110, height: 42, alignment: .center)
+        TPPicker(selected: $profileSelection.selected, list: profileSelection.list).frame(width: 165, height: 42, alignment: .center)
 
         if(profileSelection.profilesEnabled) {
           TPButton(iconName: "baseline_edit_42") {
@@ -83,30 +110,40 @@ struct RunView: View {
             viewModel.showProfileHelp()
           }.frame(width: 60, height: 42, alignment: .center)
         }
-
         Spacer()
       }.padding(.horizontal, 20)
 
-      Spacer()
+      if(trackRun) {
+        Spacer()
 
-      VStack {
-        HStack {
-          Text("Start to Finish (\(trackSelection.runDist)):")
+        VStack {
+          HStack {
+            Text("Start to Finish (\(trackSelection.runDist)):")
 
-          Spacer()
-        }.padding(.horizontal, 20)
+            Spacer()
+          }.padding(.horizontal, 20)
 
-        Spacer().frame(height: 10)
+          Spacer().frame(height: 10)
 
-        ZStack {
-          Image("running_track")
-          Image(trackSelection.trackOverlay)
-          VStack {
-            Text(trackSelection.lapCounter)
-            Text(trackSelection.lapDesc1)
-            Text(trackSelection.lapDesc2)
+          ZStack {
+            Image("running_track")
+            Image(trackSelection.trackOverlay)
+
+            VStack {
+              Text(trackSelection.lapCounter)
+              Text(trackSelection.lapDesc1)
+              Text(trackSelection.lapDesc2)
+            }
           }
         }
+      }
+      else {
+        Spacer().frame(height: 40)
+        Text(trackSelection.lapCounter)
+          .font(.title)
+
+        Spacer().frame(height: 5)
+        Text(trackSelection.lapDesc1)
       }
 
       Spacer()

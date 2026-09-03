@@ -11,55 +11,84 @@ private let distanceVersion = "1.3"
 enum DistanceError : Error { case VersionError }
 
 class DistanceManager {
-  private let distanceDir: File
+  private let dataDir: File
 
-  var distanceArray: [String]!
-  var timeMap: [String : [String]] = [:]
-  var profileMap: [String : [(String, [WaypointData])]] = [:]
+  var distArray: [String]!
+  var timeMap: [String : [String : [String]]] = [:]
+  var profMap: [String : [Intvl : [(String, [WaypointData])]]] = [:]
 
   private var currentVersion: String!
 
   init(filesDir: URL) {
-    let filesDir     = File(url: filesDir)
-    self.distanceDir = File(file: filesDir, child: "Data", directoryHint: .isDirectory)
+    let filesDir = File(url: filesDir)
+    self.dataDir = File(file: filesDir, child: "Data", directoryHint: .isDirectory)
   }
 
-  func initDistances(defaultDistances: [String]) throws {
-    if(distanceDir.exists()) {
+  func initDistances(_ defaultDist: [[String : Any]]) throws {
+    if(dataDir.exists()) {
       try readVersion()
       try readData()
 
       if(currentVersion != distanceVersion) {
-        try updateData(defaultDistances: defaultDistances)
+        try updateData(defaultDist)
       }
     } else {
-      try initData(defaultDistances)
+      try initData(defaultDist)
     }
   }
 
   private func readVersion() throws {
-    let versionFile = File(file: distanceDir, child: "version.dat", directoryHint: .notDirectory)
+    let versionFile = File(file: dataDir, child: "version.dat", directoryHint: .notDirectory)
     if(!versionFile.exists()) { throw FileError.FileReadError }
 
     currentVersion = try versionFile.readText()
   }
 
   private func writeVersion() throws {
-    let versionFile = File(file: distanceDir, child: "version.dat", directoryHint: .notDirectory)
+    let versionFile = File(file: dataDir, child: "version.dat", directoryHint: .notDirectory)
     try versionFile.writeText(distanceVersion)
   }
 
-  private func initData(_ defaultDistances: [String]) throws {
-    let success = try distanceDir.mkdir()
+  private func initData(_ defaultDist: [[String : Any]]) throws {
+    let success = try dataDir.mkdir()
     if(!success) { throw FileError.FolderCreationError }
 
-    distanceArray = (0 ..< defaultDistances.size).map { (i: Int) in String(defaultDistances[i].split(separator: "+")[0]) }
-    for (i, runDistance) in distanceArray.enumerated() {
-      timeMap[runDistance] = String(defaultDistances[i].split(separator: "+")[1]).trim().split(separator: ",").map(String.init)
+    distArray = (0 ..< defaultDist.size).map { (i: Int) in String(defaultDist[i]["Dist"]! as! String) }
+    for (i, runDist) in distArray.enumerated() {
+      timeMap[runDist] = [:]
+      timeMap[runDist]!["Pace"]   = (defaultDist[i]["Pace"]!   as! [String])
+      timeMap[runDist]!["Goal"]   = (defaultDist[i]["Goal"]!   as! [String])
+      timeMap[runDist]!["Actual"] = (defaultDist[i]["Actual"]! as! [String])
 
       var profileWaypoints: [WaypointData] = []
-      for _ in 0..<waypointDistances[runDistance]!.count { profileWaypoints.append(WaypointData()) }
-      profileMap[runDistance] = [("Fixed pace", profileWaypoints)]
+      for _ in 0..<waypointDistances[runDist]!.count { profileWaypoints.append(WaypointData()) }
+      profMap[runDist] = [:];
+      profMap[runDist]![Intvl.i50m ] = [("Fixed pace", profileWaypoints)]
+      profMap[runDist]![Intvl.i100m] = [("Fixed pace", profileWaypoints)]
+      profMap[runDist]![Intvl.i200m] = [("Fixed pace", profileWaypoints)]
+      profMap[runDist]![Intvl.i400m] = [("Fixed pace", profileWaypoints)]
+
+      switch runDist
+      {
+      case "800m":
+        profMap[runDist]![Intvl.i800m] = [("Fixed pace", profileWaypoints)]
+
+      case "1000m", "1200m", "1500m", "2000m", "3000m", "4000m":
+        profMap[runDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
+        profMap[runDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+
+      case "5000m", "10000m":
+        profMap[runDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
+        profMap[runDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+        profMap[runDist]![Intvl.i1km  ] = [("Fixed pace", profileWaypoints)]
+
+      case "1 mile":
+        profMap[runDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
+        profMap[runDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+
+      default:
+        break
+      }
     }
 
     try writeData()
@@ -67,116 +96,104 @@ class DistanceManager {
   }
 
   private func readData() throws {
-    var folderList = try distanceDir.list()
-    var distanceList = folderList.filter { (distance: String) in distance.starts(with: "Distance") }
-    distanceList.sort()
+    let folderList = try dataDir.list()
+    var distList = folderList.filter { (dist: String) in dist.starts(with: "Distance") }
+    distList.sort()
 
-    distanceArray = [String](repeating: "", count: distanceList.size)
-    for (i, distance) in distanceList.enumerated() {
-      let runDistance  = distance.substring(13)
-      distanceArray[i] = runDistance
+    distArray = [String](repeating: "", count: distList.size)
+    for (i, dist) in distList.enumerated() {
+      let baseDist  = dist.substring(13)
+      distArray[i] = baseDist
 
-      let distanceDir = File(file: distanceDir, child: distance, directoryHint: .isDirectory)
-      let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
+      let distDir = File(file: dataDir, child: dist, directoryHint: .isDirectory)
+      let timesFile = File(file: distDir, child: "times.dat", directoryHint: .notDirectory)
       let timesStr  = try timesFile.readText()
-      timeMap[runDistance] = timesStr.split(separator: ",").map(String.init)
+      let timesArray = timesStr.split(separator: "\n")
+      timeMap[baseDist] = [:]
+      timeMap[baseDist]!["Pace"]   = timesArray[0].split(separator: ",").map(String.init)
+      timeMap[baseDist]!["Goal"]   = timesArray[1].split(separator: ",").map(String.init)
+      timeMap[baseDist]!["Actual"] = timesArray[2].split(separator: ",").map(String.init)
 
-      let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
-      folderList = try profilesDir.list()
+      let baseProfDir = File(file: distDir, child: "Profiles", directoryHint: .isDirectory)
+      let intvlList = try baseProfDir.list()
 
-      var profileDates: [String : Date] = [:]
-      for fileName in folderList {
-        let profileFile = File(file: profilesDir, child: fileName, directoryHint: .notDirectory)
-        let fileAttrib  = try profileFile.fileAttributes()
+      profMap[baseDist] = [:]
+      for intvl in intvlList {
+        let profDir = File(file: baseProfDir, child: intvl, directoryHint: .isDirectory)
+        let profList = try profDir.listByDate()
 
-        let creationDate = fileAttrib[FileAttributeKey.creationDate] as? Date
-        guard let creationDate else { throw FileError.FileDataError }
+        var profiles: [(String, [WaypointData])] = []
+        for fileName in profList {
+          let profName = String(fileName.dropLast(4))
+          let profFile = File(file: profDir, child: fileName, directoryHint: .notDirectory)
+          let jsonData    = try profFile.readData()
 
-        profileDates[fileName] = creationDate
+          let jsonDecoder   = JSONDecoder()
+          let waypointData  = try jsonDecoder.decode([WaypointData].self, from: jsonData)
+          profiles.append((profName, waypointData))
+        }
+
+        // To do, make sure string converts correctly
+        // Should really also check dist dirs are correct, too
+        profMap[baseDist]![Intvl(rawValue: intvl)!] = profiles
       }
-      folderList.sort { return (profileDates[$0]! < profileDates[$1]!) }
-
-      var profiles: [(String, [WaypointData])] = []
-      for fileName in folderList {
-        let profileName = String(fileName.dropLast(4))
-
-        let profileFile = File(file: profilesDir, child: fileName, directoryHint: .notDirectory)
-        let jsonData    = try profileFile.readData()
-
-        let jsonDecoder   = JSONDecoder()
-        let waypointData  = try jsonDecoder.decode([WaypointData].self, from: jsonData)
-
-        profiles.append((profileName, waypointData))
-      }
-
-      profileMap[runDistance] = profiles
     }
   }
 
-  private func writeData(_ distance: String) throws {
-    let i = distanceArray.firstIndex(of: distance)
-    guard let i else { throw Exception.IllegalArgumentException }
-
-    let prefix = String(format: "Distance_%03d_", i)
-    let distanceDir = File(file: distanceDir, child: prefix + distance, directoryHint: .isDirectory)
-    if(!distanceDir.exists()) {
-      let success = try distanceDir.mkdir()
+  private func writeData(_ index: Int, _ dist: String) throws {
+    let prefix = String(format: "Distance_%03d_", index)
+    let distDir = File(file: dataDir, child: prefix + dist, directoryHint: .isDirectory)
+    if(!distDir.exists()) {
+      let success = try distDir.mkdir()
       if(!success) { throw Exception.IOException }
     }
 
-    let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
-    if(!profilesDir.exists()) {
-      let success = try profilesDir.mkdir()
+    let baseProfDir = File(file: distDir, child: "Profiles", directoryHint: .isDirectory)
+    if(!baseProfDir.exists()) {
+      let success = try baseProfDir.mkdir()
       if(!success) { throw Exception.IOException }
     }
 
-    let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
-    let timeStr = timeMap[distance]!.joined(separator: ",")
+    let timesFile = File(file: distDir, child: "times.dat", directoryHint: .notDirectory)
+    var timeStr = timeMap[dist]!["Pace"]!.joined(separator: ",")    + "\n"
+    timeStr    += timeMap[dist]!["Goal"]!.joined(separator: ",")    + "\n"
+    timeStr    += timeMap[dist]!["Actual"]!.joined(separator: ",")  + "\n"
     try timesFile.writeText(timeStr)
 
-    let profiles = profileMap[distance]!
-    for profile in profiles {
-      let profileName = profile.0
-      let profileFile = File(file: profilesDir, child: "\(profileName).dat", directoryHint: .notDirectory)
-
-      let jsonEncoder = JSONEncoder()
-      let jsonData    = try jsonEncoder.encode(profile.1)
-      try profileFile.writeData(jsonData)
-    }
-  }
-
-  private func writeData() throws {
-    for (i, distance) in distanceArray.enumerated() {
-      let prefix = String(format: "Distance_%03d_", i)
-      let distanceDir = File(file: distanceDir, child: prefix + distance, directoryHint: .isDirectory)
-      if(!distanceDir.exists()) {
-        let success = try distanceDir.mkdir()
-        if(!success) { throw FileError.FolderCreationError }
-      }
-
-      let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
-      if(!profilesDir.exists()) {
-        let success = try profilesDir.mkdir()
+    let profIntvl = profMap[dist]!
+    for intvl in profIntvl.keys {
+      let profDir = File(file: baseProfDir, child: intvl.rawValue, directoryHint: .isDirectory)
+      if(!profDir.exists()) {
+        let success = try profDir.mkdir()
         if(!success) { throw Exception.IOException }
       }
 
-      let timesFile = File(file: distanceDir, child: "times.dat", directoryHint: .notDirectory)
-      let timeStr = timeMap[distance]!.joined(separator: ",")
-      try timesFile.writeText(timeStr)
-
-      let profiles = profileMap[distance]!
+      let profiles = profIntvl[intvl]!
       for profile in profiles {
-        let profileName = profile.0
-        let profileFile = File(file: profilesDir, child: "\(profileName).dat", directoryHint: .notDirectory)
+        let profName = profile.0
+        let profFile = File(file: profDir, child: "\(profName).dat", directoryHint: .notDirectory)
 
         let jsonEncoder = JSONEncoder()
         let jsonData    = try jsonEncoder.encode(profile.1)
-        try profileFile.writeData(jsonData)
+        try profFile.writeData(jsonData)
       }
     }
   }
 
-  private func updateData(defaultDistances: [String]) throws {
+  private func writeData(_ dist: String) throws {
+    let index = distArray.firstIndex(of: dist)
+    guard let index else { throw Exception.IllegalArgumentException }
+
+    try writeData(index, dist)
+  }
+
+  private func writeData() throws {
+    for (index, dist) in distArray.enumerated() {
+      try writeData(index, dist)
+    }
+  }
+
+  private func updateData(_ defaultDist: [[String : Any]]) throws {
     throw DistanceError.VersionError
   }
 
@@ -193,21 +210,22 @@ class DistanceManager {
     return (time1Dbl > time2Dbl)
   }
 
-  func deleteTime(_ runDistance: String, _ runTime: String?) throws -> Int {
-    guard let runTime else { throw Exception.IllegalArgumentException }
+  func deleteTime(_ baseDist: String, _ runPace: String, _ setTime: String) throws -> Int {
+    let timeDict = timeMap[baseDist]
+    guard let timeDict else { throw Exception.IllegalArgumentException }
 
-    let timeArray = timeMap[runDistance]
+    let timeArray = timeDict[runPace]
     guard let timeArray else { throw Exception.IllegalArgumentException }
-    if(!timeArray.contains(runTime)) { throw Exception.IllegalArgumentException }
+
+    if(!timeArray.contains(setTime)) { throw Exception.IllegalArgumentException }
 
     var i = 0
     var newIndex = -1
     var newTimeArray = [String](repeating: "", count: timeArray.size-1)
     for time in timeArray {
-      if(time == runTime) {
+      if(time == setTime) {
         newIndex = i-1
         if(newIndex < 0) { newIndex = 0 }
-
         continue
       }
 
@@ -215,32 +233,34 @@ class DistanceManager {
       i += 1
     }
 
-    timeMap[runDistance] = newTimeArray
-    try writeData(runDistance)
+    timeMap[baseDist]![runPace]! = newTimeArray
+    try writeData(baseDist)
 
     return newIndex
   }
 
-  func addTime(_ runDistance: String, _ runTime: String?) throws -> Int {
-    guard let runTime else { throw Exception.IllegalArgumentException }
+  func addTime(_ baseDist: String, _ runPace: String, _ setTime: String) throws -> Int {
+    let timeDict = timeMap[baseDist]
+    guard let timeDict else { throw Exception.IllegalArgumentException }
 
-    let timeArray = timeMap[runDistance]
+    let timeArray = timeDict[runPace]
     guard let timeArray else { throw Exception.IllegalArgumentException }
-    if(timeArray.contains(runTime)) { throw Exception.IllegalArgumentException }
+
+    if(timeArray.contains(setTime)) { throw Exception.IllegalArgumentException }
 
     var i = 0
     var j = 0
     var newTimeArray = [String](repeating: "", count: timeArray.size+1)
     while(i < timeArray.size) {
       let time = timeArray[i]
-      if(try timeGreaterThan(time1: time, time2: runTime)) { break }
+      if(try timeGreaterThan(time1: time, time2: setTime)) { break }
 
       newTimeArray[j] = time
       i += 1; j += 1
     }
 
     let newIndex = j
-    newTimeArray[j] = runTime
+    newTimeArray[j] = setTime
     j += 1
 
     while(i < timeArray.size) {
@@ -248,17 +268,19 @@ class DistanceManager {
       i += 1; j += 1
     }
 
-    timeMap[runDistance] = newTimeArray
-    try writeData(runDistance)
+    timeMap[baseDist]![runPace]! = newTimeArray
+    try writeData(baseDist)
 
     return newIndex
   }
 
-  func replaceTime(_ runDistance: String, _ origTime: String?, _ newTime: String?) throws -> Int {
-    guard let origTime, let newTime else { throw Exception.IllegalArgumentException }
+  func replaceTime(_ baseDist: String, _ runPace: String, _ origTime: String, _ newTime: String) throws -> Int {
+    let timeDict = timeMap[baseDist]
+    guard let timeDict else { throw Exception.IllegalArgumentException }
 
-    let timeArray = timeMap[runDistance]
+    let timeArray = timeDict[runPace]
     guard let timeArray else { throw Exception.IllegalArgumentException }
+
     if(!timeArray.contains(origTime)) { throw Exception.IllegalArgumentException }
     if(timeArray.contains(newTime))   { throw Exception.IllegalArgumentException }
 
@@ -290,42 +312,49 @@ class DistanceManager {
       j += 1
     }
 
-    timeMap[runDistance] = newTimeArray
-    try writeData(runDistance)
+    timeMap[baseDist]![runPace]! = newTimeArray
+    try writeData(baseDist)
 
     return newIndex
   }
 
-  func profileExists(_ runDistance: String, _ profileName: String) -> Bool
-  { return profileMap[runDistance]!.contains { (name, _) in return (name == profileName) } }
+  func profileExists(_ runDistance: String, _ intvl: Intvl,  _ profileName: String) -> Bool
+  { return profMap[runDistance]![intvl]!.contains { (name, _) in return (name == profileName) } }
 
-  func saveProfile(_ runDistance: String, _ profileName: String, _ waypointData: [WaypointData]) throws -> [String] {
-    let profiles = profileMap[runDistance]
+  func saveProfile(_ baseDist: String, _ intvl: Intvl, _ profileName: String, _ waypointData: [WaypointData]) throws -> [String] {
+    let profilesDict = profMap[baseDist]
+    guard var updatedProfilesDict = profilesDict else { throw Exception.IllegalArgumentException }
+
+    let profiles = updatedProfilesDict[intvl]
     guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
 
     updatedProfiles = updatedProfiles.filter { $0.0 != profileName }
     updatedProfiles.append((profileName, waypointData))
-    profileMap[runDistance]! = updatedProfiles
+    profMap[baseDist]![intvl]! = updatedProfiles
 
-    try writeData(runDistance)
-    return profileMap[runDistance]!.map { $0.0 }
+    try writeData(baseDist)
+    return profMap[baseDist]![intvl]!.map { $0.0 }
   }
 
   // TODO: Maybe make a profile manager?
-  func deleteProfile(_ runDistance: String, _ profileName: String) throws -> [String] {
-    let profiles = profileMap[runDistance]
+  func deleteProfile(_ runDist: String, _ intvl: Intvl, _ profileName: String) throws -> [String] {
+    let profilesDict = profMap[runDist]
+    guard var updatedProfilesDict = profilesDict else { throw Exception.IllegalArgumentException }
+
+    let profiles = updatedProfilesDict[intvl]
     guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
 
-    let i = distanceArray.firstIndex(of: runDistance)
+    let i = distArray.firstIndex(of: runDist)
     guard let i else { throw Exception.IllegalArgumentException }
 
     let prefix = String(format: "Distance_%03d_", i)
-    let distanceDir = File(file: distanceDir, child: prefix + runDistance, directoryHint: .isDirectory)
-    let profilesDir = File(file: distanceDir, child: "Profiles", directoryHint: .isDirectory)
+    let distDir  = File(file: dataDir, child: prefix + runDist, directoryHint: .isDirectory)
+    let intvlDir = File(file: distDir, child: intvl.rawValue, directoryHint: .isDirectory)
+    let profilesDir = File(file: distDir, child: "Profiles", directoryHint: .isDirectory)
     let profileFile = File(file: profilesDir, child: "\(profileName).dat", directoryHint: .notDirectory)
     if(profileFile.delete()) {
       updatedProfiles = updatedProfiles.filter { $0.0 != profileName }
-      profileMap[runDistance]! = updatedProfiles
+      profMap[runDist]![intvl]! = updatedProfiles
 
       return updatedProfiles.map { $0.0 }
     }
@@ -333,11 +362,14 @@ class DistanceManager {
     throw Exception.IOException
   }
 
-  func waypointsFor(_ baseDist: String, _ profileName: String) throws -> [WaypointData] {
-    let profiles = profileMap[baseDist]
-    guard let profiles else { throw Exception.IllegalArgumentException }
+  func waypointsFor(_ baseDist: String, _ intvl: Intvl, _ profName: String) throws -> [WaypointData] {
+    let profilesDict = profMap[baseDist]
+    guard let profilesDict else { throw Exception.IllegalArgumentException }
 
-    let matches = profiles.filter { $0.0 == profileName }
+    let profiles = profilesDict[intvl]
+    guard let profiles = profiles else { throw Exception.IllegalArgumentException }
+
+    let matches = profiles.filter { $0.0 == profName }
     if(matches.count != 1) { throw Exception.IllegalArgumentException }
 
     return matches[0].1

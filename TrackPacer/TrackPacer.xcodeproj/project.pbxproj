@@ -95,7 +95,6 @@
 		129359792BFEAC180042F99E /* Int64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129359782BFEAC180042F99E /* Int64.swift */; };
 		1293597B2BFEAD1D0042F99E /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597A2BFEAD1D0042F99E /* Double.swift */; };
 		1293597D2BFEADF50042F99E /* ContinousClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1293597C2BFEADF50042F99E /* ContinousClock.swift */; };
-		129D7AF72F0C745B0002B91D /* silent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 129D7AF62F0C745B0002B91D /* silent.mp3 */; };
 		12A0CD782C345F5100308607 /* thirty.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD752C345F5100308607 /* thirty.m4a */; };
 		12A0CD792C345F5100308607 /* ten.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD762C345F5100308607 /* ten.m4a */; };
 		12A0CD7A2C345F5100308607 /* stop.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 12A0CD772C345F5100308607 /* stop.m4a */; };
@@ -140,6 +139,19 @@
 		12E530082C08C202007EB53C /* HistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E530072C08C202007EB53C /* HistoryManager.swift */; };
 		12E5300A2C08C554007EB53C /* FileTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E530092C08C554007EB53C /* FileTime.swift */; };
 		12F0E37B2C03A27700ECE1E0 /* PacingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F0E37A2C03A27700ECE1E0 /* PacingModel.swift */; };
+		B55223C8303986B800D7035F /* silent.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223C7303986B800D7035F /* silent.m4a */; };
+		B55223CA3039E30E00D7035F /* 1000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223C93039E30E00D7035F /* 1000m.m4a */; };
+		B55223D33039E32C00D7035F /* 6000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223CF3039E32C00D7035F /* 6000m.m4a */; };
+		B55223D43039E32C00D7035F /* 8000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223D13039E32C00D7035F /* 8000m.m4a */; };
+		B55223D53039E32C00D7035F /* 2000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223CB3039E32C00D7035F /* 2000m.m4a */; };
+		B55223D63039E32C00D7035F /* 3000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223CC3039E32C00D7035F /* 3000m.m4a */; };
+		B55223D73039E32C00D7035F /* 4000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223CD3039E32C00D7035F /* 4000m.m4a */; };
+		B55223D83039E32C00D7035F /* 7000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223D03039E32C00D7035F /* 7000m.m4a */; };
+		B55223D93039E32C00D7035F /* 9000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223D23039E32C00D7035F /* 9000m.m4a */; };
+		B55223DA3039E32C00D7035F /* 5000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223CE3039E32C00D7035F /* 5000m.m4a */; };
+		B58F15512F90446B00E210C9 /* PaceSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58F15502F90446500E210C9 /* PaceSelection.swift */; };
+		B58F15532F90536900E210C9 /* StartSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58F15522F90535800E210C9 /* StartSelection.swift */; };
+		B5EE06443042367200B1411C /* silent10.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5EE06433042367200B1411C /* silent10.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -232,7 +244,6 @@
 		129359782BFEAC180042F99E /* Int64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int64.swift; sourceTree = "<group>"; };
 		1293597A2BFEAD1D0042F99E /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		1293597C2BFEADF50042F99E /* ContinousClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinousClock.swift; sourceTree = "<group>"; };
-		129D7AF62F0C745B0002B91D /* silent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silent.mp3; sourceTree = "<group>"; };
 		12A0CD752C345F5100308607 /* thirty.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = thirty.m4a; sourceTree = "<group>"; };
 		12A0CD762C345F5100308607 /* ten.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = ten.m4a; sourceTree = "<group>"; };
 		12A0CD772C345F5100308607 /* stop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = stop.m4a; sourceTree = "<group>"; };
@@ -278,6 +289,19 @@
 		12E530072C08C202007EB53C /* HistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryManager.swift; sourceTree = "<group>"; };
 		12E530092C08C554007EB53C /* FileTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTime.swift; sourceTree = "<group>"; };
 		12F0E37A2C03A27700ECE1E0 /* PacingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacingModel.swift; sourceTree = "<group>"; };
+		B55223C7303986B800D7035F /* silent.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = silent.m4a; sourceTree = "<group>"; };
+		B55223C93039E30E00D7035F /* 1000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1000m.m4a; sourceTree = "<group>"; };
+		B55223CB3039E32C00D7035F /* 2000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 2000m.m4a; sourceTree = "<group>"; };
+		B55223CC3039E32C00D7035F /* 3000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 3000m.m4a; sourceTree = "<group>"; };
+		B55223CD3039E32C00D7035F /* 4000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 4000m.m4a; sourceTree = "<group>"; };
+		B55223CE3039E32C00D7035F /* 5000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5000m.m4a; sourceTree = "<group>"; };
+		B55223CF3039E32C00D7035F /* 6000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 6000m.m4a; sourceTree = "<group>"; };
+		B55223D03039E32C00D7035F /* 7000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 7000m.m4a; sourceTree = "<group>"; };
+		B55223D13039E32C00D7035F /* 8000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 8000m.m4a; sourceTree = "<group>"; };
+		B55223D23039E32C00D7035F /* 9000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9000m.m4a; sourceTree = "<group>"; };
+		B58F15502F90446500E210C9 /* PaceSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaceSelection.swift; sourceTree = "<group>"; };
+		B58F15522F90535800E210C9 /* StartSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSelection.swift; sourceTree = "<group>"; };
+		B5EE06433042367200B1411C /* silent10.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = silent10.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -505,7 +529,17 @@
 		12B144B82BF3CCFC00FCD2A7 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				129D7AF62F0C745B0002B91D /* silent.mp3 */,
+				B5EE06433042367200B1411C /* silent10.m4a */,
+				B55223C93039E30E00D7035F /* 1000m.m4a */,
+				B55223CB3039E32C00D7035F /* 2000m.m4a */,
+				B55223CC3039E32C00D7035F /* 3000m.m4a */,
+				B55223CD3039E32C00D7035F /* 4000m.m4a */,
+				B55223CE3039E32C00D7035F /* 5000m.m4a */,
+				B55223CF3039E32C00D7035F /* 6000m.m4a */,
+				B55223D03039E32C00D7035F /* 7000m.m4a */,
+				B55223D13039E32C00D7035F /* 8000m.m4a */,
+				B55223D23039E32C00D7035F /* 9000m.m4a */,
+				B55223C7303986B800D7035F /* silent.m4a */,
 				12A0CD762C345F5100308607 /* ten.m4a */,
 				12A0CD752C345F5100308607 /* thirty.m4a */,
 				12A0CD772C345F5100308607 /* stop.m4a */,
@@ -599,10 +633,12 @@
 		12E5204A2C00E961002F54AE /* Run */ = {
 			isa = PBXGroup;
 			children = (
+				B58F15522F90535800E210C9 /* StartSelection.swift */,
 				12E36B632F2979B30015E724 /* IntervalSelection.swift */,
 				127122A72BEE7F1F00106069 /* DistanceSelection.swift */,
 				12E5204C2C00E98A002F54AE /* LaneSelection.swift */,
 				12AE78F92C0294A70057764D /* TimeSelection.swift */,
+				B58F15502F90446500E210C9 /* PaceSelection.swift */,
 				12A2F4A12C1515490062367B /* ProfileSelection.swift */,
 				12C8734F2C036B4100FA5C5E /* TrackSelection.swift */,
 				1287C2992C06026C008BDD46 /* TimeEdit.swift */,
@@ -714,7 +750,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5EE06443042367200B1411C /* silent10.m4a in Resources */,
+				B55223D33039E32C00D7035F /* 6000m.m4a in Resources */,
+				B55223D43039E32C00D7035F /* 8000m.m4a in Resources */,
+				B55223D53039E32C00D7035F /* 2000m.m4a in Resources */,
+				B55223D63039E32C00D7035F /* 3000m.m4a in Resources */,
+				B55223D73039E32C00D7035F /* 4000m.m4a in Resources */,
+				B55223D83039E32C00D7035F /* 7000m.m4a in Resources */,
+				B55223D93039E32C00D7035F /* 9000m.m4a in Resources */,
+				B55223DA3039E32C00D7035F /* 5000m.m4a in Resources */,
 				12A0CD782C345F5100308607 /* thirty.m4a in Resources */,
+				B55223CA3039E30E00D7035F /* 1000m.m4a in Resources */,
 				1228356D2C10AC4F003FCE65 /* oym.m4a in Resources */,
 				1228356C2C10AC4F003FCE65 /* set.m4a in Resources */,
 				12B144BA2BF3CD6100FCD2A7 /* threetwoone.m4a in Resources */,
@@ -726,7 +772,6 @@
 				129359512BFE4D8D0042F99E /* lap9.m4a in Resources */,
 				129359682BFE4D8D0042F99E /* fourhundred.m4a in Resources */,
 				1293595B2BFE4D8D0042F99E /* go.m4a in Resources */,
-				129D7AF72F0C745B0002B91D /* silent.mp3 in Resources */,
 				129359542BFE4D8D0042F99E /* threehundred.m4a in Resources */,
 				1293596D2BFE4D8D0042F99E /* lap2.m4a in Resources */,
 				1293595F2BFE4D8D0042F99E /* cancelled.m4a in Resources */,
@@ -755,6 +800,7 @@
 				12A0CD792C345F5100308607 /* ten.m4a in Resources */,
 				1293594F2BFE4D8D0042F99E /* lap4.m4a in Resources */,
 				129359522BFE4D8D0042F99E /* threehundredandfifty.m4a in Resources */,
+				B55223C8303986B800D7035F /* silent.m4a in Resources */,
 				12A0CD7A2C345F5100308607 /* stop.m4a in Resources */,
 				129359602BFE4D8D0042F99E /* lap6.m4a in Resources */,
 				129359582BFE4D8D0042F99E /* lap24.m4a in Resources */,
@@ -800,6 +846,7 @@
 				12B144AF2BF2854A00FCD2A7 /* PacingProgress.swift in Sources */,
 				127122AB2BEEDE5400106069 /* MainViewModel.swift in Sources */,
 				12B5A3F02C04A07300455303 /* StatusModel.swift in Sources */,
+				B58F15532F90536900E210C9 /* StartSelection.swift in Sources */,
 				124645ED2BF16A6C00CB6EAC /* ActionButtonStyle.swift in Sources */,
 				122F8CA32C0D29C100352AE0 /* PastView.swift in Sources */,
 				12B5A4012C04A71000455303 /* Dialog.swift in Sources */,
@@ -849,6 +896,7 @@
 				12B5A4062C04B97100455303 /* DialogContent.swift in Sources */,
 				129359792BFEAC180042F99E /* Int64.swift in Sources */,
 				122F8C972C0B37BC00352AE0 /* HistoryViewModel.swift in Sources */,
+				B58F15512F90446B00E210C9 /* PaceSelection.swift in Sources */,
 				12A2F4A22C1515490062367B /* ProfileSelection.swift in Sources */,
 				124645F22BF16E5900CB6EAC /* PaceView.swift in Sources */,
 				1271228E2BEE41A000106069 /* TrackPacerApp.swift in Sources */,
@@ -994,10 +1042,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"TrackPacer/Preview Content\"";
+				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrackPacer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = TrackPacer;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1026,10 +1076,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"TrackPacer/Preview Content\"";
+				DEVELOPMENT_TEAM = YV8CWLF497;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrackPacer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = TrackPacer;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

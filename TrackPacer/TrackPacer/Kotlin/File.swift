@@ -37,6 +37,25 @@ struct File {
     return fileNames.map { fileName in File(url: url, child: fileName, directoryHint: .inferFromPath) }
   }
 
+  // New fn.
+  func listByDate() throws -> [String] {
+    var folderList = try list()
+
+    var fileDates: [String : Date] = [:]
+    for fileName in folderList {
+      let file = File(file: self, child: fileName, directoryHint: .notDirectory)
+      let fileAttrib  = try file.fileAttributes()
+
+      let creationDate = fileAttrib[FileAttributeKey.creationDate] as? Date
+      guard let creationDate else { throw FileError.FileDataError }
+
+      fileDates[fileName] = creationDate
+    }
+
+    folderList.sort { return (fileDates[$0]! < fileDates[$1]!) }
+    return folderList;
+  }
+
   func fileAttributes() throws -> [FileAttributeKey : Any] {
     return try fm.attributesOfItem(atPath: url.path(percentEncoded: false))
   }

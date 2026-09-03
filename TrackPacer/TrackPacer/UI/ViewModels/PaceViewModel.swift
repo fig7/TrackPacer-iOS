@@ -119,19 +119,19 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     self.pacingSettings = statusViewModel.pacingSettings
   }
 
-  func setPacingOptions(_ baseDist: String, _ runLane: Int, _ baseTime: Double, _ runProf: String) {
-    pacingOptions.baseDist = baseDist
-    pacingOptions.baseTime = baseTime
+  FFS Check all this work in!
+  func setPacingOptions(_ distAndStart: String, _ runLane: Int, _ setPace: String, _ setTime: Double, _ runProf: String) {
+    pacingOptions.distAndStart = distAndStart
+    pacingOptions.runLane      = runLane
+    pacingOptions.runProf      = runProf
 
-    pacingOptions.runLane = runLane
-    pacingOptions.runProf = runProf
-
+    pacingOptions.baseTime = baseTimeFor(pacingOptions.baseDist, pacingOptions.runLane, setPace, setTime)
     pacingProgress.resetProgress()
   }
 
   func onServiceConnected() {
     let distanceManager = mainViewModel.runModel.distanceModel.distanceManager
-    let waypoints       = try! distanceManager.waypointsFor(pacingOptions.baseDist, pacingOptions.runProf)
+    let waypoints       = try! distanceManager.waypointsFor(pacingOptions.baseDist, pacingOptions.intvl, pacingOptions.profName)
 
     let pacingStatus = pacingStatus.status
     if(pacingStatus == .ServiceStart) {

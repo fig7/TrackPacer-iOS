@@ -10,8 +10,8 @@ import Foundation
 @MainActor class IntervalSelection: ObservableObject {
   var selectedCallback: (_ newSelected: String) -> Void = { _ in }
 
-  @Published var selected = ""
+  @Published var selected = "50m"
   { didSet { selectedCallback(selected) } }
 
-  @Published var list: [String] = [""]
+  @Published var list: [String] = ["50m", "100m", "200m", "400m"];
 }

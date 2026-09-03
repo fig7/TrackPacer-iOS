@@ -157,13 +157,13 @@ import UIKit
 
   func initRunView() {
     let distanceManager = runModel.distanceModel.distanceManager
-    let distanceArray   = distanceManager.distanceArray!
-    let profileMap      = distanceManager.profileMap
+    let distArray = distanceManager.distArray!
+    let profMap   = distanceManager.profMap
 
     do {
       // Initialise with 400m
-      let profileArray = profileMap[distanceArray[0]]!.map { $0.0 }
-      try runViewModel.initDistances(distanceArray, profileArray)
+      let profArray = profMap[distArray[0]]![Intvl.i50m]!.map { $0.0 }
+      try runViewModel.initDistances(distArray, profArray)
     } catch {
       showErrorDialog(title: "Loading error",
         message:
@@ -266,8 +266,10 @@ import UIKit
 
   func editProfile(_ runDist: String, _ runProfile: String, _ runInterval: String) {
     do {
+      let intvl = Intvl(rawValue: "i" + runInterval)!
+
       let distanceManager = runModel.distanceModel.distanceManager
-      let waypoints       = try distanceManager.waypointsFor(runDist, runProfile)
+      let waypoints       = try distanceManager.waypointsFor(runDist, intvl, runProfile)
 
       let settingsManager = settingsModel.settingsManager
       let refPace = settingsManager.refPace
@@ -311,8 +313,8 @@ import UIKit
     return radioAccessTechnology.isEmpty
   }
 
-  func onYourMarks(_ runDist: String, _ runLane: Int, _ runTime: Double, _ runProf: String) {
-    paceViewModel.setPacingOptions(runDist, runLane, runTime, runProf)
+  func onYourMarks(_ runDist: String, _ runLane: Int, _ setPace: String, _ setTime: Double, _ runProf: String) {
+    paceViewModel.setPacingOptions(runDist, runLane, setPace, setTime, runProf)
 
     let settingsManager    = settingsModel.settingsManager
     let flightModeReminder = settingsManager.flightMode
@@ -377,7 +379,7 @@ import UIKit
     resultModel.setActualTime(timeToAlmostFullString(timeInMS: actualRunTime))
 
     let actualPace = (1000.0 * actualRunTime.toDouble()) / pacingOptions.runDist
-    resultModel.setActualPace(timeToMinuteString(timeInMS: actualPace.toLong()))
+    resultModel.setActualPace(timeToMinuteString2(timeInMS: actualPace.toLong()))
 
     let runTime = pacingOptions.runTime
     var timeDiff  = actualRunTime - runTime.toLong()
@@ -422,59 +424,59 @@ import UIKit
     mainViewStack.popCompletionView()
   }
 
-  private func completeSaveProfile(_ profileDist: String, _ profileName: String, _ waypointData: [WaypointData]) throws {
+  private func completeSaveProfile(_ profileDist: String, _ profileIntvl: Intvl, _ profileName: String, _ waypointData: [WaypointData]) throws {
     // TODO: Handle errors
     let distanceManager = runModel.distanceModel.distanceManager
-    let profileArray    = try distanceManager.saveProfile(profileDist, profileName, waypointData)
+    let profileArray    = try distanceManager.saveProfile(profileDist, profileIntvl, profileName, waypointData)
     runViewModel.updateProfiles(profileArray)
   }
 
-  func saveProfile(_ profileDist: String, _ profileName: String, _ waypointData: [WaypointData]) {
+  func saveProfile(_ profileDist: String, _ profileItvl: Intvl, _ profileName: String, _ waypointData: [WaypointData]) {
     do {
       let distanceManager = runModel.distanceModel.distanceManager
-      if(distanceManager.profileExists(profileDist, profileName)) {
+      if(distanceManager.profileExists(profileDist, profileItvl, profileName)) {
         showQuestionDialog(title: "Replace existing profile",
           message: "Are you sure you want to make changes to an existing profile?", action: "REPLACE", width: 342, height: 240,
           completion: { [weak self] in
             guard let self else { return }
 
-            try! completeSaveProfile(profileDist, profileName, waypointData)
+            try! completeSaveProfile(profileDist, profileItvl, profileName, waypointData)
             mainViewStack.popProfileView()
           })
 
         return
       }
 
-      try completeSaveProfile(profileDist, profileName, waypointData)
+      try completeSaveProfile(profileDist, profileItvl, profileName, waypointData)
     } catch { }
 
     mainViewStack.popProfileView()
   }
 
-  func completeDeleteProfile(_ profileDist: String, _ profileName: String) throws {
+  func completeDeleteProfile(_ profileDist: String, _ profileIntvl: Intvl, _ profileName: String) throws {
     // TODO: Handle errors
     let distanceManager = runModel.distanceModel.distanceManager
-    let profileArray    = try distanceManager.deleteProfile(profileDist, profileName)
+    let profileArray    = try distanceManager.deleteProfile(profileDist, profileIntvl, profileName)
     runViewModel.updateProfiles(profileArray)
   }
 
-  func deleteProfile(_ profileDist: String, _ profileName: String) {
+  func deleteProfile(_ profileDist: String, _ profileIntvl: Intvl, _ profileName: String) {
     do {
       let distanceManager = runModel.distanceModel.distanceManager
-      if(distanceManager.profileExists(profileDist, profileName)) {
+      if(distanceManager.profileExists(profileDist, profileIntvl, profileName)) {
         showQuestionDialog(title: "Delete existing profile",
           message: "Are you sure you want to delete this profile? This operation cannot be undone.", action: "DELETE", width: 342, height: 240,
           completion: { [weak self] in
             guard let self else { return }
 
-            try! completeDeleteProfile(profileDist, profileName)
+            try! completeDeleteProfile(profileDist, profileIntvl, profileName)
             mainViewStack.popProfileView()
           })
 
         return
       }
 
-      try completeDeleteProfile(profileDist, profileName)
+      try completeDeleteProfile(profileDist, profileIntvl, profileName)
     } catch { }
 
     mainViewStack.popProfileView()

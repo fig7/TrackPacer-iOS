@@ -18,8 +18,10 @@ struct ContentView: View {
           RunView().tabItem { Label("Run", image: "baseline_run_24") }
             .environmentObject(viewModel.runViewModel)
             .environmentObject(viewModel.runViewModel.distanceSelection)
+            .environmentObject(viewModel.runViewModel.startSelection)
             .environmentObject(viewModel.runViewModel.laneSelection)
             .environmentObject(viewModel.runViewModel.timeSelection)
+            .environmentObject(viewModel.runViewModel.paceSelection)
             .environmentObject(viewModel.runViewModel.profileSelection)
             .environmentObject(viewModel.runViewModel.intervalSelection)
             .environmentObject(viewModel.runViewModel.trackSelection)

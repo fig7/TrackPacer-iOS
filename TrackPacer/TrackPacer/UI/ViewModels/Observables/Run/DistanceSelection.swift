@@ -17,4 +17,6 @@ import Foundation
 
   var selected = ""
   { didSet { selectedCallback(selected) } }
+
+  @Published var runDist = ""
 }

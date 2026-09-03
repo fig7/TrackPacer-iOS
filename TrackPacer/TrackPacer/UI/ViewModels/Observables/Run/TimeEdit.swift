@@ -16,6 +16,8 @@ enum EditResponse { case UserCancel, UserDelete, UserAdd, UserSet }
     self.timeSelection = timeSelection
   }
 
+  var unit = "Pace"
+  @Published var dist = "400m"
   @Published var mins = 0 { didSet { updateComputed() } }
   @Published var secs = 0 { didSet { updateComputed() } }
   @Published var hths = 0 { didSet { updateComputed() } }
@@ -27,8 +29,8 @@ enum EditResponse { case UserCancel, UserDelete, UserAdd, UserSet }
   @Published var editAction: EditResponse = .UserCancel
 
   private func timeInvalid() -> Bool {
-    // TODO: This should really use a waypoint check (min 5s between waypoints)
-    return (mins == 0) && (secs<40)
+    // TODO: This should really use a waypoint check (e.g. min 5s between waypoints)
+    return (unit == "Pace") ? ((mins < 1) || ((mins == 1) && (secs < 40))) : ((mins == 0) && (secs < 40))
   }
 
   private func timeDuplicate() -> Bool {

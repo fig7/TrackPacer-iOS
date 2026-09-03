@@ -106,6 +106,7 @@ struct Raw {
   let threetwoone = "threetwoone"
   let go          = "go"
   let silent      = "silent"
+  let silent10    = "silent10"
 
   let fifty                = "fifty"
   let onehundred           = "onehundred"
@@ -181,6 +182,10 @@ struct Strings {
   let ll_10 = NSLocalizedString("ll_10", comment: "")
   let ll_13 = NSLocalizedString("ll_13", comment: "")
   let ll_25 = NSLocalizedString("ll_25", comment: "")
+
+  let road_5   = NSLocalizedString("road_5", comment: "")
+  let road_10  = NSLocalizedString("road_10", comment: "")
+  let road_mks = NSLocalizedString("road_mks", comment: "")
 }
 
 struct Resources {

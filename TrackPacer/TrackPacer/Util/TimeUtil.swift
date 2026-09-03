@@ -12,9 +12,11 @@ let baseTimeMS  = "%@%@:%@"
 let baseTimeHMS = "%@%@:%@:%@"
 let baseTimeMSS = "%@%@:%@.%@"
 let baseTimeAll = "%@%@:%@:%@.%@"
-let editTimeAll = "%@:%@.%@"
 
-func timeToString(timeInMS: Int64) -> String {
+let editTimeS  = "%@.%@"
+let editTimeMS = "%@:%@.%@"
+
+func timeToString(timeInMS: Int64, roundUp: Bool = true) -> String {
   var timeLeft = abs(timeInMS)
   let sgnStr   = (timeInMS < 0) ? "-" : ""
 
@@ -27,7 +29,8 @@ func timeToString(timeInMS: Int64) -> String {
   var secs = timeLeft / 1000
   timeLeft -= secs * 1000
 
-  if(((hrs > 0) || (mins > 0)) && (timeLeft > 0)) {
+  let roundUp2 = roundUp || (timeLeft >= 500)
+  if(roundUp2 && ((hrs > 0) || (mins > 0)) && (timeLeft > 0)) {
     secs += 1
     if(secs == 60) {
       secs = 0
@@ -90,7 +93,6 @@ func timeToMinuteString(timeInMS: Int64) -> String {
   }
 }
 
-// TODO: Figure out why we added a second to the first version!
 func timeToMinuteString2(timeInMS: Int64) -> String {
   var timeLeft = abs(timeInMS)
   let sgnStr   = (timeInMS < 0) ? "-" : ""
@@ -162,11 +164,11 @@ func timeToFullString(timeInMS: Int64) -> String {
   return String(format: baseTimeAll, sgnStr, hrsStr, minsStr, secsStr, msStr)
 }
 
-func runTimeFor(_ selectedTime: String) throws -> Double {
-  let runTimeSplit = selectedTime.split(separator: ":")
-  let runTime0 = try String(runTimeSplit[0]).trim().toLong()
-  let runTime1 = try String(runTimeSplit[1]).toDouble()
-  return 1000.0*(runTime0.toDouble()*60.0 + runTime1)
+func setTimeFor(_ selectedTime: String) throws -> Double {
+  let setTimeSplit = selectedTime.split(separator: ":")
+  let setTime0 = try String(setTimeSplit[0]).trim().toLong()
+  let setTime1 = try String(setTimeSplit[1]).trim().toDouble()
+  return 1000.0*(setTime0.toDouble()*60.0 + setTime1)
 }
 
 func mshFromRunTime(_ runTime: Double) -> (mins: Int, secs: Int, hths: Int) {
@@ -177,5 +179,7 @@ func mshFromRunTime(_ runTime: Double) -> (mins: Int, secs: Int, hths: Int) {
 }
 
 func strFromMSH(_ mins: Int, _ secs: Int, _ hths: Int) -> String {
-  return String(format: editTimeAll, mins.toString(), String(format:"%02d", secs), String(format: "%02d", hths))
+
+  return (mins > 0) ? String(format: editTimeMS, mins.toString(), String(format:"%02d", secs), String(format: "%02d", hths))
+                    : String(format: editTimeS,  String(format:"%02d", secs), String(format: "%02d", hths))
 }

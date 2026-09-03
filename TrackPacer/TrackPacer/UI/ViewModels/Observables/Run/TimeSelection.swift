@@ -16,5 +16,12 @@ import Foundation
   @Published var list: [String] = [""]
 
   func contains(_ timeStr: String) -> Bool
-  { return list.contains(timeStr) }
+  {
+    for timeEntry in list {
+      let trimmed = timeEntry.trim()
+      if(trimmed == timeStr) { return true }
+    }
+
+    return false
+  }
 }

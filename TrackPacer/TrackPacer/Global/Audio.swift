@@ -10,39 +10,16 @@ import Foundation
 // Clips for the waypoints (see waypointNames in Waypoint.swift)
 let clipList = [
   "",
-  "fifty",
-  "onehundred",
-  "onehundredandfifty",
-  "twohundred",
-  "twohundredandfifty",
-  "threehundred",
-  "threehundredandfifty",
-  "lap2",
-  "lap3",
-  "lap4",
-  "lap5",
-  "lap6",
-  "lap7",
-  "lap8",
-  "lap9",
-  "lap10",
-  "lap11",
-  "lap12",
-  "lap13",
-  "lap14",
-  "lap15",
-  "lap16",
-  "lap17",
-  "lap18",
-  "lap19",
-  "lap20",
-  "lap21",
-  "lap22",
-  "lap23",
-  "lap24",
-  "lap25",
-  "finish",
-  "silent"]
+
+  "fifty", "onehundred", "onehundredandfifty", "twohundred", "twohundredandfifty", "threehundred", "threehundredandfifty",
+
+  "lap2",  "lap3",  "lap4",  "lap5",  "lap6",  "lap7",  "lap8",  "lap9",
+  "lap10", "lap11", "lap12", "lap13", "lap14", "lap15", "lap16", "lap17",
+  "lap18", "lap19", "lap20", "lap21", "lap22", "lap23", "lap24", "lap25",
+
+  "1000m", "2000m", "3000m", "4000m", "5000m", "6000m", "7000m", "8000m", "9000m",
+
+  "finish", "silent", "silent10"]
 
 let Go1ClipDuration: Int64  = 400
 let Go3ClipDuration: Int64  = 3000
