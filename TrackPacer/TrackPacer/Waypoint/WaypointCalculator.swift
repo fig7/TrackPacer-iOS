@@ -39,6 +39,10 @@ struct WaypointCalculator {
     return waypointTimes[currentIndex]
   }
 
+  func waypointTime(_ index: Int) -> Double {
+    return waypointTimes[index]
+  }
+
   func waypointWait() -> Double {
     return waypointWaits[currentIndex].toDouble()
   }

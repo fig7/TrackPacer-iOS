@@ -84,6 +84,7 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
   private var goTime:Int64 = -1
   private var prevTime     = -1.0
+  private var msPrevTime   = -1.0
 
   private func waypointRunnable(delayMS: Int64) {
     handleWaypoint(delayMS)
@@ -142,8 +143,9 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   func beginPacing(_ pacingOptions: PacingOptions, _ waypoints: [WaypointData]) {
     waypointIndexList = waypointsFor(pacingOptions.distAndStart, pacingOptions.intvl)
 
-    goTime   = 0
-    prevTime = 0.0
+    goTime     = 0
+    prevTime   = 0.0
+    msPrevTime = 0.0
     waypointCalculator.initRun(pacingOptions.baseDist, pacingOptions.runLane, pacingOptions.baseTime, waypoints)
   }
 
@@ -183,6 +185,16 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
     goTime   = resumeTime
     prevTime = waypointCalculator.initResume(pacingOptions.baseDist, pacingOptions.runLane, pacingOptions.baseTime, waypoints, resumeTime.toDouble())
+
+    // TODO: Test me
+    var wpNum   = waypointCalculator.waypointNum() - 1
+    var wpIndex = waypointIndexList[wpNum]
+    while wpIndex == sl {
+      wpNum -= 1
+      wpIndex = waypointIndexList[wpNum]
+    }
+
+    msPrevTime = waypointCalculator.waypointTime()
   }
 
   func resumeStart(quickStart: Bool) -> Bool {
@@ -234,13 +246,32 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     return waypointCalculator.distOnPace(elapsedTime.toDouble())
   }
 
-  func waypointName() -> String {
-      let waypointNum = waypointCalculator.waypointNum()
-      return waypointNames[waypointIndexList[waypointNum]]
+  func milestoneName() -> String {
+    var wpNum   = waypointCalculator.waypointNum()
+    var wpIndex = waypointIndexList[wpNum]
+    while wpIndex == sl {
+      wpNum += 1
+      wpIndex = waypointIndexList[wpNum]
+    }
+
+    return waypointNames[wpIndex]
+  }
+
+  func milestoneProgress(_ elapsedTime: Int64) -> Double {
+    var wpNum   = waypointCalculator.waypointNum()
+    var msIndex = waypointIndexList[wpNum]
+    while msIndex == sl {
+      wpNum += 1
+      msIndex = waypointIndexList[wpNum]
+    }
+
+    let milestoneTime = waypointCalculator.waypointTime(wpNum)
+    return min(1.0, (elapsedTime.toDouble() - msPrevTime) / (milestoneTime - msPrevTime))
   }
 
   func waypointProgress(_ elapsedTime: Int64) -> Double {
-    let waypointTime = waypointCalculator.waypointTime()
+    let wpNum        = waypointCalculator.waypointNum()
+    let waypointTime = waypointCalculator.waypointTime(wpNum)
     return min(1.0, (elapsedTime.toDouble() - prevTime) / (waypointTime - prevTime))
   }
 
@@ -277,9 +308,11 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
 
       let urlGo = Bundle.main.url(forResource: R.raw.go, withExtension: ".m4a")!
       mpStart2  = try AVAudioPlayer(contentsOf: urlGo)
+      mpStart2.delegate = startDelegate
 
       let urlResumed = Bundle.main.url(forResource: "resumed", withExtension: ".m4a")!
       mpResume       = try AVAudioPlayer(contentsOf: urlResumed)
+      mpResume.delegate = startDelegate
 
       waypointDelegate = MPWaypointDelegate()
       mpWaypoint = try (0 ..< clipList.size).map { (i: Int) in
@@ -354,7 +387,8 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
   } */
 
   private func handleWaypoint(_ delayMS: Int64) {
-    let i = waypointIndexList[waypointCalculator.waypointNum()]
+    let wpNum = waypointCalculator.waypointNum()
+    let i     = waypointIndexList[wpNum]
     // let res = audioManager.requestAudioFocus(focusRequest)
     // if(res == AUDIOFOCUS_REQUEST_GRANTED) {
     mpWaypoint[i].play(atTime: mpWaypoint[i].deviceCurrentTime + delayMS.toDouble()/1000.0)
@@ -364,9 +398,10 @@ private class MPFinalDelegate : NSObject, AVAudioPlayerDelegate {
     mpWaitStart.play(atTime: mpWaitStart.deviceCurrentTime + delayMS.toDouble()/1000.0)
   }
 
-  func nextWaypoint() {
+  func nextWaypoint(_ msProgress: Double) {
     if(waypointCalculator.waypointsRemaining()) {
       prevTime = waypointTime + waypointWait
+      if(msProgress == 1.0) { msPrevTime = prevTime }
       (waypointTime, waypointWait) = waypointCalculator.nextWaypoint()
 
       let delay    = waypointTime.toLong() - elapsedTime()

@@ -11,8 +11,8 @@ import Foundation
   @Published var elapsedTime: Int64
 
   @Published var distRun: Double
-  @Published var waypointName: String
-  @Published var waypointProgress: Double
+  @Published var milestoneName: String
+  @Published var milestoneProgress: Double
 
   @Published var timeRemaining: Int64? {
     didSet {
@@ -28,8 +28,8 @@ import Foundation
     elapsedTime = 0
     distRun     = 0.0
 
-    waypointName     = ""
-    waypointProgress = 0.0
+    milestoneName     = ""
+    milestoneProgress = 0.0
     timeRemaining    = nil
 
     timeToProgress = 0.0
@@ -50,17 +50,17 @@ import Foundation
     self.distRun = distRun
   }
 
-  func setWaypointProgress(_ waypointName: String, _ waypointProgress: Double, _ timeRemaining: Int64, _ waitRemaining: Int64) {
-    self.waypointName     = waypointName
-    self.waypointProgress = waypointProgress
+  func setMilestoneProgress(_ milestoneName: String, _ milestoneProgress: Double, _ timeRemaining: Int64, _ waitRemaining: Int64) {
+    self.milestoneName     = milestoneName
+    self.milestoneProgress = milestoneProgress
 
     self.timeRemaining    = timeRemaining
     self.waitRemaining    = waitRemaining
   }
 
   func resetWaypointProgress() {
-    self.waypointName     = ""
-    self.waypointProgress = 0.0
+    self.milestoneName     = ""
+    self.milestoneProgress = 0.0
 
     self.timeRemaining = nil
     self.waitRemaining = 0

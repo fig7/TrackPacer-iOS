@@ -119,7 +119,6 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     self.pacingSettings = statusViewModel.pacingSettings
   }
 
-  FFS Check all this work in!
   func setPacingOptions(_ distAndStart: String, _ runLane: Int, _ setPace: String, _ setTime: Double, _ runProf: String) {
     pacingOptions.distAndStart = distAndStart
     pacingOptions.runLane      = runLane
@@ -202,14 +201,15 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
 
         if(pacingStatus == .PacingStart) { mainViewModel.initPacingResult() }
       } else {
-        let name          = waypointService.waypointName()
-        let progress      = waypointService.waypointProgress(elapsedTime)
+        let msName        = waypointService.milestoneName()
+        let msProgress    = waypointService.milestoneProgress(elapsedTime)
+        let wpProgress    = waypointService.waypointProgress(elapsedTime)
         let timeRemaining = waypointService.timeRemaining(elapsedTime)
         let waitRemaining = waypointService.waitRemaining(elapsedTime)
-        pacingProgress.setWaypointProgress(name, progress, timeRemaining, waitRemaining)
+        pacingProgress.setMilestoneProgress(msName, msProgress, timeRemaining, waitRemaining)
 
         if(waitRemaining == 0) {
-          if(progress == 1.0) { waypointService.nextWaypoint() }
+          if(wpProgress == 1.0) { waypointService.nextWaypoint(msProgress) }
 
           let distRun = waypointService.distOnPace(elapsedTime)
           pacingProgress.setDistRun(distRun)
@@ -257,12 +257,13 @@ private class MPCompletionDelegate : NSObject, AVAudioPlayerDelegate {
     guard let waypointService else { return }
 
     // Record the pacing progress
+    // TODO: Does this still work ok? (with waypoints now replaced with milestones?)
     let elapsedTime   = waypointService.elapsedTime()
-    let name          = waypointService.waypointName()
-    let progress      = waypointService.waypointProgress(elapsedTime)
+    let msName        = waypointService.milestoneName()
+    let msProgress    = waypointService.milestoneProgress(elapsedTime)
     let timeRemaining = waypointService.timeRemaining(elapsedTime)
     let waitRemaining = waypointService.waitRemaining(elapsedTime)
-    pacingProgress.setWaypointProgress(name, progress, timeRemaining, waitRemaining)
+    pacingProgress.setMilestoneProgress(msName, msProgress, timeRemaining, waitRemaining)
 
     if(waitRemaining == 0) {
       let distRun = waypointService.distOnPace(elapsedTime)

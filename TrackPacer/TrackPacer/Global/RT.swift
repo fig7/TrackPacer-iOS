@@ -115,7 +115,6 @@ let rtMap = [
   "rt_5000m_AS_l6"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l6_a, R.drawable.rt_1000_l6_a_ck],
   "rt_5000m_AS_l7"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l7_a, R.drawable.rt_1000_l7_a_ck],
   "rt_5000m_AS_l8"  : [R.string.laps_5000, R.string.ll_200m, R.string.ll_13, R.drawable.rt_1000_l8_a, R.drawable.rt_1000_l8_a_ck],
-  "rt_5000m_RD"  : [R.string.road_5, R.string.road_mks, R.string.empty, R.string.empty, R.string.empty],
 
   "rt_10000m_l1" : [R.string.laps_10000, R.string.ll_25, R.string.empty, R.drawable.rt_400_l1, R.drawable.rt_400_l1_ck],
   "rt_10000m_l2" : [R.string.laps_10000, R.string.ll_25, R.string.empty, R.drawable.rt_400_l2, R.drawable.rt_400_l2_ck],
@@ -125,7 +124,6 @@ let rtMap = [
   "rt_10000m_l6" : [R.string.laps_10000, R.string.ll_25, R.string.empty, R.drawable.rt_400_l6, R.drawable.rt_400_l6_ck],
   "rt_10000m_l7" : [R.string.laps_10000, R.string.ll_25, R.string.empty, R.drawable.rt_400_l7, R.drawable.rt_400_l7_ck],
   "rt_10000m_l8" : [R.string.laps_10000, R.string.ll_25, R.string.empty, R.drawable.rt_400_l8, R.drawable.rt_400_l8_ck],
-  "rt_10000m_RD" : [R.string.road_10, R.string.road_mks, R.string.empty, R.string.empty],
 
   "rt_1 mile_l1" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l1, R.drawable.rt_mile_l1_ck],
   "rt_1 mile_l2" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l2, R.drawable.rt_mile_l2_ck],
@@ -134,7 +132,10 @@ let rtMap = [
   "rt_1 mile_l5" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l5, R.drawable.rt_mile_l5_ck],
   "rt_1 mile_l6" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l6, R.drawable.rt_mile_l6_ck],
   "rt_1 mile_l7" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l7, R.drawable.rt_mile_l7_ck],
-  "rt_1 mile_l8" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l8, R.drawable.rt_mile_l8_ck]]
+  "rt_1 mile_l8" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l8, R.drawable.rt_mile_l8_ck],
+
+  "rt_5000m_RD"  : [R.string.road_5,  R.string.road_mks, R.string.empty, R.string.empty, R.string.empty],
+  "rt_10000m_RD" : [R.string.road_10, R.string.road_mks, R.string.empty, R.string.empty]]
 
 func rtKeyFromArgs(_ baseDist: String, _ startType: String, _ runLane: Int) -> String {
   let altDist = (baseDist == "1000m") || (baseDist == "3000m") || (baseDist == "5000m")

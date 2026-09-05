@@ -26,7 +26,11 @@ struct PaceView: View {
 
       Spacer().frame(height: 10)
 
-      Text("Distance in lane \(pacingOptions.runLane)")
+      if (!pacingOptions.runLaps.starts(with: "Road")) {
+        Text("Distance in lane \(pacingOptions.runLane)")
+      } else {
+        Text("Distance")
+      }
       Text("\(pacingOptions.runDistStr) (\(pacingOptions.runLaps))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
 
       Spacer().frame(height: 10)
@@ -50,8 +54,8 @@ struct PaceView: View {
 
         Spacer().frame(height: 10)
 
-        Text("\(running ? "Next up: " + pacingProgress.waypointName : "Waiting: " + timeToString(timeInMS: pacingProgress.waitRemaining))").monospacedDigit()
-        ProgressView(value: pacingProgress.waypointProgress).progressViewStyle(PacingProgressStyle())
+        Text("\(running ? "Next up: " + pacingProgress.milestoneName : "Waiting: " + timeToString(timeInMS: pacingProgress.waitRemaining))").monospacedDigit()
+        ProgressView(value: pacingProgress.milestoneProgress).progressViewStyle(PacingProgressStyle())
 
         Spacer().frame(height: 10)
 
