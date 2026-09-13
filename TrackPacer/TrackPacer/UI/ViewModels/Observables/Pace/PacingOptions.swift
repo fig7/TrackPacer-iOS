@@ -76,7 +76,7 @@ import Foundation
       let index2 = runProf.index(after: index1)
       let index3 = runProf.lastIndex(of: ")")!
 
-      intvl = Intvl(rawValue: "i" + runProf[index2 ..< index3])!
+      intvl = intvlFromString(String(runProf[index2 ..< index3]))
       profName = String(runProf[ ..<index1]).trim()
     }
   }

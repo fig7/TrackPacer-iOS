@@ -102,9 +102,12 @@ struct RunView: View {
         TPPicker(selected: $profileSelection.selected, list: profileSelection.list).frame(width: 165, height: 42, alignment: .center)
 
         if(profileSelection.profilesEnabled) {
-          TPButton(iconName: "baseline_edit_42") {
-            viewModel.editProfile()
-          }.frame(width: 60, height: 42, alignment: .center)
+          let buttonDisabled = (profileSelection.selected == "Freestyle")
+          let builtInProfile = buttonDisabled || (profileSelection.selected == "Fixed pace")
+          let buttonIcon = buttonDisabled ? "baseline_plus_42d" : builtInProfile ? "baseline_plus_42" : "baseline_edit_42"
+          TPButton(iconName: buttonIcon) {
+            builtInProfile ? viewModel.newProfile() : viewModel.editProfile()
+          }.frame(width: 60, height: 42, alignment: .center).disabled(buttonDisabled)
         } else {
           TPButton(iconName: "baseline_help_outline_42") {
             viewModel.showProfileHelp()

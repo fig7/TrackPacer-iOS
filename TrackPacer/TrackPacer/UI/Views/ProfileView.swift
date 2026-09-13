@@ -9,6 +9,7 @@ import SwiftUI
 
 let lineDef: (color: Color, width: CGFloat, extent: CGFloat) = (.blue, 18.0, 9.0)
 let axisDef: (color: Color, width: CGFloat, extent: CGFloat) = (.black, 3.0, 1.5)
+let midDef: (color: Color, width: CGFloat, extent: CGFloat) = (.gray, 3.0, 1.5)
 
 let strokeGrad = LinearGradient(colors: [.blue, .green, .red], startPoint:.bottom, endPoint: .top)
 let strokeDef  = StrokeStyle(lineWidth: lineDef.width, lineCap: .round, lineJoin: .round)
@@ -100,6 +101,21 @@ struct YAxis: View {
   }
 }
 
+struct MAxis: View {
+  let waypointCount: Int
+
+  var body: some View {
+    VStack(alignment:.leading, spacing: 0) {
+      Spacer().frame(height: sectionHeight2)
+      HStack(alignment:.center, spacing: 0) {
+        Spacer().frame(width: midDef.width)
+        LineH(y: midDef.extent).stroke(midDef.color, lineWidth: midDef.width).frame(width: CGFloat(waypointCount-1)*sectionWidth + midDef.width, height: midDef.width)
+      }
+      Spacer()
+    }
+  }
+}
+
 func colorForProfileValidity(_ validity: ProfileValidity) -> Color {
   switch(validity) {
   case .OK:
@@ -116,14 +132,15 @@ func colorForProfileValidity(_ validity: ProfileValidity) -> Color {
 struct ProfileView: View {
   @EnvironmentObject var viewModel: ProfileViewModel
 
-  @EnvironmentObject var intervalSelection: IntervalSelection
-
   var body: some View {
     VStack(alignment: .leading, spacing: 5) {
       HStack {
-        Text("\(viewModel.profileDesc):")
+        VStack(alignment: .leading, spacing: 0) {
+          Text("Profile name:")
+          Text("for \(viewModel.profDesc)")
+        }
         Spacer().frame(width:18)
-        TextField("", text: $viewModel.profileName).textFieldStyle(.roundedBorder) // disabled, but still clickable? Or just do text with a border?
+        TextField("", text: $viewModel.profName).textFieldStyle(.roundedBorder)
       }
 
       ScrollView(.horizontal) {
@@ -138,45 +155,47 @@ struct ProfileView: View {
 
           VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .bottomLeading) {
-              XAxis(waypointCount: viewModel.waypointList.count).padding(.leading, axisDef.width)
+              XAxis(waypointCount: viewModel.profList.count).padding(.leading, axisDef.width)
               YAxis().padding(.bottom, axisDef.width)
 
               HStack(alignment: .top, spacing: 0) {
-                ForEach(viewModel.waypointList.indices, id: \.self) { i in
+                ForEach(viewModel.profList.indices, id: \.self) { i in
                   let afterStart = (i > 0)
-                  let beforeEnd  = ((i+1) < viewModel.waypointList.count)
+                  let beforeEnd  = ((i+1) < viewModel.profList.count)
                   if(afterStart) {
-                    LineD(y1: viewModel.waypointList[i].prevOffset, y2: viewModel.waypointList[i].offset)
+                    LineD(y1: viewModel.profList[i].prevOffset, y2: viewModel.profList[i].offset)
                       .stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
 
-                    LineH(y: viewModel.waypointList[i].offset)
+                    LineH(y: viewModel.profList[i].offset)
                       .stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
                       .gesture(DragGesture()
                         .onChanged { gesture in
-                          let dist   = viewModel.waypointList[i].dist
+                          let dist   = viewModel.profList[i].dist
                           let offset = viewModel.snapTo(gesture.location.y, forDist: dist)
 
-                          viewModel.waypointList[i] = ProfileWaypoint(other: viewModel.waypointList[i],   offset: offset, roundTime: true)
-                          if(beforeEnd) { viewModel.waypointList[i+1] = ProfileWaypoint(other: viewModel.waypointList[i+1], prevOffset: offset) }
+                          viewModel.profList[i] = ProfileWaypoint(other: viewModel.profList[i],   offset: offset, roundTime: true)
+                          if(beforeEnd) { viewModel.profList[i+1] = ProfileWaypoint(other: viewModel.profList[i+1], prevOffset: offset) }
                           viewModel.updateTimes()
                         })
                   }
                 }
               }.padding(.leading, axisDef.width+axisDef.extent).padding(.bottom, axisDef.width+axisDef.extent)
+
+              MAxis(waypointCount: viewModel.profList.count).padding(.leading, axisDef.width)
             }.padding(.horizontal, 15).padding(.vertical, 10).frame(height: sectionHeight + 20)
 
             HStack(alignment: .top, spacing: 0) {
-              ForEach(viewModel.waypointList.indices, id: \.self) { i in
+              ForEach(viewModel.profList.indices, id: \.self) { i in
                 let afterStart = (i > 0)
-                let beforeEnd  = ((i+1) < viewModel.waypointList.count)
+                let beforeEnd  = ((i+1) < viewModel.profList.count)
 
                 VStack {
                   HStack(alignment: .top, spacing: 0) {
-                    Text(viewModel.waypointList[i].name).monospacedDigit()
-                    if(beforeEnd) { Text(viewModel.waypointList[i].waitTimeStr).monospacedDigit().frame(maxWidth: .infinity, alignment: .center) }
+                    Text(viewModel.profList[i].name).monospacedDigit()
+                    if(beforeEnd) { Text(viewModel.profList[i].waitTimeStr).monospacedDigit().frame(maxWidth: .infinity, alignment: .center) }
                   }.frame(width: sectionWidth, alignment: .leading)
 
-                  if(afterStart) { Text("\(viewModel.waypointList[i].timeStr)").monospacedDigit().frame(width: sectionWidth, alignment: .leading) }
+                  if(afterStart) { Text("\(viewModel.profList[i].timeStr)").monospacedDigit().frame(width: sectionWidth, alignment: .leading) }
                 }.onTapGesture { if(afterStart) { viewModel.editWaypoint(i, !beforeEnd) } }
               }
             }
@@ -186,13 +205,14 @@ struct ProfileView: View {
 
       Spacer().frame(height: 10)
 
-      Text("Ref. time: \(viewModel.profileTime) \(viewModel.profilePace)").foregroundColor(colorForProfileValidity(viewModel.profileValidity))
-      Text("Rest time: \(viewModel.profileWait)")
+      Text("Ref. time: \(viewModel.profTime) \(viewModel.profPace)").foregroundColor(colorForProfileValidity(viewModel.profValidity))
+      Text("Rest time: \(viewModel.profWait)")
 
       Spacer().frame(height: 10)
 
       HStack {
-        Button(action: { viewModel.deleteProfile() }) { Text(" ").overlay { Image("baseline_delete_forever_48") } }
+        let deleteButton = viewModel.newProf ? "baseline_delete_forever_48d" : "baseline_delete_forever_48"
+        Button(action: { viewModel.deleteProfile() }) { Text(" ").overlay { Image(deleteButton) } }.disabled(viewModel.newProf)
           .buttonStyle(ActionButtonStyleMax(disabledCol: true)).disabled(false)
         Button(action: { viewModel.saveProfile() }) { Text(" SAVE ") }
           .buttonStyle(ActionButtonStyleMax(disabledCol: false)).disabled(false)

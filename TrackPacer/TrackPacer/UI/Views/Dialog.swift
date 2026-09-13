@@ -172,7 +172,7 @@ struct EditWaypointDialog: View {
     HStack {
       VStack(alignment: .leading) {
         Text("Time to waypoint (s)")
-        Text("(between \(viewModel.waypointTimeMinStr) and \(viewModel.waypointTimeMaxStr))").font(.caption)
+        Text("(between \(viewModel.wpTimeMinStr) and \(viewModel.wpTimeMaxStr))").font(.caption)
       }
       Spacer()
 

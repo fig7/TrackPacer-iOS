@@ -71,7 +71,17 @@ import Foundation
   {
     if(start == "Road")
     {
-      return ["1km"]
+      switch(distance)
+      {
+      case "5000m":
+        return ["1km", "5km"]
+
+      case "10000m":
+        return ["1km", "2km", "5km", "10km"]
+
+      default:
+        break
+      }
     }
 
     switch(distance)
@@ -82,8 +92,35 @@ import Foundation
     case "800m":
       return ["50m", "100m", "200m", "400m", "800m"]
 
-    default:
+    case "1000m":
       return ["50m", "100m", "200m", "400m", "800m", "1000m"]
+
+    case "1200m":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "1200m"]
+
+    case "1500m":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "1500m"]
+
+    case "2000m":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m"]
+
+    case "3000m":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "3000m"]
+
+    case "4000m":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "4000m"]
+
+    case "5000m":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "5000m"]
+
+    case "10000m":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "5000m", "10000m"]
+
+    case "1 mile":
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "1 mile"]
+
+    default:
+      return []
     }
   }
 
@@ -136,7 +173,7 @@ import Foundation
         paceSelection.selected = paceSelection.list[1]
       }
 
-      intervalSelection.list = intevalListFor(distance: newSelected, start: startSelection.selected)
+      intervalSelection.list = intevalListFor(distance: distanceSelection.selected, start: newSelected)
       if(!intervalSelection.list.contains(intervalSelection.selected)) {
         intervalSelection.selected = intervalSelection.list[0]
       }
@@ -148,6 +185,16 @@ import Foundation
       guard let self else { return }
 
       updateTrackOverlay()
+    }
+
+    intervalSelection.selectedCallback = { [weak self] newSelected in
+      guard let self else { return }
+
+      let baseDist = distanceSelection.selected
+      let runIntvl = intvlFromString(newSelected)
+      let profArray = runModel.distanceModel.distanceManager.profMap[baseDist]![runIntvl]!.map { $0.0 }
+      profileSelection.list     = profArray
+      profileSelection.selected = profileSelection.list[0]
     }
   }
 
@@ -208,9 +255,19 @@ import Foundation
     } catch { }
   }
 
+  func newProfile() {
+    let baseDist = distanceSelection.selected
+    let runStart = startSelection.selected
+    let runIntvl = intvlFromString(intervalSelection.selected)
+    mainViewModel.newProfile(baseDist, runStart, runIntvl)
+  }
+
   func editProfile() {
-    let runDist = distanceSelection.selected
-    mainViewModel.editProfile(runDist, profileSelection.selected, intervalSelection.selected)
+    let baseDist = distanceSelection.selected
+    let runStart = startSelection.selected
+    let runIntvl = intvlFromString(intervalSelection.selected)
+    let runProf  = profileSelection.selected
+    mainViewModel.editProfile(baseDist, runStart, runIntvl, runProf)
   }
 
   func showProfileHelp() {
@@ -282,17 +339,20 @@ import Foundation
 
   func onYourMarks() {
     do {
-      let baseDist  = distanceSelection.selected + " (" + startSelection.selected + ")"
+      let baseDist = distanceSelection.selected
+      let runStart = startSelection.selected
+      let distAndStart = baseDist + " (" + runStart + ")"
 
       let laneSelected = laneSelection.selected
       let runLane = try laneSelected.toInt()
 
       let setPace      = paceSelection.selected
+
       let timeSelected = timeSelection.selected
       let setTime = try setTimeFor(timeSelected)
 
       let runProf = profileSelection.selected + " (" + intervalSelection.selected + ")"
-      mainViewModel.onYourMarks(baseDist, runLane, setPace, setTime, runProf)
+      mainViewModel.onYourMarks(distAndStart, runLane, setPace, setTime, runProf)
     } catch { }
   }
 }

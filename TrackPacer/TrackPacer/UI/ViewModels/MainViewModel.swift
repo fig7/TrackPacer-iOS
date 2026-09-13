@@ -264,17 +264,28 @@ import UIKit
     }
   }
 
-  func editProfile(_ runDist: String, _ runProfile: String, _ runInterval: String) {
+  func newProfile(_ baseDist: String, _ runStart: String, _ runIntvl: Intvl) {
     do {
-      let intvl = Intvl(rawValue: "i" + runInterval)!
-
       let distanceManager = runModel.distanceModel.distanceManager
-      let waypoints       = try distanceManager.waypointsFor(runDist, intvl, runProfile)
+      let waypoints       = try distanceManager.waypointsFor(baseDist, runIntvl, "Fixed pace")
 
       let settingsManager = settingsModel.settingsManager
       let refPace = settingsManager.refPace
 
-      profileViewModel.setProfileOptions(runDist, runProfile, runInterval, waypoints, refPace)
+      profileViewModel.setProfileOptions(baseDist, runStart, runIntvl, waypoints, refPace)
+      mainViewStack.pushProfileView()
+    } catch { }
+  }
+
+  func editProfile(_ baseDist: String, _ runStart: String, _ runIntvl: Intvl, _ runProf: String) {
+    do {
+      let distanceManager = runModel.distanceModel.distanceManager
+      let waypoints       = try distanceManager.waypointsFor(baseDist, runIntvl, runProf)
+
+      let settingsManager = settingsModel.settingsManager
+      let refPace = settingsManager.refPace
+
+      profileViewModel.setProfileOptions(baseDist, runStart, runIntvl, runProf, waypoints, refPace)
       mainViewStack.pushProfileView()
     } catch { }
   }
@@ -313,8 +324,8 @@ import UIKit
     return radioAccessTechnology.isEmpty
   }
 
-  func onYourMarks(_ runDist: String, _ runLane: Int, _ setPace: String, _ setTime: Double, _ runProf: String) {
-    paceViewModel.setPacingOptions(runDist, runLane, setPace, setTime, runProf)
+  func onYourMarks(_ distAndStart: String, _ runLane: Int, _ setPace: String, _ setTime: Double, _ runProf: String) {
+    paceViewModel.setPacingOptions(distAndStart, runLane, setPace, setTime, runProf)
 
     let settingsManager    = settingsModel.settingsManager
     let flightModeReminder = settingsManager.flightMode

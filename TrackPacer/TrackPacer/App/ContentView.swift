@@ -98,7 +98,7 @@ struct ContentView: View {
         .environmentObject(viewModel.runViewModel.timeSelection)
 
         .environmentObject(viewModel.profileViewModel)
-        .environmentObject(viewModel.profileViewModel.waypointEdit)
+        .environmentObject(viewModel.profileViewModel.wpEdit)
     }
   }
 }

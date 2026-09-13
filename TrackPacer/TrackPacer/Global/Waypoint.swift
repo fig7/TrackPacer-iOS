@@ -81,7 +81,21 @@ let waypointNames = [
 
   "Finish", "Silent"]
 
-enum Intvl: String, CaseIterable { case i50m; case i100m; case i200m; case i400m; case i800m; case i1000m; case i1km; }
+enum Intvl: String, CaseIterable { case   i50m; case  i100m; case  i200m;  case  i400m; case  i800m; case i1000m; case i1km; case    i2km;
+                                   case i1200m; case i1500m; case i2000m;  case i3000m; case i4000m; case i5000m; case i5km; case i10000m; case i10km; case i1mile; }
+
+func intvlFromString(_ intvl: String) -> Intvl {
+  var intvl = "i" + intvl
+  intvl = intvl.filter { !$0.isWhitespace }
+  return Intvl(rawValue: intvl)!
+}
+
+func stringFromIntvl(_ intvl: Intvl) -> String {
+  let rawValue   = intvl.rawValue
+  let startIndex = rawValue.index(rawValue.startIndex, offsetBy: 1)
+  return String(rawValue[startIndex...])
+}
+
 
 let fL = waypointNames.size - 2
 let sl = waypointNames.size - 1
@@ -185,7 +199,11 @@ let waypointsMap =
 
     Intvl.i1000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
-                      sl, sl, sl, sl,  4, sl, sl, sl, fL ] ],
+                      sl, sl, sl, sl,  4, sl, sl, sl, fL ],
+
+    Intvl.i1200m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL ] ],
 
   "1500m (Race)"  : [
     Intvl.i50m    : [  0,  1,  2,  3,  4,  5,
@@ -216,6 +234,11 @@ let waypointsMap =
     Intvl.i1000m  : [  0, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl,  6, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL ],
+
+    Intvl.i1500m  : [  0, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl, fL ] ],
 
   "2000m (Home)"  : [
@@ -252,6 +275,12 @@ let waypointsMap =
     Intvl.i1000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl,  4, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i2000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl, fL] ],
 
@@ -308,6 +337,15 @@ let waypointsMap =
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       12, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, fL],
+
+    Intvl.i3000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, fL] ],
 
   "3000m (Race)"  : [
@@ -362,6 +400,15 @@ let waypointsMap =
                       10, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl,  4, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i3000m  : [  0, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl, fL] ],
 
@@ -429,6 +476,28 @@ let waypointsMap =
                       12, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl,  4, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i2000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      12, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i4000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl, fL] ],
 
@@ -515,22 +584,36 @@ let waypointsMap =
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       17, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, fL],
+
+    Intvl.i5000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, fL] ],
 
   "5000m (Race)"  : [
     Intvl.i50m    : [  0,  1,  2,  3,
-                      8,  1,  2,  3,  4,  5,  6,  7,
-                      9,  1,  2,  3,  4,  5,  6,  7,
-                     10,  1,  2,  3,  4,  5,  6,  7,
-                     11,  1,  2,  3,  4,  5,  6,  7,
-                     12,  1,  2,  3,  4,  5,  6,  7,
-                     13,  1,  2,  3,  4,  5,  6,  7,
-                     14,  1,  2,  3,  4,  5,  6,  7,
-                     15,  1,  2,  3,  4,  5,  6,  7,
-                     16,  1,  2,  3,  4,  5,  6,  7,
-                     17,  1,  2,  3,  4,  5,  6,  7,
-                     18,  1,  2,  3,  4,  5,  6,  7,
-                     19,  1,  2,  3,  4,  5,  6,  7, fL],
+                       8,  1,  2,  3,  4,  5,  6,  7,
+                       9,  1,  2,  3,  4,  5,  6,  7,
+                      10,  1,  2,  3,  4,  5,  6,  7,
+                      11,  1,  2,  3,  4,  5,  6,  7,
+                      12,  1,  2,  3,  4,  5,  6,  7,
+                      13,  1,  2,  3,  4,  5,  6,  7,
+                      14,  1,  2,  3,  4,  5,  6,  7,
+                      15,  1,  2,  3,  4,  5,  6,  7,
+                      16,  1,  2,  3,  4,  5,  6,  7,
+                      17,  1,  2,  3,  4,  5,  6,  7,
+                      18,  1,  2,  3,  4,  5,  6,  7,
+                      19,  1,  2,  3,  4,  5,  6,  7, fL],
 
     Intvl.i100m   : [  0, sl,  2, sl,
                        8, sl,  2, sl,  4, sl,  6, sl,
@@ -600,6 +683,20 @@ let waypointsMap =
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl,  4, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i5000m  : [  0, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl, fL] ],
 
   "5000m (Road)"  : [
@@ -607,7 +704,13 @@ let waypointsMap =
                       32, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
                       33, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
                       34, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
-                      35, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ] ],
+                      35, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ],
+
+    Intvl.i5km    : [  0, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ] ],
 
   "10000m (Home)" : [
     Intvl.i50m    : [  0,  1,  2,  3,  4,  5,  6,  7,
@@ -764,6 +867,84 @@ let waypointsMap =
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl,  4, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i2000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      12, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      17, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      22, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      27, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i5000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl,  4, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i10000m : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl, fL] ],
 
   "10000m (Road)" : [
@@ -776,7 +957,40 @@ let waypointsMap =
                       37, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
                       38, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
                       39, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
-                      40, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ] ],
+                      40, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ],
+
+    Intvl.i2km    : [  0, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      33, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      35, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      37, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      39, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ],
+
+    Intvl.i5km    : [  0, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      36, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ],
+
+    Intvl.i10km   : [  0, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, sl, fL ] ],
 
   "1 mile (Race)" : [
     Intvl.i50m    : [  0,  1,  2,  3,  4,  5,  6,  7,
@@ -807,6 +1021,11 @@ let waypointsMap =
     Intvl.i1000m  : [  0, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl,  4, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl, fL],
+
+    Intvl.i1mile  : [  0, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
+                      sl, sl, sl, sl, sl, sl, sl, sl,
                       sl, sl, sl, sl, sl, sl, sl, sl, fL] ]
 ]
 

@@ -54,37 +54,95 @@ class DistanceManager {
     if(!success) { throw FileError.FolderCreationError }
 
     distArray = (0 ..< defaultDist.size).map { (i: Int) in String(defaultDist[i]["Dist"]! as! String) }
-    for (i, runDist) in distArray.enumerated() {
-      timeMap[runDist] = [:]
-      timeMap[runDist]!["Pace"]   = (defaultDist[i]["Pace"]!   as! [String])
-      timeMap[runDist]!["Goal"]   = (defaultDist[i]["Goal"]!   as! [String])
-      timeMap[runDist]!["Actual"] = (defaultDist[i]["Actual"]! as! [String])
+    for (i, baseDist) in distArray.enumerated() {
+      timeMap[baseDist] = [:]
+      timeMap[baseDist]!["Pace"]   = (defaultDist[i]["Pace"]!   as! [String])
+      timeMap[baseDist]!["Goal"]   = (defaultDist[i]["Goal"]!   as! [String])
+      timeMap[baseDist]!["Actual"] = (defaultDist[i]["Actual"]! as! [String])
 
       var profileWaypoints: [WaypointData] = []
-      for _ in 0..<waypointDistances[runDist]!.count { profileWaypoints.append(WaypointData()) }
-      profMap[runDist] = [:];
-      profMap[runDist]![Intvl.i50m ] = [("Fixed pace", profileWaypoints)]
-      profMap[runDist]![Intvl.i100m] = [("Fixed pace", profileWaypoints)]
-      profMap[runDist]![Intvl.i200m] = [("Fixed pace", profileWaypoints)]
-      profMap[runDist]![Intvl.i400m] = [("Fixed pace", profileWaypoints)]
+      for _ in 0..<waypointDistances[baseDist]!.count { profileWaypoints.append(WaypointData()) }
+      profMap[baseDist] = [:];
+      profMap[baseDist]![Intvl.i50m ] = [("Fixed pace", profileWaypoints)]
+      profMap[baseDist]![Intvl.i100m] = [("Fixed pace", profileWaypoints)]
+      profMap[baseDist]![Intvl.i200m] = [("Fixed pace", profileWaypoints)]
 
-      switch runDist
+      switch baseDist
       {
       case "800m":
-        profMap[runDist]![Intvl.i800m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i400m] = [("Fixed pace", profileWaypoints)]
 
-      case "1000m", "1200m", "1500m", "2000m", "3000m", "4000m":
-        profMap[runDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
-        profMap[runDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+      case  "1000m":
+        profMap[baseDist]![Intvl.i400m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i800m] = [("Fixed pace", profileWaypoints)]
 
-      case "5000m", "10000m":
-        profMap[runDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
-        profMap[runDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
-        profMap[runDist]![Intvl.i1km  ] = [("Fixed pace", profileWaypoints)]
+      case "1200m", "1500m", "2000m", "3000m", "1 mile":
+        profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+
+      case "4000m":
+        profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i2000m] = [("Fixed pace", profileWaypoints)]
+
+      case "5000m":
+        profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i1km  ] = [("Fixed pace", profileWaypoints)]
+
+      case "10000m":
+        profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i2000m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i5000m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i1km  ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i2km  ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i5km  ] = [("Fixed pace", profileWaypoints)]
+
+      default:
+        break
+      }
+
+      switch baseDist
+      {
+      case "400m":
+        profMap[baseDist]![Intvl.i400m]  = [("Freestyle", profileWaypoints)]
+
+      case "800m":
+        profMap[baseDist]![Intvl.i800m]  = [("Freestyle", profileWaypoints)]
+
+      case "1000m":
+        profMap[baseDist]![Intvl.i1000m]  = [("Freestyle", profileWaypoints)]
+
+      case "1200m":
+        profMap[baseDist]![Intvl.i1200m]  = [("Freestyle", profileWaypoints)]
+
+      case "1500m":
+        profMap[baseDist]![Intvl.i1500m]  = [("Freestyle", profileWaypoints)]
+
+      case "2000m":
+        profMap[baseDist]![Intvl.i2000m]  = [("Freestyle", profileWaypoints)]
+
+      case "3000m":
+        profMap[baseDist]![Intvl.i3000m]  = [("Freestyle", profileWaypoints)]
+
+      case "4000m":
+        profMap[baseDist]![Intvl.i4000m]  = [("Freestyle", profileWaypoints)]
+
+      case "5000m":
+        profMap[baseDist]![Intvl.i5000m]  = [("Freestyle", profileWaypoints)]
+        profMap[baseDist]![Intvl.i5km  ]  = [("Freestyle", profileWaypoints)]
+
+      case "10000m":
+        profMap[baseDist]![Intvl.i10000m] = [("Freestyle", profileWaypoints)]
+        profMap[baseDist]![Intvl.i10km  ] = [("Freestyle", profileWaypoints)]
 
       case "1 mile":
-        profMap[runDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
-        profMap[runDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i1mile]  = [("Freestyle", profileWaypoints)]
 
       default:
         break
@@ -323,7 +381,7 @@ class DistanceManager {
 
   func saveProfile(_ baseDist: String, _ intvl: Intvl, _ profileName: String, _ waypointData: [WaypointData]) throws -> [String] {
     let profilesDict = profMap[baseDist]
-    guard var updatedProfilesDict = profilesDict else { throw Exception.IllegalArgumentException }
+    guard let updatedProfilesDict = profilesDict else { throw Exception.IllegalArgumentException }
 
     let profiles = updatedProfilesDict[intvl]
     guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
@@ -336,10 +394,9 @@ class DistanceManager {
     return profMap[baseDist]![intvl]!.map { $0.0 }
   }
 
-  // TODO: Maybe make a profile manager?
   func deleteProfile(_ runDist: String, _ intvl: Intvl, _ profileName: String) throws -> [String] {
     let profilesDict = profMap[runDist]
-    guard var updatedProfilesDict = profilesDict else { throw Exception.IllegalArgumentException }
+    guard let updatedProfilesDict = profilesDict else { throw Exception.IllegalArgumentException }
 
     let profiles = updatedProfilesDict[intvl]
     guard var updatedProfiles = profiles else { throw Exception.IllegalArgumentException }
@@ -347,12 +404,13 @@ class DistanceManager {
     let i = distArray.firstIndex(of: runDist)
     guard let i else { throw Exception.IllegalArgumentException }
 
-    let prefix = String(format: "Distance_%03d_", i)
-    let distDir  = File(file: dataDir, child: prefix + runDist, directoryHint: .isDirectory)
-    let intvlDir = File(file: distDir, child: intvl.rawValue, directoryHint: .isDirectory)
-    let profilesDir = File(file: distDir, child: "Profiles", directoryHint: .isDirectory)
-    let profileFile = File(file: profilesDir, child: "\(profileName).dat", directoryHint: .notDirectory)
-    if(profileFile.delete()) {
+    let prefix  = String(format: "Distance_%03d_", i)
+    let distDir = File(file: dataDir, child: prefix + runDist, directoryHint: .isDirectory)
+
+    let baseProfDir = File(file: distDir,     child: "Profiles", directoryHint: .isDirectory)
+    let profDir     = File(file: baseProfDir, child: intvl.rawValue, directoryHint: .isDirectory)
+    let profFile    = File(file: profDir,     child: "\(profileName).dat", directoryHint: .notDirectory)
+    if(profFile.delete()) {
       updatedProfiles = updatedProfiles.filter { $0.0 != profileName }
       profMap[runDist]![intvl]! = updatedProfiles
 
