@@ -173,7 +173,7 @@ struct ProfileView: View {
                           let dist   = viewModel.profList[i].dist
                           let offset = viewModel.snapTo(gesture.location.y, forDist: dist)
 
-                          viewModel.profList[i] = ProfileWaypoint(other: viewModel.profList[i],   offset: offset, roundTime: true)
+                          viewModel.profList[i] = ProfileWaypoint(other: viewModel.profList[i],   offset: offset, intvl: viewModel.profIntvl)
                           if(beforeEnd) { viewModel.profList[i+1] = ProfileWaypoint(other: viewModel.profList[i+1], prevOffset: offset) }
                           viewModel.updateTimes()
                         })

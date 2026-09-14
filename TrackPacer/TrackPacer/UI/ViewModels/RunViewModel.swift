@@ -114,7 +114,7 @@ import Foundation
       return ["50m", "100m", "200m", "400m", "800m", "1000m", "5000m"]
 
     case "10000m":
-      return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "5000m", "10000m"]
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "5000m", " 10000m "]
 
     case "1 mile":
       return ["50m", "100m", "200m", "400m", "800m", "1000m", "1 mile"]
@@ -143,14 +143,15 @@ import Foundation
         startSelection.selected = startSelection.list[0]
       }
 
-      let profArray = runModel.distanceModel.distanceManager.profMap[newSelected]![Intvl.i50m]!.map { $0.0 }
-      profileSelection.list     = profArray
-      profileSelection.selected = profileSelection.list[0]
-
       intervalSelection.list = intevalListFor(distance: newSelected, start: startSelection.selected)
       if(!intervalSelection.list.contains(intervalSelection.selected)) {
         intervalSelection.selected = intervalSelection.list[0]
       }
+
+      let intvl = intvlFromString(intervalSelection.selected)
+      let profArray = runModel.distanceModel.distanceManager.profMap[newSelected]![intvl]!.map { $0.0 }
+      profileSelection.list     = profArray
+      profileSelection.selected = profileSelection.list[0]
 
       updateTrackOverlay()
     }

@@ -96,7 +96,7 @@ struct RunView: View {
       }.padding(.horizontal, 20)
 
       HStack {
-        TPPicker(selected: $intervalSelection.selected, list: intervalSelection.list).frame(width: 110, height: 42, alignment: .center)
+        TPPicker(selected: $intervalSelection.selected, list: intervalSelection.list).frame(width: 125, height: 42, alignment: .center)
         Spacer().frame(width: 10)
 
         TPPicker(selected: $profileSelection.selected, list: profileSelection.list).frame(width: 165, height: 42, alignment: .center)

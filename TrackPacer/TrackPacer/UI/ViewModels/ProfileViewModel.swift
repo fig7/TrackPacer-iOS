@@ -18,7 +18,7 @@ struct ProfileWaypoint {
 
   let timeSecs: Double
   let timeStr: String
-  let roundTime: Bool
+  let intvl: Intvl?
 
   let waitTime: Int64
   let waitTimeStr: String
@@ -26,7 +26,7 @@ struct ProfileWaypoint {
   var offset: CGFloat
   var prevOffset: CGFloat
 
-  init(name: String, dist: Double, waitTime: Int64, refPace: Double, offset: CGFloat, prevOffset: CGFloat, roundTime: Bool = true) {
+  init(name: String, dist: Double, waitTime: Int64, refPace: Double, offset: CGFloat, prevOffset: CGFloat, intvl: Intvl?) {
     self.name     = name
     self.dist     = dist
 
@@ -48,9 +48,9 @@ struct ProfileWaypoint {
     }
 
     let time = ((refPace*dist)/(scaleFactor*1000.0))
-    self.timeSecs  = (roundTime) ? time.roundedToFifth() : time
-    self.timeStr   = String(format: "%.1f", self.timeSecs)
-    self.roundTime = roundTime
+    self.timeSecs  = (intvl != nil) ? time.roundedToIntvl(intvl!) : time
+    self.timeStr   = String(format: "%.2f", self.timeSecs)
+    self.intvl     = intvl
 
     if(waitTime == 0) {
       waitTimeStr = "--->"
@@ -60,14 +60,14 @@ struct ProfileWaypoint {
     }
   }
 
-  init(other: ProfileWaypoint, offset: CGFloat, roundTime: Bool)
-  { self.init(name: other.name, dist: other.dist, waitTime: other.waitTime, refPace: other.refPace, offset: offset, prevOffset: other.prevOffset, roundTime: roundTime) }
+  init(other: ProfileWaypoint, offset: CGFloat, intvl: Intvl?)
+  { self.init(name: other.name, dist: other.dist, waitTime: other.waitTime, refPace: other.refPace, offset: offset, prevOffset: other.prevOffset, intvl: intvl) }
 
   init(other: ProfileWaypoint, prevOffset: CGFloat)
-  { self.init(name: other.name, dist: other.dist, waitTime: other.waitTime, refPace: other.refPace, offset: other.offset, prevOffset: prevOffset, roundTime: other.roundTime) }
+  { self.init(name: other.name, dist: other.dist, waitTime: other.waitTime, refPace: other.refPace, offset: other.offset, prevOffset: prevOffset, intvl: other.intvl) }
 
-  init(other: ProfileWaypoint, waitTime: Int64, offset: CGFloat, roundTime: Bool)
-  { self.init(name: other.name, dist: other.dist, waitTime: waitTime, refPace: other.refPace, offset: offset, prevOffset: other.prevOffset, roundTime: roundTime) }
+  init(other: ProfileWaypoint, waitTime: Int64, offset: CGFloat, intvl: Intvl?)
+  { self.init(name: other.name, dist: other.dist, waitTime: waitTime, refPace: other.refPace, offset: offset, prevOffset: other.prevOffset, intvl: intvl) }
 }
 
 @MainActor class ProfileViewModel : ObservableObject {
@@ -129,7 +129,7 @@ struct ProfileWaypoint {
     }
 
     let time = (refPace*dist)/(scaleFactor*1000.0)
-    return time.roundedToFifth()
+    return time
   }
 
   func offsetForTime(_ time: Double, forDist dist: Double) -> CGFloat {
@@ -151,7 +151,7 @@ struct ProfileWaypoint {
   }
 
   func snapTo(_ y: CGFloat, forDist dist: Double) -> CGFloat {
-    let time = timeForOffset(y, forDist: dist)
+    let time = timeForOffset(y, forDist: dist).roundedToIntvl(profIntvl)
     return offsetForTime(time, forDist: dist)
   }
 
@@ -159,28 +159,28 @@ struct ProfileWaypoint {
   {
     let insertCount: Int
     switch intvl {
-    case Intvl.i50m, Intvl.i1200m, Intvl.i1500m, Intvl.i3000m, Intvl.i4000m, Intvl.i10000m, Intvl.i10km, Intvl.i1mile:
+    case .i50m, .i1200m, .i1500m, .i3000m, .i4000m, .i10000m, .i10km, .i1mile:
       return baseData
 
-    case Intvl.i100m:
+    case .i100m:
       insertCount = 1
 
-    case Intvl.i200m:
+    case .i200m:
       insertCount = 3
 
-    case Intvl.i400m:
+    case .i400m:
       insertCount = 7
 
-    case Intvl.i800m:
+    case .i800m:
       insertCount = 15
 
-    case Intvl.i1000m, Intvl.i1km:
+    case .i1000m, .i1km:
       insertCount = 19
 
-    case Intvl.i2000m, Intvl.i2km:
+    case .i2000m, .i2km:
       insertCount = 39
 
-    case Intvl.i5000m, Intvl.i5km:
+    case .i5000m, .i5km:
       insertCount = 99
     }
 
@@ -272,7 +272,7 @@ struct ProfileWaypoint {
     var prevOffset = sectionHeight
     for (i, wpIndex) in wpIndexList.enumerated() {
       if(i == 0) {
-        profList.append(ProfileWaypoint(name: waypointNames[wpIndex], dist: 0.0, waitTime: 0, refPace: refPace, offset: prevOffset, prevOffset: prevOffset))
+        profList.append(ProfileWaypoint(name: waypointNames[wpIndex], dist: 0.0, waitTime: 0, refPace: refPace, offset: prevOffset, prevOffset: prevOffset, intvl: profIntvl))
         continue
       }
 
@@ -284,7 +284,7 @@ struct ProfileWaypoint {
       let time = (dist*refPace) / (1000.0*runData[i].scaleFactor)
 
       let offset = offsetForTime(time, forDist: dist)
-      profList.append(ProfileWaypoint(name: waypointNames[wpIndex], dist: dist, waitTime: runData[i].waitTime, refPace: refPace, offset: offset, prevOffset: prevOffset, roundTime: false))
+      profList.append(ProfileWaypoint(name: waypointNames[wpIndex], dist: dist, waitTime: runData[i].waitTime, refPace: refPace, offset: offset, prevOffset: prevOffset, intvl: nil))
 
       prevOffset = offset
       lastI = i
@@ -294,8 +294,8 @@ struct ProfileWaypoint {
   }
 
   func updateTimes() {
-    let movingTime   = profList.dropFirst().reduce(0.0) { $0 + $1.timeSecs }.rounded(toPlaces: 1)
-    profTime      = timeToAlmostFullString(timeInMS: ((movingTime*10.0).toLongRounded()*100))
+    let movingTime   = profList.dropFirst().reduce(0.0) { $0 + $1.timeSecs }.rounded(toPlaces: 2)
+    profTime         = timeToAlmostFullString(timeInMS: ((movingTime*100.0).toLongRounded()*10))
 
     if(profTime == refTimeStr) {
       profValidity = .OK
@@ -388,7 +388,7 @@ struct ProfileWaypoint {
     let waitSecs = try! wpEdit.waypointWaitSS.toInt64()
     let waitTime = (waitMins*60 + waitSecs)*1000
 
-    profList[i]   = ProfileWaypoint(other: oldWaypoint1, waitTime: waitTime, offset: offset, roundTime: false)
+    profList[i]   = ProfileWaypoint(other: oldWaypoint1, waitTime: waitTime, offset: offset, intvl: nil)
     if((i+1) < iMax) { profList[i+1] = ProfileWaypoint(other: oldWaypoint2, prevOffset: offset) }
 
     updateTimes()
