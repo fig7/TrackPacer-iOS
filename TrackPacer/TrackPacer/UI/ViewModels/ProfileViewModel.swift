@@ -49,7 +49,8 @@ struct ProfileWaypoint {
 
     let time = ((refPace*dist)/(scaleFactor*1000.0))
     self.timeSecs  = (intvl != nil) ? time.roundedToIntvl(intvl!) : time
-    self.timeStr   = String(format: "%.2f", self.timeSecs)
+    self.timeStr   = (self.timeSecs >= 100.0) ? timeToMinuteString2(timeInMS: (self.timeSecs*1000.0).toLongRounded())
+                                              : String(format: "%.2f", self.timeSecs)
     self.intvl     = intvl
 
     if(waitTime == 0) {
@@ -363,10 +364,10 @@ struct ProfileWaypoint {
     wpEdit.waypointWaitSS = String(format: "%02d", waitSecs)
 
     let dist = waypoint.dist
-    let timeMin = ((refPace*dist)/(1.5*1000.0)).roundedToFifth()
+    let timeMin = ((refPace*dist)/(1.5*1000.0)).roundedToIntvl(profIntvl)
     let timeMinHths = (timeMin*100.0).rounded().toInt()
 
-    let timeMax = ((refPace*dist*3.0)/1000.0).roundedToFifth()
+    let timeMax = ((refPace*dist*3.0)/1000.0).roundedToIntvl(profIntvl)
     let timeMaxHths = (timeMax*100.0).rounded().toInt()
     wpTimeRange = timeMinHths...timeMaxHths
 

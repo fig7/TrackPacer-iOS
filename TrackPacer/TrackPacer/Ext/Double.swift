@@ -25,11 +25,6 @@ extension Double {
     return (self * divisor).rounded() / divisor
   }
 
-  func roundedToFifth() -> Double {
-    let divisor = 5.0
-    return (self * divisor).rounded() / divisor
-  }
-
   func roundedToP25() -> Double {
     let divisor = 4.0
     return (self * divisor).rounded() / divisor

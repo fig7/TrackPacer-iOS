@@ -473,6 +473,9 @@
     "Quick start" : {
 
     },
+    "Recovery time (mm:ss):" : {
+
+    },
     "Ref. time: %@ %@" : {
       "localizations" : {
         "en" : {
@@ -571,9 +574,6 @@
 
     },
     "Unit:" : {
-
-    },
-    "Wait time (mm:ss):" : {
 
     },
     "Your notes:" : {

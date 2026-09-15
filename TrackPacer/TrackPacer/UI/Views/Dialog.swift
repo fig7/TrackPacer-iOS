@@ -192,7 +192,7 @@ struct EditWaypointDialog: View {
 
     HStack {
       VStack(alignment: .leading) {
-        Text("Wait time (mm:ss):")
+        Text("Recovery time (mm:ss):")
         Text("(between 00:10 and 05:00)").font(.caption)
       }
 
