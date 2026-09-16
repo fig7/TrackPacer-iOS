@@ -151,6 +151,7 @@
 		B55223DA3039E32C00D7035F /* 5000m.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B55223CE3039E32C00D7035F /* 5000m.m4a */; };
 		B58F15512F90446B00E210C9 /* PaceSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58F15502F90446500E210C9 /* PaceSelection.swift */; };
 		B58F15532F90536900E210C9 /* StartSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58F15522F90535800E210C9 /* StartSelection.swift */; };
+		B5DB12AC305B408300CD9475 /* 1000m_110.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12AB305B408200CD9475 /* 1000m_110.m4a */; };
 		B5EE06443042367200B1411C /* silent10.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5EE06433042367200B1411C /* silent10.m4a */; };
 /* End PBXBuildFile section */
 
@@ -301,6 +302,7 @@
 		B55223D23039E32C00D7035F /* 9000m.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9000m.m4a; sourceTree = "<group>"; };
 		B58F15502F90446500E210C9 /* PaceSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaceSelection.swift; sourceTree = "<group>"; };
 		B58F15522F90535800E210C9 /* StartSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSelection.swift; sourceTree = "<group>"; };
+		B5DB12AB305B408200CD9475 /* 1000m_110.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1000m_110.m4a; sourceTree = "<group>"; };
 		B5EE06433042367200B1411C /* silent10.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = silent10.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -529,6 +531,7 @@
 		12B144B82BF3CCFC00FCD2A7 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				B5DB12AB305B408200CD9475 /* 1000m_110.m4a */,
 				B5EE06433042367200B1411C /* silent10.m4a */,
 				B55223C93039E30E00D7035F /* 1000m.m4a */,
 				B55223CB3039E32C00D7035F /* 2000m.m4a */,
@@ -771,6 +774,7 @@
 				1293596F2BFE4D8D0042F99E /* lap19.m4a in Resources */,
 				129359512BFE4D8D0042F99E /* lap9.m4a in Resources */,
 				129359682BFE4D8D0042F99E /* fourhundred.m4a in Resources */,
+				B5DB12AC305B408300CD9475 /* 1000m_110.m4a in Resources */,
 				1293595B2BFE4D8D0042F99E /* go.m4a in Resources */,
 				129359542BFE4D8D0042F99E /* threehundred.m4a in Resources */,
 				1293596D2BFE4D8D0042F99E /* lap2.m4a in Resources */,

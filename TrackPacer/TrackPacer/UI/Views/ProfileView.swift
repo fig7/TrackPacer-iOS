@@ -133,80 +133,84 @@ struct ProfileView: View {
   @EnvironmentObject var viewModel: ProfileViewModel
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 5) {
-      HStack {
-        VStack(alignment: .leading, spacing: 0) {
-          Text("Profile name:")
-          Text("for \(viewModel.profDesc)")
-        }
-        Spacer().frame(width:18)
-        TextField("", text: $viewModel.profName).textFieldStyle(.roundedBorder)
-      }
+    VStack {
+      ScrollView {
+        VStack(alignment: .leading, spacing: 5) {
+          HStack {
+            VStack(alignment: .leading, spacing: 0) {
+              Text("Profile name:")
+              Text("for \(viewModel.profDesc)")
+            }
+            Spacer().frame(width:18)
+            TextField("", text: $viewModel.profName).textFieldStyle(.roundedBorder)
+          }
 
-      ScrollView(.horizontal) {
-        HStack(alignment: .top, spacing: 0) {
-          VStack(alignment: .leading) {
-            Text("150%")
-            Spacer()
-            Text("100%")
-            Spacer()
-            Text("33%")
-          }.frame(height: sectionHeight + 20)
+          ScrollView(.horizontal) {
+            HStack(alignment: .top, spacing: 0) {
+              VStack(alignment: .leading) {
+                Text("150%")
+                Spacer()
+                Text("100%")
+                Spacer()
+                Text("33%")
+              }.frame(height: sectionHeight + 20)
 
-          VStack(alignment: .leading, spacing: 0) {
-            ZStack(alignment: .bottomLeading) {
-              XAxis(waypointCount: viewModel.profList.count).padding(.leading, axisDef.width)
-              YAxis().padding(.bottom, axisDef.width)
+              VStack(alignment: .leading, spacing: 0) {
+                ZStack(alignment: .bottomLeading) {
+                  XAxis(waypointCount: viewModel.profList.count).padding(.leading, axisDef.width)
+                  YAxis().padding(.bottom, axisDef.width)
 
-              HStack(alignment: .top, spacing: 0) {
-                ForEach(viewModel.profList.indices, id: \.self) { i in
-                  let afterStart = (i > 0)
-                  let beforeEnd  = ((i+1) < viewModel.profList.count)
-                  if(afterStart) {
-                    LineD(y1: viewModel.profList[i].prevOffset, y2: viewModel.profList[i].offset)
-                      .stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
+                  HStack(alignment: .top, spacing: 0) {
+                    ForEach(viewModel.profList.indices, id: \.self) { i in
+                      let afterStart = (i > 0)
+                      let beforeEnd  = ((i+1) < viewModel.profList.count)
+                      if(afterStart) {
+                        LineD(y1: viewModel.profList[i].prevOffset, y2: viewModel.profList[i].offset)
+                          .stroke(strokeGrad, style: strokeDef).frame(width: rampWidth, height: sectionHeight)
 
-                    LineH(y: viewModel.profList[i].offset)
-                      .stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
-                      .gesture(DragGesture()
-                        .onChanged { gesture in
-                          let dist   = viewModel.profList[i].dist
-                          let offset = viewModel.snapTo(gesture.location.y, forDist: dist)
+                        LineH(y: viewModel.profList[i].offset)
+                          .stroke(strokeGrad, style: strokeDef).frame(width: flatWidth, height: sectionHeight)
+                          .gesture(DragGesture()
+                            .onChanged { gesture in
+                              let dist   = viewModel.profList[i].dist
+                              let offset = viewModel.snapTo(gesture.location.y, forDist: dist)
 
-                          viewModel.profList[i] = ProfileWaypoint(other: viewModel.profList[i],   offset: offset, intvl: viewModel.profIntvl)
-                          if(beforeEnd) { viewModel.profList[i+1] = ProfileWaypoint(other: viewModel.profList[i+1], prevOffset: offset) }
-                          viewModel.updateTimes()
-                        })
+                              viewModel.profList[i] = ProfileWaypoint(other: viewModel.profList[i],   offset: offset, intvl: viewModel.profIntvl)
+                              if(beforeEnd) { viewModel.profList[i+1] = ProfileWaypoint(other: viewModel.profList[i+1], prevOffset: offset) }
+                              viewModel.updateTimes()
+                            })
+                      }
+                    }
+                  }.padding(.leading, axisDef.width+axisDef.extent).padding(.bottom, axisDef.width+axisDef.extent)
+
+                  MAxis(waypointCount: viewModel.profList.count).padding(.leading, axisDef.width)
+                }.padding(.horizontal, 15).padding(.vertical, 10).frame(height: sectionHeight + 20)
+
+                HStack(alignment: .top, spacing: 0) {
+                  ForEach(viewModel.profList.indices, id: \.self) { i in
+                    let afterStart = (i > 0)
+                    let beforeEnd  = ((i+1) < viewModel.profList.count)
+
+                    VStack {
+                      HStack(alignment: .top, spacing: 0) {
+                        Text(viewModel.profList[i].name).monospacedDigit()
+                        if(beforeEnd) { Text(viewModel.profList[i].waitTimeStr).monospacedDigit().frame(maxWidth: .infinity, alignment: .center) }
+                      }.frame(width: sectionWidth, alignment: .leading)
+
+                      if(afterStart) { Text("\(viewModel.profList[i].timeStr)").monospacedDigit().frame(width: sectionWidth, alignment: .leading) }
+                    }.onTapGesture { if(afterStart) { viewModel.editWaypoint(i, !beforeEnd) } }
                   }
                 }
-              }.padding(.leading, axisDef.width+axisDef.extent).padding(.bottom, axisDef.width+axisDef.extent)
-
-              MAxis(waypointCount: viewModel.profList.count).padding(.leading, axisDef.width)
-            }.padding(.horizontal, 15).padding(.vertical, 10).frame(height: sectionHeight + 20)
-
-            HStack(alignment: .top, spacing: 0) {
-              ForEach(viewModel.profList.indices, id: \.self) { i in
-                let afterStart = (i > 0)
-                let beforeEnd  = ((i+1) < viewModel.profList.count)
-
-                VStack {
-                  HStack(alignment: .top, spacing: 0) {
-                    Text(viewModel.profList[i].name).monospacedDigit()
-                    if(beforeEnd) { Text(viewModel.profList[i].waitTimeStr).monospacedDigit().frame(maxWidth: .infinity, alignment: .center) }
-                  }.frame(width: sectionWidth, alignment: .leading)
-
-                  if(afterStart) { Text("\(viewModel.profList[i].timeStr)").monospacedDigit().frame(width: sectionWidth, alignment: .leading) }
-                }.onTapGesture { if(afterStart) { viewModel.editWaypoint(i, !beforeEnd) } }
               }
             }
           }
+
+          Spacer().frame(height: 10)
+
+          Text("Ref. time: \(viewModel.profTime) \(viewModel.profPace)").foregroundColor(colorForProfileValidity(viewModel.profValidity))
+          Text("Rest time: \(viewModel.profWait)")
         }
-      }
-
-      Spacer().frame(height: 10)
-
-      Text("Ref. time: \(viewModel.profTime) \(viewModel.profPace)").foregroundColor(colorForProfileValidity(viewModel.profValidity))
-      Text("Rest time: \(viewModel.profWait)")
+      }.scrollDismissesKeyboard(.interactively)
 
       Spacer().frame(height: 10)
 
