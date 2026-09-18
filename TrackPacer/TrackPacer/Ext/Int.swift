@@ -15,4 +15,8 @@ extension Int {
   func toString() -> String {
     return "\(self)"
   }
+
+  func toString2() -> String {
+    return "\(String(format: "%02d", self))"
+  }
 }

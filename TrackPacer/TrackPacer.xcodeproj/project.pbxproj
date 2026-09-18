@@ -152,6 +152,14 @@
 		B58F15512F90446B00E210C9 /* PaceSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58F15502F90446500E210C9 /* PaceSelection.swift */; };
 		B58F15532F90536900E210C9 /* StartSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58F15522F90535800E210C9 /* StartSelection.swift */; };
 		B5DB12AC305B408300CD9475 /* 1000m_110.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12AB305B408200CD9475 /* 1000m_110.m4a */; };
+		B5DB12AE305C892A00CD9475 /* 2000m_110.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12AD305C892A00CD9475 /* 2000m_110.m4a */; };
+		B5DB12B0305C8A1800CD9475 /* 3000m_110.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12AF305C8A1800CD9475 /* 3000m_110.m4a */; };
+		B5DB12B2305C8B3200CD9475 /* 4000m_110.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12B1305C8B3200CD9475 /* 4000m_110.m4a */; };
+		B5DB12B6305C8C5300CD9475 /* 5000m_115.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12B5305C8C5300CD9475 /* 5000m_115.m4a */; };
+		B5DB12B8305C8CF500CD9475 /* 6000m_115.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12B7305C8CF500CD9475 /* 6000m_115.m4a */; };
+		B5DB12BA305C8E0D00CD9475 /* 7000m_114.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12B9305C8E0D00CD9475 /* 7000m_114.m4a */; };
+		B5DB12BC305C8F3500CD9475 /* 8000m_110.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12BB305C8F3500CD9475 /* 8000m_110.m4a */; };
+		B5DB12BE305C8FD400CD9475 /* 9000m_115.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5DB12BD305C8FD400CD9475 /* 9000m_115.m4a */; };
 		B5EE06443042367200B1411C /* silent10.m4a in Resources */ = {isa = PBXBuildFile; fileRef = B5EE06433042367200B1411C /* silent10.m4a */; };
 /* End PBXBuildFile section */
 
@@ -303,6 +311,14 @@
 		B58F15502F90446500E210C9 /* PaceSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaceSelection.swift; sourceTree = "<group>"; };
 		B58F15522F90535800E210C9 /* StartSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSelection.swift; sourceTree = "<group>"; };
 		B5DB12AB305B408200CD9475 /* 1000m_110.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1000m_110.m4a; sourceTree = "<group>"; };
+		B5DB12AD305C892A00CD9475 /* 2000m_110.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 2000m_110.m4a; sourceTree = "<group>"; };
+		B5DB12AF305C8A1800CD9475 /* 3000m_110.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 3000m_110.m4a; sourceTree = "<group>"; };
+		B5DB12B1305C8B3200CD9475 /* 4000m_110.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 4000m_110.m4a; sourceTree = "<group>"; };
+		B5DB12B5305C8C5300CD9475 /* 5000m_115.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5000m_115.m4a; sourceTree = "<group>"; };
+		B5DB12B7305C8CF500CD9475 /* 6000m_115.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 6000m_115.m4a; sourceTree = "<group>"; };
+		B5DB12B9305C8E0D00CD9475 /* 7000m_114.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 7000m_114.m4a; sourceTree = "<group>"; };
+		B5DB12BB305C8F3500CD9475 /* 8000m_110.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 8000m_110.m4a; sourceTree = "<group>"; };
+		B5DB12BD305C8FD400CD9475 /* 9000m_115.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 9000m_115.m4a; sourceTree = "<group>"; };
 		B5EE06433042367200B1411C /* silent10.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = silent10.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -531,6 +547,14 @@
 		12B144B82BF3CCFC00FCD2A7 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				B5DB12BD305C8FD400CD9475 /* 9000m_115.m4a */,
+				B5DB12BB305C8F3500CD9475 /* 8000m_110.m4a */,
+				B5DB12B9305C8E0D00CD9475 /* 7000m_114.m4a */,
+				B5DB12B7305C8CF500CD9475 /* 6000m_115.m4a */,
+				B5DB12B5305C8C5300CD9475 /* 5000m_115.m4a */,
+				B5DB12B1305C8B3200CD9475 /* 4000m_110.m4a */,
+				B5DB12AF305C8A1800CD9475 /* 3000m_110.m4a */,
+				B5DB12AD305C892A00CD9475 /* 2000m_110.m4a */,
 				B5DB12AB305B408200CD9475 /* 1000m_110.m4a */,
 				B5EE06433042367200B1411C /* silent10.m4a */,
 				B55223C93039E30E00D7035F /* 1000m.m4a */,
@@ -756,6 +780,7 @@
 				B5EE06443042367200B1411C /* silent10.m4a in Resources */,
 				B55223D33039E32C00D7035F /* 6000m.m4a in Resources */,
 				B55223D43039E32C00D7035F /* 8000m.m4a in Resources */,
+				B5DB12BE305C8FD400CD9475 /* 9000m_115.m4a in Resources */,
 				B55223D53039E32C00D7035F /* 2000m.m4a in Resources */,
 				B55223D63039E32C00D7035F /* 3000m.m4a in Resources */,
 				B55223D73039E32C00D7035F /* 4000m.m4a in Resources */,
@@ -763,6 +788,7 @@
 				B55223D93039E32C00D7035F /* 9000m.m4a in Resources */,
 				B55223DA3039E32C00D7035F /* 5000m.m4a in Resources */,
 				12A0CD782C345F5100308607 /* thirty.m4a in Resources */,
+				B5DB12B6305C8C5300CD9475 /* 5000m_115.m4a in Resources */,
 				B55223CA3039E30E00D7035F /* 1000m.m4a in Resources */,
 				1228356D2C10AC4F003FCE65 /* oym.m4a in Resources */,
 				1228356C2C10AC4F003FCE65 /* set.m4a in Resources */,
@@ -770,15 +796,18 @@
 				129359552BFE4D8D0042F99E /* lap13.m4a in Resources */,
 				1293595E2BFE4D8D0042F99E /* lap20.m4a in Resources */,
 				1293596C2BFE4D8D0042F99E /* fifty.m4a in Resources */,
+				B5DB12AE305C892A00CD9475 /* 2000m_110.m4a in Resources */,
 				129359592BFE4D8D0042F99E /* lap5.m4a in Resources */,
 				1293596F2BFE4D8D0042F99E /* lap19.m4a in Resources */,
 				129359512BFE4D8D0042F99E /* lap9.m4a in Resources */,
 				129359682BFE4D8D0042F99E /* fourhundred.m4a in Resources */,
 				B5DB12AC305B408300CD9475 /* 1000m_110.m4a in Resources */,
+				B5DB12B2305C8B3200CD9475 /* 4000m_110.m4a in Resources */,
 				1293595B2BFE4D8D0042F99E /* go.m4a in Resources */,
 				129359542BFE4D8D0042F99E /* threehundred.m4a in Resources */,
 				1293596D2BFE4D8D0042F99E /* lap2.m4a in Resources */,
 				1293595F2BFE4D8D0042F99E /* cancelled.m4a in Resources */,
+				B5DB12BC305C8F3500CD9475 /* 8000m_110.m4a in Resources */,
 				127122952BEE41A200106069 /* Preview Assets.xcassets in Resources */,
 				129359652BFE4D8D0042F99E /* lap16.m4a in Resources */,
 				129359612BFE4D8D0042F99E /* lap10.m4a in Resources */,
@@ -788,6 +817,7 @@
 				1293595D2BFE4D8D0042F99E /* lap17.m4a in Resources */,
 				129359532BFE4D8D0042F99E /* lap15.m4a in Resources */,
 				1293594C2BFE4D8D0042F99E /* onehundred.m4a in Resources */,
+				B5DB12B8305C8CF500CD9475 /* 6000m_115.m4a in Resources */,
 				1293594E2BFE4D8D0042F99E /* finish.m4a in Resources */,
 				129359502BFE4D8D0042F99E /* paused.m4a in Resources */,
 				1293596A2BFE4D8D0042F99E /* lap25.m4a in Resources */,
@@ -799,6 +829,7 @@
 				129359712BFE4D8D0042F99E /* lap23.m4a in Resources */,
 				129359692BFE4D8D0042F99E /* resumed.m4a in Resources */,
 				129359642BFE4D8D0042F99E /* twohundredandfifty.m4a in Resources */,
+				B5DB12B0305C8A1800CD9475 /* 3000m_110.m4a in Resources */,
 				1293596B2BFE4D8D0042F99E /* twohundred.m4a in Resources */,
 				1293595C2BFE4D8D0042F99E /* complete.m4a in Resources */,
 				12A0CD792C345F5100308607 /* ten.m4a in Resources */,
@@ -810,6 +841,7 @@
 				129359582BFE4D8D0042F99E /* lap24.m4a in Resources */,
 				1293594D2BFE4D8D0042F99E /* lap7.m4a in Resources */,
 				127122922BEE41A200106069 /* Assets.xcassets in Resources */,
+				B5DB12BA305C8E0D00CD9475 /* 7000m_114.m4a in Resources */,
 				129359662BFE4D8D0042F99E /* lap3.m4a in Resources */,
 				129359562BFE4D8D0042F99E /* lap8.m4a in Resources */,
 			);

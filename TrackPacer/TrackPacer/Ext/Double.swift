@@ -12,6 +12,10 @@ extension Double {
     return Int(self)
   }
 
+  func toIntRounded() -> Int {
+    return Int(self.rounded())
+  }
+
   func toLong() -> Int64 {
     return Int64(self)
   }

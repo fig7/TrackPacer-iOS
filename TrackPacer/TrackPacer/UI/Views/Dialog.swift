@@ -169,25 +169,48 @@ struct EditWaypointDialog: View {
     }
     Spacer().frame(height: 10)
 
-    HStack {
-      VStack(alignment: .leading) {
-        Text("Time to waypoint (s)")
-        Text("(between \(viewModel.wpTimeMinStr) and \(viewModel.wpTimeMaxStr))").font(.caption)
-      }
-      Spacer()
-
+    if(waypointEdit.isSmall) {
       HStack {
-        TextField("", text: $waypointEdit.waypointTimeSS).foregroundStyle(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
-          .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-          .onChange(of: waypointEdit.waypointTimeSS) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
+        VStack(alignment: .leading) {
+          Text("Time to waypoint (s)")
+          Text("(between \(viewModel.wpTimeMinStr) and \(viewModel.wpTimeMaxStr))").font(.caption)
+        }
+        Spacer()
 
-        Text(".")
+        HStack {
+          TextField("", text: $waypointEdit.waypointTimeSS).foregroundStyle(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+            .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+            .onChange(of: waypointEdit.waypointTimeSS) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
 
-        TextField("", text: $waypointEdit.waypointTimeHH).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
-          .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-          .onChange(of: waypointEdit.waypointTimeHH) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
+          Text(".")
+
+          TextField("", text: $waypointEdit.waypointTimeHH).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+            .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+            .onChange(of: waypointEdit.waypointTimeHH) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
+        }
+      }
+    } else {
+      HStack {
+        VStack(alignment: .leading) {
+          Text("Time to waypoint (mm:ss)")
+          Text("(between \(viewModel.wpTimeMinStr) and \(viewModel.wpTimeMaxStr))").font(.caption)
+        }
+        Spacer()
+
+        HStack {
+          TextField("", text: $waypointEdit.waypointTimeMM).foregroundStyle(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+            .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+            .onChange(of: waypointEdit.waypointTimeMM) { timeValid = viewModel.validateWaypointTime2(waypointEdit.waypointTimeMM, waypointEdit.waypointTimeSS2) }
+
+          Text(".")
+
+          TextField("", text: $waypointEdit.waypointTimeSS2).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+            .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
+            .onChange(of: waypointEdit.waypointTimeSS2) { timeValid = viewModel.validateWaypointTime2(waypointEdit.waypointTimeMM, waypointEdit.waypointTimeSS2) }
+        }
       }
     }
+
     Spacer().frame(height: 20)
 
     HStack {
@@ -214,7 +237,8 @@ struct EditWaypointDialog: View {
     Spacer()
 
     HStack {
-      Button("  MAKE CHANGES  ", action: { closeAction(); Task { @MainActor in viewModel.saveWaypoint() } }).buttonStyle(SmallActionButtonStyle(disabledCol: !timeValid || !waitValid))
+      let canMakeChanges = timeValid && waitValid
+      Button("  MAKE CHANGES  ", action: { closeAction(); Task { @MainActor in viewModel.saveWaypoint() } }).buttonStyle(SmallActionButtonStyle(disabledCol: !canMakeChanges)).disabled(!canMakeChanges)
     }.frame(maxWidth: .infinity, alignment: .trailing)
   }
 }

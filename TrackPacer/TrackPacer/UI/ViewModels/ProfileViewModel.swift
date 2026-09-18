@@ -92,6 +92,17 @@ struct ProfileWaypoint {
       wpTimeMaxStr.insert(".", at: timeMaxIndex)
     } }
 
+  var wpTimeRange2 = 0...10 { didSet
+    {
+      let minMin  = (wpTimeRange2.lowerBound/60)
+      let minSecs = wpTimeRange2.lowerBound - 60*minMin
+      wpTimeMinStr = minMin.toString() + ":" + minSecs.toString2()
+
+      let maxMin  = (wpTimeRange2.upperBound/60)
+      let maxSecs = wpTimeRange2.upperBound - 60*maxMin
+      wpTimeMaxStr = maxMin.toString() + ":" + maxSecs.toString2()
+    } }
+
   @Published var wpTimeMinStr = ""
   @Published var wpTimeMaxStr = ""
 
@@ -315,7 +326,7 @@ struct ProfileWaypoint {
   }
 
   func validateWaypointTime(_ secsStr: String, _ hthsStr: String) -> Bool {
-    if(secsStr.count > 2)  { return false }
+    if((secsStr.count == 0) || (secsStr.count > 3)) { return false }
     if(hthsStr.count != 2) { return false }
 
     let secs, hths: Int
@@ -326,6 +337,20 @@ struct ProfileWaypoint {
 
     let val = secs*100 + hths
     return wpTimeRange.contains(val)
+  }
+
+  func validateWaypointTime2(_ minsStr: String, _ secsStr: String) -> Bool {
+    if((minsStr.count == 0) || (minsStr.count > 2)) { return false }
+    if(secsStr.count != 2) { return false }
+
+    let mins, secs: Int
+    do {
+      mins = try minsStr.toInt()
+      secs = try secsStr.toInt()
+    } catch { return false }
+
+    let val = mins*60 + secs
+    return wpTimeRange2.contains(val)
   }
 
   func validateMinsSecs(_ minsStr: String, _ secsStr: String, _ secsRange: ClosedRange<Int>) -> Bool {
@@ -351,10 +376,27 @@ struct ProfileWaypoint {
     let waypoint = profList[i]
     wpEdit.name = waypoint.name
 
-    let secs = waypoint.timeSecs.toInt()
-    let hths = ((waypoint.timeSecs - secs.toDouble())*100.0).rounded().toInt()
-    wpEdit.waypointTimeSS = String(secs)
-    wpEdit.waypointTimeHH = String(format: "%02d", hths)
+    let smallWaypoint = (waypoint.timeSecs < 100.0)
+    if(smallWaypoint) {
+      wpEdit.isSmall = true
+      wpEdit.waypointTimeMM  = ""
+      wpEdit.waypointTimeSS2 = ""
+
+      let secs = waypoint.timeSecs.toInt()
+      let hths = ((waypoint.timeSecs - secs.toDouble())*100.0).rounded().toInt()
+      wpEdit.waypointTimeSS = String(secs)
+      wpEdit.waypointTimeHH = String(format: "%02d", hths)
+    }
+    else {
+      wpEdit.isSmall = false
+      wpEdit.waypointTimeSS = ""
+      wpEdit.waypointTimeHH = ""
+
+      let mins = (waypoint.timeSecs / 60.0).toInt()
+      let secs = (waypoint.timeSecs - mins.toDouble() * 60.0).toIntRounded()
+      wpEdit.waypointTimeMM  = String(mins)
+      wpEdit.waypointTimeSS2 = String(format: "%02d", secs)
+    }
 
     let waitTime = waypoint.waitTime / 1000
     let waitMins = waitTime / 60
@@ -365,11 +407,16 @@ struct ProfileWaypoint {
 
     let dist = waypoint.dist
     let timeMin = ((refPace*dist)/(1.5*1000.0)).roundedToIntvl(profIntvl)
-    let timeMinHths = (timeMin*100.0).rounded().toInt()
-
     let timeMax = ((refPace*dist*3.0)/1000.0).roundedToIntvl(profIntvl)
-    let timeMaxHths = (timeMax*100.0).rounded().toInt()
-    wpTimeRange = timeMinHths...timeMaxHths
+    if(smallWaypoint) {
+      let timeMinHths = (timeMin*100.0).rounded().toInt()
+      let timeMaxHths = (timeMax*100.0).rounded().toInt()
+      wpTimeRange = timeMinHths...timeMaxHths
+    } else {
+      let timeMinSecs = timeMin.rounded().toInt()
+      let timeMaxSecs = timeMax.rounded().toInt()
+      wpTimeRange2 = timeMinSecs...timeMaxSecs
+    }
 
     mainViewModel.showEditWaypointDialog(width: 342, height: 260)
   }
@@ -380,9 +427,17 @@ struct ProfileWaypoint {
     let oldWaypoint1 = profList[i]
     let oldWaypoint2 = ((i+1) < iMax) ? profList[i+1] : profList[0]
 
-    let secs = try! wpEdit.waypointTimeSS.toInt()
-    let hths = try! wpEdit.waypointTimeHH.toInt()
-    let time = Double(secs) + Double(hths)/100.0
+    let time: Double
+    if(wpEdit.isSmall) {
+      let secs = try! wpEdit.waypointTimeSS.toInt()
+      let hths = try! wpEdit.waypointTimeHH.toInt()
+      time = Double(secs) + Double(hths)/100.0
+    } else {
+      let mins = try! wpEdit.waypointTimeMM.toInt()
+      let secs = try! wpEdit.waypointTimeSS2.toInt()
+      time = Double(mins*60) + Double(secs)
+    }
+
     let offset = offsetForTime(time, forDist: oldWaypoint1.dist)
 
     let waitMins = try! wpEdit.waypointWaitMM.toInt64()

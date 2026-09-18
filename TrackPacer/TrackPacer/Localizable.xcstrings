@@ -489,9 +489,6 @@
     "Reference pace" : {
 
     },
-    "Rest time: %@" : {
-
-    },
     "road_5" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -570,7 +567,13 @@
     "Time to target: %@" : {
 
     },
+    "Time to waypoint (mm:ss)" : {
+
+    },
     "Time to waypoint (s)" : {
+
+    },
+    "Total recovery time: %@" : {
 
     },
     "Unit:" : {

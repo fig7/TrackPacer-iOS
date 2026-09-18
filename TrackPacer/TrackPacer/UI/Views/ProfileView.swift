@@ -208,7 +208,7 @@ struct ProfileView: View {
           Spacer().frame(height: 10)
 
           Text("Ref. time: \(viewModel.profTime) \(viewModel.profPace)").foregroundColor(colorForProfileValidity(viewModel.profValidity))
-          Text("Rest time: \(viewModel.profWait)")
+          Text("Total recovery time: \(viewModel.profWait)")
         }
       }.scrollDismissesKeyboard(.interactively)
 
