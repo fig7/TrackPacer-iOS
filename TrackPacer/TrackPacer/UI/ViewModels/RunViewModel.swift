@@ -74,7 +74,7 @@ import Foundation
       switch(distance)
       {
       case "5000m":
-        return ["1km", "5km"]
+        return ["1km", "2km", "5km"]
 
       case "10000m":
         return ["1km", "2km", "5km", "10km"]
@@ -105,13 +105,13 @@ import Foundation
       return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m"]
 
     case "3000m":
-      return ["50m", "100m", "200m", "400m", "800m", "1000m", "3000m"]
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "3000m"]
 
     case "4000m":
       return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "4000m"]
 
     case "5000m":
-      return ["50m", "100m", "200m", "400m", "800m", "1000m", "5000m"]
+      return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "5000m"]
 
     case "10000m":
       return ["50m", "100m", "200m", "400m", "800m", "1000m", "2000m", "5000m", " 10000m "]

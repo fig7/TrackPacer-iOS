@@ -22,9 +22,12 @@ extension StringProtocol {
 }
 
 struct SettingsView: View {
+  @Environment(\.colorScheme) var colorScheme
   @EnvironmentObject var viewModel: SettingsViewModel
 
   var body: some View {
+    let validTimeCol: Color = (colorScheme == .light) ? .black : .white
+
     VStack {
       Text("Settings").font(.largeTitle).frame(maxWidth: .infinity, alignment: .leading)
       Spacer().frame(height: 32)
@@ -44,12 +47,14 @@ struct SettingsView: View {
               Spacer()
 
               HStack {
-                TextField("", text: $viewModel.startDelaySS).foregroundStyle(viewModel.startDelayValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                TextField("", text: $viewModel.startDelaySS)
+                  .foregroundStyle(viewModel.startDelayValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
                   .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
 
                 Text(".")
                 
-                TextField("", text: $viewModel.startDelayHH).foregroundStyle(viewModel.startDelayValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                TextField("", text: $viewModel.startDelayHH)
+                  .foregroundStyle(viewModel.startDelayValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
                   .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
               }
             }.padding(.horizontal, 1).padding(.vertical, 16)
@@ -130,12 +135,14 @@ struct SettingsView: View {
               Spacer()
 
               HStack {
-                TextField("", text: $viewModel.refPaceMM).foregroundStyle(viewModel.refPaceValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                TextField("", text: $viewModel.refPaceMM)
+                  .foregroundStyle(viewModel.refPaceValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
                   .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
 
                 Text(":")
 
-                TextField("", text: $viewModel.refPaceSS).foregroundStyle(viewModel.refPaceValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+                TextField("", text: $viewModel.refPaceSS)
+                  .foregroundStyle(viewModel.refPaceValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
                   .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
               }
             }.padding(.horizontal, 1).padding(.vertical, 16)

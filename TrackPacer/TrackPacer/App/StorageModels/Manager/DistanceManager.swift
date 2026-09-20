@@ -76,12 +76,12 @@ class DistanceManager {
         profMap[baseDist]![Intvl.i400m] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i800m] = [("Fixed pace", profileWaypoints)]
 
-      case "1200m", "1500m", "2000m", "3000m", "1 mile":
+      case "1200m", "1500m", "2000m", "1 mile":
         profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
 
-      case "4000m":
+      case "3000m", "4000m":
         profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
@@ -91,7 +91,9 @@ class DistanceManager {
         profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i800m ] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i1000m] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i2000m] = [("Fixed pace", profileWaypoints)]
         profMap[baseDist]![Intvl.i1km  ] = [("Fixed pace", profileWaypoints)]
+        profMap[baseDist]![Intvl.i2km  ] = [("Fixed pace", profileWaypoints)]
 
       case "10000m":
         profMap[baseDist]![Intvl.i400m ] = [("Fixed pace", profileWaypoints)]

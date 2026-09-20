@@ -70,8 +70,10 @@ struct QuestionDialog: View {
 }
 
 struct EditTimeDialog: View {
+  @Environment(\.colorScheme) var colorScheme
   @EnvironmentObject var timeEdit: TimeEdit
   @EnvironmentObject var timeSelection: TimeSelection
+
   let closeAction: () -> ()
 
   init(_ closeAction: @escaping () -> ()) {
@@ -98,15 +100,15 @@ struct EditTimeDialog: View {
         Spacer().frame(height: 8)
 
         HStack {
-          Text("Minutes").font(.caption).frame(maxWidth: .infinity)
-          Text("Seconds").font(.caption).frame(maxWidth: .infinity)
-          Text("Hundredths").font(.caption).frame(maxWidth: .infinity)
+          Text("Minutes").font(.caption).foregroundStyle(.black).frame(maxWidth: .infinity)
+          Text("Seconds").font(.caption).foregroundStyle(.black).frame(maxWidth: .infinity)
+          Text("Hundredths").font(.caption).foregroundStyle(.black).frame(maxWidth: .infinity)
         }
 
         HStack {
           Picker("Minutes", selection: $timeEdit.mins) {
             ForEach(0..<100, id: \.self) { number in
-              Text("\(number)")
+              Text("\(number)").foregroundStyle(.black)
             }
           }.pickerStyle(.wheel)
 
@@ -114,7 +116,7 @@ struct EditTimeDialog: View {
 
           Picker("Seconds", selection: $timeEdit.secs) {
             ForEach(0..<60, id: \.self) { number in
-              Text(String(format: "%02d", number))
+              Text(String(format: "%02d", number)).foregroundStyle(.black)
             }
           }.pickerStyle(.wheel)
 
@@ -122,7 +124,7 @@ struct EditTimeDialog: View {
 
           Picker("Hundredths", selection: $timeEdit.hths) {
             ForEach(0..<100, id: \.self) { number in
-              Text(String(format: "%02d", number))
+              Text(String(format: "%02d", number)).foregroundStyle(.black)
             }
           }.pickerStyle(.wheel)
         }
@@ -150,6 +152,7 @@ struct EditTimeDialog: View {
 }
 
 struct EditWaypointDialog: View {
+  @Environment(\.colorScheme) var colorScheme
   @EnvironmentObject var viewModel: ProfileViewModel
   @EnvironmentObject var waypointEdit: WaypointEdit
 
@@ -163,6 +166,8 @@ struct EditWaypointDialog: View {
   }
 
   var body: some View {
+    let validTimeCol: Color = (colorScheme == .light) ? .black : .white
+
     HStack(alignment: .top) {
       Text("Edit waypoint: " + waypointEdit.name).font(.title).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
       CloseButton(closeAction: closeAction)
@@ -178,15 +183,21 @@ struct EditWaypointDialog: View {
         Spacer()
 
         HStack {
-          TextField("", text: $waypointEdit.waypointTimeSS).foregroundStyle(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          TextField("", text: $waypointEdit.waypointTimeSS)
+            .foregroundStyle(timeValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
             .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-            .onChange(of: waypointEdit.waypointTimeSS) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
+            .onChange(of: waypointEdit.waypointTimeSS) {
+              timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH)
+            }
 
           Text(".")
 
-          TextField("", text: $waypointEdit.waypointTimeHH).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          TextField("", text: $waypointEdit.waypointTimeHH)
+            .foregroundStyle(timeValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
             .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-            .onChange(of: waypointEdit.waypointTimeHH) { timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH) }
+            .onChange(of: waypointEdit.waypointTimeHH) {
+              timeValid = viewModel.validateWaypointTime(waypointEdit.waypointTimeSS, waypointEdit.waypointTimeHH)
+            }
         }
       }
     } else {
@@ -198,15 +209,21 @@ struct EditWaypointDialog: View {
         Spacer()
 
         HStack {
-          TextField("", text: $waypointEdit.waypointTimeMM).foregroundStyle(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          TextField("", text: $waypointEdit.waypointTimeMM)
+            .foregroundStyle(timeValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
             .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-            .onChange(of: waypointEdit.waypointTimeMM) { timeValid = viewModel.validateWaypointTime2(waypointEdit.waypointTimeMM, waypointEdit.waypointTimeSS2) }
+            .onChange(of: waypointEdit.waypointTimeMM) {
+              timeValid = viewModel.validateWaypointTime2(waypointEdit.waypointTimeMM, waypointEdit.waypointTimeSS2)
+            }
 
           Text(".")
 
-          TextField("", text: $waypointEdit.waypointTimeSS2).foregroundColor(timeValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+          TextField("", text: $waypointEdit.waypointTimeSS2)
+            .foregroundStyle(timeValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
             .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad)
-            .onChange(of: waypointEdit.waypointTimeSS2) { timeValid = viewModel.validateWaypointTime2(waypointEdit.waypointTimeMM, waypointEdit.waypointTimeSS2) }
+            .onChange(of: waypointEdit.waypointTimeSS2) {
+              timeValid = viewModel.validateWaypointTime2(waypointEdit.waypointTimeMM, waypointEdit.waypointTimeSS2)
+            }
         }
       }
     }
@@ -222,15 +239,21 @@ struct EditWaypointDialog: View {
       Spacer()
 
       HStack {
-        TextField("", text: $waypointEdit.waypointWaitMM).foregroundStyle(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+        TextField("", text: $waypointEdit.waypointWaitMM)
+          .foregroundStyle(waitValid ? validTimeCol : .red).textFieldStyle(.roundedBorder).frame(width: 50)
           .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad).disabled(waypointEdit.atEnd)
-          .onChange(of: waypointEdit.waypointWaitMM) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM, waypointEdit.waypointWaitSS, 10...300) }
+          .onChange(of: waypointEdit.waypointWaitMM) {
+            waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM, waypointEdit.waypointWaitSS, 10...300)
+          }
 
         Text(":")
 
-        TextField("", text: $waypointEdit.waypointWaitSS).foregroundStyle(waitValid ? .black : .red).textFieldStyle(.roundedBorder).frame(width: 50)
+        TextField("", text: $waypointEdit.waypointWaitSS)
+          .foregroundStyle(waitValid ? validTimeCol: .red).textFieldStyle(.roundedBorder).frame(width: 50)
           .lineLimit(1).multilineTextAlignment(.trailing).keyboardType(.numberPad).disabled(waypointEdit.atEnd)
-          .onChange(of: waypointEdit.waypointWaitSS) { waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM, waypointEdit.waypointWaitSS, 10...300) }
+          .onChange(of: waypointEdit.waypointWaitSS) {
+            waitValid = viewModel.validateMinsSecs(waypointEdit.waypointWaitMM, waypointEdit.waypointWaitSS, 10...300)
+          }
       }
     }.opacity(waypointEdit.atEnd ? 0.5 : 1.0)
 
@@ -283,6 +306,7 @@ struct FMRDialog: View {
 }
 
 struct Dialog: View {
+  @Environment(\.colorScheme) var colorScheme
   @EnvironmentObject var viewModel: MainViewModel
   @EnvironmentObject var dialogContent: DialogContent
   @EnvironmentObject var dialogResult: DialogResult
@@ -293,7 +317,7 @@ struct Dialog: View {
     let dialogScale   = (dialogVisibility.visible) ? 1.0 : 0.0
 
     ZStack {
-      Color(.black).frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity).ignoresSafeArea().opacity(0.56)
+      Color((colorScheme == .light) ? .black : .gray).frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity).ignoresSafeArea().opacity(0.56)
 
       VStack(spacing: 0) {
         VStack(alignment: .leading, spacing: 0) {
@@ -322,7 +346,8 @@ struct Dialog: View {
           }
         }
         .padding(.all, dialogContent.dialogPadding)
-        .frame(width: dialogContent.dialogWidth, height: dialogContent.dialogHeight, alignment: .topLeading).background(.white).scaleEffect(CGSize(width: dialogScale, height: dialogScale))
+        .frame(width: dialogContent.dialogWidth, height: dialogContent.dialogHeight, alignment: .topLeading)
+        .background((colorScheme == .light) ? .white : .black).scaleEffect(CGSize(width: dialogScale, height: dialogScale))
 
         Spacer().frame(height: 20)
       }
