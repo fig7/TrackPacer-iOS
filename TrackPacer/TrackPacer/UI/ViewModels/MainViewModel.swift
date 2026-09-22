@@ -374,6 +374,7 @@ import UIKit
 
     let pacingOptions = paceViewModel.pacingOptions
     resultModel.setBaseDist(pacingOptions.baseDist)
+    resultModel.setStartType(pacingOptions.startType)
     resultModel.setRunLane(pacingOptions.runLane)
     resultModel.setRunProf(pacingOptions.runProf)
 

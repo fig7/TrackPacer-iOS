@@ -24,7 +24,14 @@ struct CompletionView: View {
           Spacer().frame(height: 10)
 
           Text("Distance run (at \"\(runData.runProf)\")")
-          Text("\(runData.runDistStr) (\(runData.baseDist) in L\(runData.runLane))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
+          if(runData.startType == "Road") {
+            let roadRace = (runData.baseDist == "5000m") ? R.string.road_5 : R.string.road_10
+            Text("\(runData.runDistStr) (\(roadRace))").lineLimit(1)
+              .font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
+          } else {
+            Text("\(runData.runDistStr) (\(runData.baseDist) in L\(runData.runLane))").lineLimit(1)
+              .font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
+          }
 
           Spacer().frame(height: 10)
 

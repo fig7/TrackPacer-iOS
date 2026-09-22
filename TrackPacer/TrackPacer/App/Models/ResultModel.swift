@@ -11,10 +11,11 @@ class ResultModel {
   private(set) var runData      = RunData()
   private(set) var runDataExtra = RunDataExtra()
 
-  func setPacingDate()                 { runData.runDate  = Date() }
-  func setBaseDist(_ baseDist: String) { runData.baseDist = baseDist }
-  func setRunLane(_ runLane: Int)      { runData.runLane  = runLane }
-  func setRunProf(_ runProf: String)   { runData.runProf  = runProf }
+  func setPacingDate()                   { runData.runDate   = Date() }
+  func setBaseDist(_ baseDist: String)   { runData.baseDist  = baseDist }
+  func setStartType(_ startType: String) { runData.startType = startType }
+  func setRunLane(_ runLane: Int)        { runData.runLane   = runLane }
+  func setRunProf(_ runProf: String)     { runData.runProf   = runProf }
 
   func setRunDist(_ runDistStr: String) { runData.runDistStr = runDistStr }
   func setRunTime(_ runTimeStr: String) { runData.runTimeStr = runTimeStr }

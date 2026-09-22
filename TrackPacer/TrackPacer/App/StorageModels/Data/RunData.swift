@@ -12,9 +12,10 @@ struct RunData: Codable {
 
   var runDate: Date!
 
-  var baseDist: String = ""
-  var runLane: Int     = -1
-  var runProf: String  = ""
+  var baseDist: String  = ""
+  var startType: String = ""
+  var runLane: Int      = -1
+  var runProf: String   = ""
 
   var runDistStr: String = ""
   var runTimeStr: String = ""

@@ -26,10 +26,10 @@ struct PaceView: View {
 
       Spacer().frame(height: 10)
 
-      if (!pacingOptions.runLaps.starts(with: "Road")) {
-        Text("Distance in lane \(pacingOptions.runLane)")
-      } else {
+      if (pacingOptions.startType == "Road") {
         Text("Distance")
+      } else {
+        Text("Distance in lane \(pacingOptions.runLane)")
       }
       Text("\(pacingOptions.runDistStr) (\(pacingOptions.runLaps))").lineLimit(1).font(.system(size: 30, weight: .regular, design: .default)).minimumScaleFactor(0.5)
 
