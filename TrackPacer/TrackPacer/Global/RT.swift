@@ -135,7 +135,7 @@ let rtMap = [
   "rt_1 mile_l8" : [R.string.laps_mile, R.string.fl_mile, R.string.ll_4, R.drawable.rt_mile_l8, R.drawable.rt_mile_l8_ck],
 
   "rt_5000m_RD"  : [R.string.road_5,  R.string.road_mks, R.string.empty, R.string.empty, R.string.empty],
-  "rt_10000m_RD" : [R.string.road_10, R.string.road_mks, R.string.empty, R.string.empty]]
+  "rt_10000m_RD" : [R.string.road_10, R.string.road_mks, R.string.empty, R.string.empty, R.string.empty]]
 
 func rtKeyFromArgs(_ baseDist: String, _ startType: String, _ runLane: Int) -> String {
   let altDist = (baseDist == "1000m") || (baseDist == "3000m") || (baseDist == "5000m")
